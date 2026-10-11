@@ -410,6 +410,26 @@ report the minimum-stable rate as a result, not a numerical nuisance.
 The table carries no arrival temperature; keep it in a side file per point for the
 hydrate and cooldown hand-off (`neqsim-flow-assurance`).
 
+### VFP tables and Flow stalls
+
+A tubing table that is U-shaped in rate (high BHP at the lowest rate, minimum near
+the loading rate, rising with friction) makes the well switch between rate and THP
+control: Flow drops to 0.02-day steps with `Oscillating behavior detected` and a
+24-year run never finishes (Othello Sor, Upper zone, rate cap 1500 Sm3/d on a
+high-PI sand; the lower-PI zone of the same set ran fine). Make each BHP row
+non-decreasing in rate before writing it (`np.maximum.accumulate`) - it raises the
+low-rate points by a few bar and removes the multiple solutions - and keep the raw
+table for the minimum-stable-rate report. The table's BHP pivots on the bubble
+point for an undersaturated oil: below Pb the column is gassy and light, above it
+dense, so with an 18-60 bara outlet the floor sits close to Pb whatever the lift
+and depletion recovery is set by Pb and the outlet pressure, not by the lift gas
+(gas lift added 6 % to a 12 % recovery).
+
+Generate each system's table in its own process (about 2 s per point with
+`PipeBeggsAndBrills`; 700 points per system), and when several decks are built in
+threads, serialise deck generation: deck builders that keep geometry and rock
+constants at module level silently build the wrong zone if two threads interleave.
+
 ## Common Mistakes
 
 Deck traps that cost a run each:
@@ -424,6 +444,8 @@ Deck traps that cost a run each:
 | wells produce at the pressure floor with no lift limit | `WCONPROD` BHP floor only, no `VFPPROD` | generate a lift-curve table from the tubing / flowline geometry and control on THP (see above) |
 | `VFPPROD` generated in kg/hr | `LiftCurveGenerator` sweeps mass rate; the exporter rejects it | recombine at standard conditions and sweep in Sm3/d |
 | Flow exits silently, no message | non-English locale | `LANG=C.UTF-8 LC_ALL=C.UTF-8` |
+| Flow crawls at 0.02-day steps, `Oscillating behavior detected`, run never ends | U-shaped `VFPPROD` BHP against rate: the well flips between ORAT and THP control | make every BHP row non-decreasing in rate (`np.maximum.accumulate`); see "VFP tables and Flow stalls" |
+| zone B of a threaded batch reports zone A's contact error | deck module keeps geometry in module globals; two threads interleave | lock the deck generation, run the simulator outside the lock |
 | `Non-monotonic values in keyword PVTO` on a table that looked fine | undersaturated branch pressures `p0 + 60`, `p0 + 150`, then `P_MAX` run past `P_MAX` for the high-Pb rows | add an offset only if `p0 + dp < P_MAX - 10`, then close every branch at `P_MAX` |
 | `SATNUM` (or other region arrays) rejected or ignored | written inside the GRID include | `SATNUM` belongs in `REGIONS`; write it to its own include |
 | oil field with a gas cap: produced GOR 1000+ from year one, pressure collapses | producers perforated through the gas cap (full-column `COMPDAT`) | perforate only layers whose centre is below the GOC (and above the OWC); add `WECON 'P*' 1* 1* <wct> <gor> 1* 'CON' /` per report step |
