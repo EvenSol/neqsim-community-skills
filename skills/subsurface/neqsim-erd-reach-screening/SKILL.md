@@ -32,11 +32,13 @@ Use this skill for a public, screening-level answer to "can this rig reach that 
 - `ReachResult`: measured depth, hold inclination, ERD ratio (departure over TVD), pick-up and slack-off hook load, torque on bottom, which limit binds (`torque` or `slack-off (lock-up)`).
 - `reach_limit(...)`: the largest departure that keeps torque within the limit and slack-off positive.
 
-## Method
+## Engineering Method
 
 1. Build-and-hold path from the kick-off point at a constant build rate; the hold inclination follows from the target departure.
 2. Johancsik soft-string integration from the bit up: axial load changes by the buoyed weight component plus or minus friction times the contact force; torque accumulates friction times contact force times tool-joint radius.
 3. Calibrate the friction factors so the model just allows the rig's longest historic well (for Njord A on the Norwegian shelf this gave 0.15 cased and 0.20 open hole, a limit about 20 percent above the 5.1 km actually drilled), then scale friction to express uncertainty.
+
+## Python Usage Pattern
 
 ```python
 from erd_reach_screening import DrillString, WellEnvironment, reach_limit, screen_reach

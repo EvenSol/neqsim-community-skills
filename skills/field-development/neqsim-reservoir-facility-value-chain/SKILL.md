@@ -20,7 +20,27 @@ field-agnostic. Use NeqSim process models (ProcessSystem, ProcessModel) for the 
 NeqSim `SimpleReservoir` or OPM Flow when a 3D reservoir model exists; this skill is the fast layer
 between them.
 
-## Method and classes
+## When to Use
+
+- Reservoir depletion must be linked to a platform or export system in one model.
+- A gas field needs a history match from shut-in wellhead pressure and allocated volumes.
+- The question is whether wells or the facility limit production, and when that changes.
+- Compression or well levers must be valued against a forecast.
+
+## Inputs
+
+- Monthly allocated volumes per wellbore and a daily sample with WHP, choke and on-stream hours.
+- Gas composition, reservoir temperature, TVD for the static column.
+- A facility throughput sweep at several separation pressures (utilisation versus rate).
+- Flowline pressure drop at a reference rate, and the export arrival pressure.
+
+## Outputs
+
+- Tank parameters (p/z_i, GIIP) and the fitted well law per well group.
+- Facility capacity versus separation pressure, the best separation pressure and the binding side (SUPPLY or FACILITY) per month.
+- Scenario comparison and P10/P90 from bootstrap and parameter sampling.
+
+## Engineering Method
 
 | Step | Python (this skill) | NeqSim Java (`neqsim.process.fielddevelopment.integrated`) |
 |------|---------------------|-------------------------------------------------------------|
@@ -62,7 +82,24 @@ between them.
    capacity and a lower Ps floor), extra wells, capacity upgrades. Bootstrap the p/z points and refit
    (p/z_i and GIIP jointly), sample the deliverability exponent, well performance and capacity.
 
-## Traps (each cost a failed run)
+## Python Usage Pattern
+
+```python
+from reservoir_facility_value_chain import (
+    Gas, GasTank, PressureCapacityCurve, RSDeliverability, maximise_rate, static_bottomhole_pressure)
+
+gas = Gas({"C1": 0.92, "C2": 0.04, "CO2": 0.02, "N2": 0.02})
+pr_now = static_bottomhole_pressure(whp_barg=220.0, gas=gas, tvd_m=1500.0, t_mean_k=330.0)
+tank = GasTank(gas=gas, t_res_k=345.0, pz_i=300.0, giip=1.0e11)
+pr = tank.pressure(cum=2.0e10)                                   # reservoir pressure after 2e10 Sm3
+wells = RSDeliverability.fit([320, 300, 280, 260], [200, 180, 160, 140], [9.0, 8.0, 7.5, 6.0])
+capacity = PressureCapacityCurve([60, 70, 80], [30.0, 36.0, 41.0])   # from the process-model sweep
+ps, rate, binding = maximise_rate(lambda ps: wells.rate(pr, ps + 10.0), capacity, 60.0, 80.0)
+```
+
+The numbers above only show the call shape; use field data and a real sweep for a study.
+
+## Common Mistakes (each cost a failed run)
 
 - **Pressure is a difference of two large numbers.** Moving GIIP by 8 % with p/z_i fixed put the
   present reservoir pressure at the wellhead pressure and the calibration became complex. Sample
@@ -87,14 +124,32 @@ between them.
   pressure. For a 320 m riser in wet gas the gas-only head is about 1 bar, but Beggs and Brill adds
   2-3 bar of condensate holdup; treat that as an upper bound and cross-check with OLGA.
 
-## Validation
+## Validation Checklist
 
 Run `python -m pytest` in the skill folder. For a real study, validate the tank against held-out
 shut-in pressures, the wells against a hold-out period, and the facility curve against the process
 model at two operating points.
+
+- [ ] The p/z intercept gives a sane initial pressure and two compartments with the same gas give similar p/z_i.
+- [ ] The deliverability exponent n lies between 0.5 and 1.0 and the fit uses choke-wide-open rows only.
+- [ ] The latest 2-3 years are held out and the bias per year is reported.
+- [ ] Every compared option uses one calendar and the stated base case matches the code.
+
+## Limitations
+
+- Screening layer: dry-gas Kay's-rule properties, a single tank per compartment and a quadratic flowline drop.
+- Facility numbers come from process-model sweeps; the receiving terminal is not modelled unless asked.
+- Monthly errors are dominated by outages that on-stream hours do not capture.
+- Built from the Troll chain; other fields need their own data checks.
 
 ## Related
 
 `neqsim-integrated-production-and-lifecycle`, `neqsim-capacity-and-utilization-analysis`,
 `neqsim-production-optimization`, `neqsim-reservoir-model-builder`, `neqsim-near-well-and-injectivity`,
 `neqsim-ncs-value-chain-optimization`, `neqsim-optimization-and-doe`.
+
+## References
+
+- Rawlins, E.L. and Schellhardt, M.A. (1935), Back-Pressure Data on Natural Gas Wells and Their Application to Production Practices, US Bureau of Mines Monograph 7.
+- Dranchuk, P.M. and Abou-Kassem, J.H. (1975), Calculation of Z factors for natural gases using equations of state, J. Can. Pet. Technol. 14(3).
+- NeqSim `neqsim.process.fielddevelopment.integrated` classes named in the method table.

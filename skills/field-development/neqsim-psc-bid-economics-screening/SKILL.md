@@ -62,9 +62,37 @@ rows = model.tornado(0.20, production_mmbbl=production, capex_musd=capex, opex_m
 
 For P10/P50/P90 EMV and the probability of loss use the Java `PscBidEconomics.monteCarlo(samples, seed, priceSigma, volumeSigma, capexSigma)`: price, volume and CAPEX get mean-preserving lognormal factors, the dry outcome is counted in the probability of loss, and a fixed seed gives repeatable results. The Python class and the Java class agree on the deterministic EMV, break-even share and price-band results (pinned in the Java tests).
 
+## Validation Checklist
+
+- [ ] Contract terms (royalty, cost-oil cap, tax, price-band table) come from the actual bid-round contract, not the defaults.
+- [ ] The development profile starts the year after discovery and is at 100 percent, with working interest applied once.
+- [ ] The bonus and exploration programme are counted in every outcome, including the dry one.
+- [ ] Break-even share reproduces zero EMV when fed back as the offered share.
+- [ ] Python and Java `PscBidEconomics` give the same deterministic EMV on the same inputs.
+
+## Common Mistakes
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| EMV looks too high | Exploration programme or bonus charged only on success | Charge both in every outcome |
+| Headroom is negative at a sensible offer | Default placeholder terms used as contract terms | Replace with the real contract terms |
+| Volume risk looks symmetric | P90/P50/P10 weights do not sum to 1 | Check `volume_weights` |
+| Value credited to a tie-back that does not fit | Host ullage ignored | Run `HostSynergyScreening` first |
+
+## Limitations
+
+- Generic public placeholder terms; not a contract-compliant calculation.
+- No per-well productivity, local-content obligations or partner carry.
+- Not suitable for a bid decision without qualified commercial and fiscal review.
+
 ## Related NeqSim Functionality
 
 - `neqsim.process.fielddevelopment.economics.PscBidEconomics` — the validated Java class with the same mechanics, plus Monte Carlo and tornado; prefer it inside NeqSim studies.
 - `neqsim.process.fielddevelopment.tieback.HostSynergyScreening` — host ullage cover and tie-back synergy value, credited only when the demand fits the host.
 - `neqsim.process.fielddevelopment.economics.TaxModelRegistry` (`BR-PSA`) and `CashFlowEngine` — full-life fiscal cash flow once a concept exists.
 - Chain with `neqsim-reservoir-model-builder`, `neqsim-brazil-presalt-analogue-basis`, `neqsim-asset-value-npv-screening` and the `frontier-block-bid-agent`.
+
+## References
+
+- Johnston, D. (1994), International Petroleum Fiscal Systems and Production Sharing Contracts, PennWell, for the royalty, cost-oil and profit-oil mechanics.
+- The production sharing contract of the bid round being screened (the only authority for the terms).
