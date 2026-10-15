@@ -136,9 +136,26 @@ RECOVERY_FACTOR: Mapping[tuple[str, str], tuple[float, float, float]] = {
     ("gas_condensate", "water_drive"): (0.40, 0.55, 0.70),
     ("oil", "solution_gas_drive"): (0.05, 0.18, 0.30),
     ("oil", "gas_cap_drive"): (0.15, 0.28, 0.40),
+    # Oil rim under a gas cap thinner than ~20-30 m: gas and water coning limit the oil take (gas-cap blowdown dominates value).
+    ("oil", "thin_oil_rim"): (0.05, 0.15, 0.30),
     ("oil", "water_drive"): (0.25, 0.38, 0.55),
     ("oil", "water_injection"): (0.30, 0.45, 0.60),
     ("oil", "gas_injection"): (0.25, 0.40, 0.55),
+}
+
+#: Common spellings of drive mechanisms mapped to the RECOVERY_FACTOR keys.
+DRIVE_ALIASES: Mapping[str, str] = {
+    "gas_cap": "gas_cap_drive",
+    "gascap": "gas_cap_drive",
+    "gas_cap_expansion": "gas_cap_drive",
+    "solution_gas": "solution_gas_drive",
+    "solution_gas_depletion": "solution_gas_drive",
+    "water": "water_drive",
+    "aquifer": "water_drive",
+    "aquifer_drive": "water_drive",
+    "oil_rim": "thin_oil_rim",
+    "waterflood": "water_injection",
+    "natural_depletion": "depletion",
 }
 
 #: Aquifer pore volume expressed as a multiple of the hydrocarbon pore volume.

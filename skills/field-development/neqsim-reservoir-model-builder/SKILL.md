@@ -1,7 +1,7 @@
 ---
 name: neqsim-reservoir-model-builder
 calculation_basis: "screening"
-version: "0.4.0"
+version: "0.5.0"
 description: "Screening-level reservoir model from whatever data exists, on a maturity ladder from one public volume to a full static model, with ranked source ladders per ingredient. USE WHEN: a field has only open data, a best-guess structure without seismic/logs/contacts is needed, volumetrics or depth defaults, recovery and well count from analogues, static arrays to OPM Flow GRID/PROPS reconciled to P90/P50/P10, or a SimpleReservoir/WellFlow spec with provenance."
 last_verified: "2026-09-10"
 requires:
@@ -118,7 +118,14 @@ injection) and labelled `analogue`. They are placeholders for reservoir
 simulation or analogue field performance.
 
 **Drive mechanism.** Inferred from the injection plan first, then aquifer
-strength, then the presence of a gas cap, then the fluid type.
+strength, then the presence of a gas cap, then the fluid type. A supplied
+`drive_mechanism` is normalised through `DRIVE_ALIASES` (`gas_cap` ->
+`gas_cap_drive`, `aquifer` -> `water_drive`, `oil_rim` -> `thin_oil_rim` ...).
+Tabulated keys: gas/gas_condensate `depletion`, `water_drive`; oil
+`solution_gas_drive`, `gas_cap_drive`, `thin_oil_rim`, `water_drive`,
+`water_injection`, `gas_injection`. Use `thin_oil_rim` (0.05/0.15/0.30) for an
+oil rim of less than about 20-30 m under a gas cap: coning, not drive energy,
+limits the oil take.
 
 **Well inflow.** The productivity index is either supplied, or estimated from
 pseudo-steady radial Darcy inflow in practical metric units:
@@ -593,6 +600,17 @@ assumption ladder for those inputs. It is still an interpretation, not a measure
 - Record the analysis version (test, working, approved) and date; thick upside cases are
   scenarios, not the base. Keep the source's access class: company-internal values do not go
   into a public repository.
+- **Gas cap over an oil rim: test the evaluation's GOR, CGR and pressure for mutual
+  consistency before building PVT.** At a gas-oil contact the rim oil is saturated at the
+  contact pressure and the cap gas is its equilibrium vapour, so GOR, condensate yield and
+  contact pressure are not three free numbers. Tune the rim oil to the GOR with its bubble
+  point at the contact pressure, then read the cap condensate yield off the equilibrium gas.
+  A volumetric evaluation that carries a yield two or three times the equilibrium value
+  overstates the cap condensate (or reports processed NGL); report the gap rather than
+  forcing it. Tuning one feed to GOR and yield at a fixed pressure fails for exactly this
+  reason.
+- **Post-well records may drop inputs that the pre-drill record carried** (permeability,
+  initial pressure): take them from the pre-drill segment of the same pay zone and label them.
 
 ## Validation Checklist
 
@@ -638,6 +656,8 @@ assumption ladder for those inputs. It is still an interpretation, not a measure
 | The closure runs off the edge of the grid | A regional dip was applied to a block that shallows continuously in one direction, so it never turns over | Make the secondary closure a four-way culmination, or extend the grid past the spill point |
 | Two compartments deplete together despite a fault between them | The assumed throw is smaller than the reservoir interval, so the reservoir is self-juxtaposed | Raise the throw above the gross thickness, or model the compartments as connected |
 | The assumed structure cannot hold the reported volume | Relief, area or porosity is inconsistent with the published number | Treat the exception from `solve_contact_for_volume` as a result and move one of them |
+| Warning "No screening recovery-factor range is tabulated for (oil, gas_cap)" | Drive name not in the table (older versions had no aliases) | Use a tabulated key or an alias from `DRIVE_ALIASES`; `thin_oil_rim` for a thin rim |
+| Thin oil rim produces at the BHP floor with GOR in the thousands from day one | Rim producers on oil-rate control with only a low BHP limit cone gas and water at once | Cap gas and liquid per well, set an economic WECON (GOR, water cut, minimum oil) and a realistic drawdown |
 
 ## Limitations
 

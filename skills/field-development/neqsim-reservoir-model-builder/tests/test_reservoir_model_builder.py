@@ -278,6 +278,19 @@ def test_refine_keeps_the_provenance_of_earlier_data_sources() -> None:
     assert with_logs.parameters["area_km2"].provenance == "measured"
 
 
+def test_drive_aliases_map_to_tabulated_ranges_and_thin_oil_rim_is_known() -> None:
+    kwargs = dict(fluid_type="oil", datum_depth_m_tvdmsl=3200.0, stoiip_Sm3=6.0e6, has_gas_cap=True)
+    alias = build_reservoir_model(field_name="Alias", drive_mechanism="gas_cap", **kwargs)
+    canonical = build_reservoir_model(field_name="Canonical", drive_mechanism="gas_cap_drive", **kwargs)
+    rim = build_reservoir_model(field_name="Rim", drive_mechanism="thin_oil_rim", **kwargs)
+
+    assert not any("No screening recovery-factor" in w for w in alias.warnings)
+    assert alias.parameters["recovery_factor"].value == pytest.approx(canonical.parameters["recovery_factor"].value)
+    assert rim.parameters["recovery_factor"].value == pytest.approx(0.15)
+    unknown = build_reservoir_model(field_name="Unknown", drive_mechanism="magic", **kwargs)
+    assert any("Known drives for oil" in w for w in unknown.warnings)
+
+
 def test_cold_and_shallow_reservoir_raises_engineering_warnings() -> None:
     model = build_reservoir_model(
         field_name="Cold Shallow",

@@ -16,6 +16,7 @@ from typing import Any, Mapping, Sequence
 from .parameters import (
     ACQUISITION_ROUTE,
     AQUIFER_VOLUME_MULTIPLE,
+    DRIVE_ALIASES,
     GEOTHERMAL_GRADIENT_C_PER_KM,
     HYDROSTATIC_GRADIENT_BAR_PER_M,
     PARAMETER_WEIGHTS,
@@ -516,7 +517,7 @@ class ReservoirModelBuilder:
         )
 
         if inputs.drive_mechanism is not None:
-            drive = inputs.drive_mechanism
+            drive = DRIVE_ALIASES.get(inputs.drive_mechanism.strip().lower(), inputs.drive_mechanism)
         elif inputs.injection_plan in ("water_injection", "gas_injection"):
             drive = inputs.injection_plan
         elif aquifer in ("moderate", "strong"):
@@ -527,9 +528,11 @@ class ReservoirModelBuilder:
             drive = "depletion"
 
         if (inputs.fluid_type, drive) not in RECOVERY_FACTOR:
+            known = sorted(d for f, d in RECOVERY_FACTOR if f == inputs.fluid_type)
             warnings.append(
                 f"No screening recovery-factor range is tabulated for "
-                f"({inputs.fluid_type}, {drive}); a depletion/solution-gas analogue is used."
+                f"({inputs.fluid_type}, {drive}); a depletion/solution-gas analogue is used. "
+                f"Known drives for {inputs.fluid_type}: {', '.join(known)}."
             )
         return drive
 
