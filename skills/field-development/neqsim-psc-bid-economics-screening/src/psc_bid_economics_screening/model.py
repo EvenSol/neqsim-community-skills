@@ -9,9 +9,22 @@ per year, money in million USD, prices in USD per barrel.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import List, Sequence
+from typing import List, Optional, Sequence, Union
+
+from .profit_oil_table import ProfitOilTable
 
 MAX_SHARE = 0.99
+
+
+def net_cost_oil_cap(gross_cap: float, royalty_rate: float) -> float:
+    """Convert a cost-oil cap quoted on gross production value to the model's cap on revenue after royalty.
+
+    ``PscBidModel.cost_oil_cap`` is applied after royalty, so an 80 % of gross cap with
+    15 % royalty must be passed as 0.80 / 0.85.
+    """
+    if not 0.0 <= royalty_rate < 1.0:
+        raise ValueError("royalty_rate must be within [0, 1)")
+    return gross_cap / (1.0 - royalty_rate)
 
 
 @dataclass
@@ -30,6 +43,7 @@ class PscBidResult:
     state_take_undiscounted_musd: float
     bid_verdict: str
     assumptions: List[str] = field(default_factory=list)
+    effective_profit_oil_share: Optional[float] = None
 
 
 class PscBidModel:
@@ -47,6 +61,8 @@ class PscBidModel:
         share_per_usd_above_reference: float = 0.0,
         reference_price: float = 40.0,
         price_share_steps: Sequence[tuple] = (),
+        share_table: Optional[ProfitOilTable] = None,
+        realisation_discount_usd: float = 0.0,
     ) -> None:
         self.oil_price = oil_price
         self.discount_rate = discount_rate
@@ -59,6 +75,10 @@ class PscBidModel:
         self.reference_price = reference_price
         steps = sorted((float(t), float(a)) for t, a in price_share_steps)
         self.price_share_steps = steps
+        # With a share table the table replaces share_per_usd and price_share_steps.
+        self.share_table = share_table
+        # Dated Brent for the table is oil_price (realised) plus this discount.
+        self.realisation_discount_usd = realisation_discount_usd
 
     def evaluate(
         self,
@@ -73,10 +93,18 @@ class PscBidModel:
         discovery_delay_years: int = 4,
         volume_scales: Sequence[float] = (1.0,),
         volume_weights: Sequence[float] = (1.0,),
+        rate_per_producer_bbld: Union[None, float, Sequence[float]] = None,
     ) -> PscBidResult:
-        """Evaluate the bid at the offered share and solve the break-even share."""
+        """Evaluate the bid at the offered share and solve the break-even share.
+
+        With a ``share_table`` the Union share varies by year with the average oil
+        rate per producing well, ``rate_per_producer_bbld`` (a number or one value per
+        year, bbl/d, independent of the volume scale), and ``break_even`` is the
+        offered share at the table reference cell.
+        """
         if not (len(production_mmbbl) == len(capex_musd) == len(opex_musd)):
             raise ValueError("production, capex and opex must have the same length")
+        rates = self._rates(rate_per_producer_bbld, len(production_mmbbl))
         if len(volume_scales) != len(volume_weights) or not volume_scales:
             raise ValueError("volume_scales and volume_weights must have the same non-zero length")
         total_w = sum(volume_weights)
@@ -91,7 +119,7 @@ class PscBidModel:
             base = None
             for scale, w in zip(volume_scales, weights):
                 pv_c, pv_s, sums = self._waterfall(
-                    production_mmbbl, capex_musd, opex_musd, share, scale, exploration_program_musd, delay
+                    production_mmbbl, capex_musd, opex_musd, share, scale, exploration_program_musd, delay, rates
                 )
                 pv_dev += w * pv_c
                 pv_state += w * pv_s
@@ -116,6 +144,24 @@ class PscBidModel:
             verdict = "thin_headroom"
         else:
             verdict = "value_creating"
+        shares = self.effective_share_profile(profit_oil_share_offered, production_mmbbl, rate_per_producer_bbld)
+        weight_sum = sum(p for p in production_mmbbl if p > 0.0)
+        effective = (
+            sum(s * p for s, p in zip(shares, production_mmbbl) if p > 0.0) / weight_sum
+            if weight_sum > 0.0
+            else shares[0]
+        )
+        assumptions = [
+            "Royalty on gross revenue; cost oil capped on net revenue after royalty.",
+            "Signature bonus is not cost recoverable; exploration programme is recoverable on discovery.",
+            "Flat oil price; generic public fiscal defaults that must be replaced by the bid-round contract terms.",
+            "Exploration programme and bonus are paid in every outcome; development only on discovery.",
+        ]
+        if self.share_table is not None:
+            assumptions.append(
+                "Union share = offer + share-table adjustment by Brent (oil price + realisation discount) and "
+                "rate per producer, floored at 1 % and capped at 100 %; break-even is the offered share at the reference cell."
+            )
         return PscBidResult(
             profit_oil_share_offered=profit_oil_share_offered,
             chance_of_discovery=chance_of_discovery,
@@ -128,12 +174,42 @@ class PscBidModel:
             contractor_cash_undiscounted_musd=working_interest * contractor_sum,
             state_take_undiscounted_musd=working_interest * state_sum,
             bid_verdict=verdict,
-            assumptions=[
-                "Royalty on gross revenue; cost oil capped on net revenue after royalty.",
-                "Signature bonus is not cost recoverable; exploration programme is recoverable on discovery.",
-                "Flat oil price; generic public fiscal defaults that must be replaced by the bid-round contract terms.",
-                "Exploration programme and bonus are paid in every outcome; development only on discovery.",
-            ],
+            assumptions=assumptions,
+            effective_profit_oil_share=effective,
+        )
+
+    def _rates(self, rate, n_years: int) -> Optional[List[float]]:
+        """Per-year rate per producer for the share table, or None when no table is used."""
+        if self.share_table is None:
+            return None
+        if rate is None:
+            raise ValueError("rate_per_producer_bbld is required when a share_table is set")
+        if isinstance(rate, (int, float)):
+            return [float(rate)] * n_years
+        rates = [float(r) for r in rate]
+        if len(rates) != n_years:
+            raise ValueError("rate_per_producer_bbld must be a number or have one value per year")
+        return rates
+
+    def effective_share_profile(self, offer, production_mmbbl, rate_per_producer_bbld=None) -> List[float]:
+        """State profit-oil share per year at the offered share (constant without a share table)."""
+        if self.share_table is None:
+            return [self._constant_state_share(offer)] * len(production_mmbbl)
+        rates = self._rates(rate_per_producer_bbld, len(production_mmbbl))
+        brent = self.oil_price + self.realisation_discount_usd
+        return [
+            self.share_table.effective_share(offer, brent, r) if p > 0.0 else offer
+            for p, r in zip(production_mmbbl, rates)
+        ]
+
+    def _constant_state_share(self, share: float) -> float:
+        step_add = 0.0
+        for threshold, added in self.price_share_steps:
+            if self.oil_price >= threshold:
+                step_add = added
+        return min(
+            MAX_SHARE,
+            share + self.share_per_usd * max(0.0, self.oil_price - self.reference_price) + step_add,
         )
 
     def tornado(self, relative_swing: float, **evaluate_kwargs) -> dict:
@@ -186,7 +262,7 @@ class PscBidModel:
         ordered = {k: tuple(sorted(v)) for k, v in rows.items()}
         return dict(sorted(ordered.items(), key=lambda kv: kv[1][0] - kv[1][1]))
 
-    def _waterfall(self, production, capex, opex, share, scale, pem, delay):
+    def _waterfall(self, production, capex, opex, share, scale, pem, delay, rates=None):
         pool = pem
         loss_pool = 0.0
         pv_c = 0.0
@@ -194,15 +270,13 @@ class PscBidModel:
         contractor_sum = 0.0
         state_sum = 0.0
         net_pre_tax = 0.0
-        step_add = 0.0
-        for threshold, added in self.price_share_steps:
-            if self.oil_price >= threshold:
-                step_add = added
-        state_share = min(
-            MAX_SHARE,
-            share + self.share_per_usd * max(0.0, self.oil_price - self.reference_price) + step_add,
-        )
+        state_share = self._constant_state_share(share)
+        brent = self.oil_price + self.realisation_discount_usd
         for t in range(len(production)):
+            if rates is not None:
+                state_share = (
+                    self.share_table.effective_share(share, brent, rates[t]) if production[t] > 0.0 else share
+                )
             revenue = production[t] * scale * self.oil_price
             royalty = self.royalty_rate * revenue
             net = revenue - royalty

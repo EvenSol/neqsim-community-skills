@@ -24,4 +24,4 @@ python -m pytest skills/field-development/neqsim-psc-bid-economics-screening/tes
 
 ## Public Scope
 
-Contains only generic public PSC mechanics and placeholder defaults. It holds no company hurdle rates, price decks, partner terms or bid-round contract data. For real decisions, use the bid-round contract terms, validated NeqSim field-economics classes and a qualified commercial review.
+Contains only generic public PSC mechanics and placeholder defaults, plus the public Brazilian ANP Annex XX profit-oil adjustment grid (`src/psc_bid_economics_screening/data/annex_xx_profit_oil_adjustment.csv`, rebuilt from the 2026 OPP edital; confirm against the edital of the round). It holds no company hurdle rates, price decks, partner terms or bid-round contract data. For real decisions, use the bid-round contract terms, validated NeqSim field-economics classes and a qualified commercial review.

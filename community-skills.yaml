@@ -795,8 +795,8 @@ skills:
     tags: [process, continuous-improvement, living-task, historian, tagreader, bayesian-optimization, enkf, identifiability]
     min_neqsim_version: "3.22.0"
   - name: neqsim-psc-bid-economics-screening
-    version: "0.1.0"
-    description: "Educational PSC exploration-block bid screening: royalty, capped cost oil, profit-oil split, income tax, signature bonus and exploration programme, with EMV and the break-even offered profit-oil share. USE WHEN: judging a bid-round offer, asking how much State profit-oil share a block can bear, or comparing a near-field tie-back with a stand-alone case before any discovery exists."
+    version: "0.2.0"
+    description: "Educational PSC exploration-block bid screening: royalty, capped cost oil, profit-oil split (optionally the Brazilian ANP Annex XX Brent and rate-per-well adjustment table), tax, bonus and exploration programme, with EMV, break-even offered share, break-even chance of discovery and volume. USE WHEN: judging a bid-round offer or how much State profit-oil share a block can bear, or comparing a tie-back with stand-alone."
     author: "neqsim-community"
     repo: "equinor/neqsim-community-skills"
     path: "skills/field-development/neqsim-psc-bid-economics-screening/SKILL.md"
@@ -817,4 +817,12 @@ skills:
     repo: "equinor/neqsim-community-skills"
     path: "skills/field-development/neqsim-anp-open-data/SKILL.md"
     tags: [field-development, brazil, anp, open-data, production, blocks]
+    min_neqsim_version: "3.7.0"
+  - name: neqsim-brazil-offshore-infrastructure-market
+    version: "0.1.0"
+    description: "Public data and helpers for Brazilian offshore (Santos and Campos pre-salt) gas export routes, processing plants, tariff status, third-party access, gas spec, oil marketing and host capacity, with explicit UNKNOWNs and source ids. USE WHEN: a Brazilian block or tie-back evaluation needs gas export, CO2 removal, wellhead net-back, host ullage or market context, and no numeric offshore tariff is public."
+    author: "neqsim-community"
+    repo: "equinor/neqsim-community-skills"
+    path: "skills/field-development/neqsim-brazil-offshore-infrastructure-market/SKILL.md"
+    tags: [field-development, brazil, pre-salt, gas-export, tariffs, market, host-capacity, screening]
     min_neqsim_version: "3.7.0"

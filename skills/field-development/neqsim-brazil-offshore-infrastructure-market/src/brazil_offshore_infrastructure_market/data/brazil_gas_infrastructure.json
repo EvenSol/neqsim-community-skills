@@ -1,0 +1,703 @@
+{
+ "meta": {
+  "accessed": "2026-10-14",
+  "scope": "Brazil offshore pre-salt gas infrastructure, tariffs, plants, market, regulation (Santos Basin blocks Rodocrosita, Rubi, Itaimbezinho, Jaspe; neighbour Bacalhau)",
+  "confidence_scale": [
+   "official",
+   "company",
+   "press",
+   "estimate",
+   "UNKNOWN"
+  ],
+  "note": "value=null means UNKNOWN (not found in a fetched public source). Source ids map to the table in brazil_gas_infrastructure_tariffs_market.md",
+  "as_of": "2026-10-14",
+  "source_id_convention": "INF-S<n> keys of `sources` in this file; analogue/market file uses MKT-S<n>",
+  "stale_warning": "Snapshot of public sources read on 2026-10-14. Tariffs, capacities, start dates and regulation change; re-check before use.",
+  "unknown_convention": "value null (or confidence UNKNOWN) means not found in a fetched public source; it is not zero."
+ },
+ "pipelines": [
+  {
+   "name": "Rota 1 (Tupi/Lula - Mexilhao - UTGCA Caraguatatuba)",
+   "capacity": {
+    "value": 10,
+    "unit": "MMm3/d"
+   },
+   "length_km": {
+    "value": 359,
+    "unit": "km"
+   },
+   "diameter": {
+    "value": "18 and 34",
+    "unit": "inch"
+   },
+   "owner": "Tupi-Mexilhao: Petrobras 65 / Shell 25 / Galp 10; Mexilhao-UTGCA: Petrobras 100 (2019 data)",
+   "start_year": 2011,
+   "landfall": "Caraguatatuba SP (via Mexilhao platform)",
+   "status_2026": "operating (per 2021-26 GEM page; not re-verified by Petrobras page)",
+   "spare_capacity": null,
+   "source_id": "INF-S3",
+   "confidence": "estimate",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "Rota 2 (Tupi/Lula - Buzios corridor - UTGCAB Cabiunas)",
+   "capacity": {
+    "value": 20,
+    "unit": "MMm3/d"
+   },
+   "length_km": {
+    "value": 401,
+    "unit": "km"
+   },
+   "diameter": {
+    "value": 24,
+    "unit": "inch"
+   },
+   "owner": "Petrobras 55 / Shell 25 / Galp 10 / Repsol 10 (2019 data)",
+   "start_year": 2016,
+   "landfall": "Lagomar beach, Macae RJ",
+   "status_2026": "operating (Petrobras page: in operation since 12 Feb 2016)",
+   "spare_capacity": null,
+   "source_id": "INF-S2",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "capacity and diameter official; length and ownership from S4 (press/secondary)"
+  },
+  {
+   "name": "Rota 3 (pre-salt Santos - UPGN Boaventura/GASLUB Itaborai)",
+   "capacity": {
+    "value": 18,
+    "unit": "MMm3/d"
+   },
+   "length_km": {
+    "value": 355,
+    "unit": "km"
+   },
+   "diameter": null,
+   "owner": "Petrobras 100",
+   "start_year": 2024,
+   "landfall": "Jacone beach, Marica RJ (48 km onshore to Itaborai)",
+   "status_2026": "operating; commercial operation Sep-Nov 2024; ANP rejected Petrobras gas-spec waiver for Itaborai 2026-10-02",
+   "spare_capacity": null,
+   "source_id": "INF-S1",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "307 km offshore + 48 km onshore; diameter UNKNOWN"
+  },
+  {
+   "name": "Rota 4A (pre-salt - Praia Grande - Cubatao)",
+   "capacity": {
+    "value": 21,
+    "unit": "MMm3/d"
+   },
+   "length_km": {
+    "value": 275,
+    "unit": "km"
+   },
+   "diameter": null,
+   "owner": "Rota 4 Participacoes (Compass/Cosan, Comgas); minority partners sought",
+   "start_year": null,
+   "landfall": "Praia Grande SP",
+   "status_2026": "proposed / licensing; not in EPE PDE 2035 base case (planned export pipelines there: Raia, SEAP)",
+   "spare_capacity": null,
+   "source_id": "INF-S6",
+   "confidence": "press",
+   "as_of": "2026-10-14",
+   "note": "GEM quotes 275-291 km and 10-21 MMm3/d; 2020 article expected start 2027-28; start year UNKNOWN now"
+  },
+  {
+   "name": "Rota 4B (pre-salt - Itaguai, Ilha da Madeira)",
+   "capacity": {
+    "value": 21,
+    "unit": "MMm3/d"
+   },
+   "length_km": {
+    "value": 313,
+    "unit": "km"
+   },
+   "diameter": null,
+   "owner": "Rota 4 Participacoes (Cosan)",
+   "start_year": null,
+   "landfall": "Itaguai RJ (294 km offshore + 19 km onshore)",
+   "status_2026": "alternative to 4A; undecided",
+   "spare_capacity": null,
+   "source_id": "INF-S6",
+   "confidence": "press",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "Raia gas export pipeline (BM-C-33, Equinor)",
+   "capacity": {
+    "value": 16,
+    "unit": "MMm3/d"
+   },
+   "length_km": null,
+   "diameter": null,
+   "owner": "Equinor-operated Raia project (partners not verified here)",
+   "start_year": 2028,
+   "landfall": null,
+   "status_2026": "ANP authorised start of construction July 2025; offshore processing, gas enters transport grid directly",
+   "spare_capacity": null,
+   "source_id": "INF-S11",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "SEAP (Sergipe Aguas Profundas) export pipeline",
+   "capacity": {
+    "value": 18,
+    "unit": "MMm3/d"
+   },
+   "length_km": null,
+   "diameter": null,
+   "owner": "Petrobras",
+   "start_year": "SEAP II 2030, SEAP I 2032",
+   "landfall": "Sergipe",
+   "status_2026": "planned",
+   "spare_capacity": null,
+   "source_id": "INF-S11",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "Rota 5 / Rota 6 / SPA (Santos Basin pre-salt)",
+   "capacity": null,
+   "length_km": null,
+   "diameter": null,
+   "owner": null,
+   "start_year": null,
+   "landfall": null,
+   "status_2026": "UNKNOWN; 2019 plan named Rotas 4,5,6; PIPE 2021 mentions Rotas 5A/5B/5C as hub-export alternatives",
+   "spare_capacity": null,
+   "source_id": "INF-S23",
+   "confidence": "UNKNOWN",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "Bacalhau gas route",
+   "capacity": {
+    "value": 530,
+    "unit": "MMscfd (FPSO gas handling = approx 15.0 MMm3/d)"
+   },
+   "length_km": null,
+   "diameter": null,
+   "owner": "Equinor 40 (op) / ExxonMobil 40 / Petrogal 20; PPSA contract manager",
+   "start_year": 2025,
+   "landfall": "none - Phase 1 associated gas reinjected",
+   "status_2026": "Phase 1 on stream Oct 2025, no export pipeline; Phase 2 concept studies include 2nd FPSO plus approx 100-mile (about 160 km) gas pipeline (Reuters via JPT 2022); route/tie-in UNKNOWN",
+   "spare_capacity": null,
+   "source_id": "INF-S7",
+   "confidence": "company",
+   "as_of": "2026-10-14",
+   "note": "reinjection statement from S9 (press, 2022); MODEC says FPSO 'process and inject up to 530 MMscfd associated gas'"
+  }
+ ],
+ "plants": [
+  {
+   "name": "Boaventura / GASLUB UPGN, Itaborai RJ",
+   "capacity": {
+    "value": 21,
+    "unit": "MMm3/d"
+   },
+   "owner": "Petrobras",
+   "tpa": "no published TPA terms; ANP draft third-party-access resolution in consultation (Jul 2026)",
+   "ngl_lpg_yield": null,
+   "source_id": "INF-S10",
+   "confidence": "press",
+   "as_of": "2026-10-14",
+   "note": "two trains; 2nd module on stream May 2025 (S11 official); feed up to 18 MMm3/d via Rota 3; gas ethane-rich; mitigation blend with Cabiunas gas, etanized gas to REDUC via Gasduc II and Gaserj (S19)"
+  },
+  {
+   "name": "UTGCAB Cabiunas (Macae RJ)",
+   "capacity": {
+    "value": 25.2,
+    "unit": "MMm3/d"
+   },
+   "owner": "Petrobras",
+   "tpa": "existing UPGN sharing contracts (e.g. Cabiunas, Caraguatatuba) per EPE; terms not public",
+   "ngl_lpg_yield": null,
+   "source_id": "INF-S13",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "largest installed processing capacity in Brazil (EPE PDE 2034)"
+  },
+  {
+   "name": "UTGCA Caraguatatuba SP",
+   "capacity": null,
+   "owner": "Petrobras",
+   "tpa": "existing UPGN sharing contracts per EPE; ANP granted spec waiver (no selective ethane separation)",
+   "ngl_lpg_yield": null,
+   "source_id": "INF-S19",
+   "confidence": "UNKNOWN",
+   "as_of": "2026-10-14",
+   "note": "capacity UNKNOWN; EPE PDE 2035 model uses up to 10 MMm3/d supply from UTGCA (PDE 2034: up to 15)"
+  },
+  {
+   "name": "Brazil national UPGN fleet",
+   "capacity": {
+    "value": 120.1,
+    "unit": "MMm3/d"
+   },
+   "owner": "Petrobras about 90 percent of capacity (ANP yearbook 2024 cited by Poder360)",
+   "tpa": "n/a",
+   "ngl_lpg_yield": null,
+   "source_id": "INF-S11",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "14 UPGNs in operation: 91.2 SE / 16.7 NE / 12.2 N (PDE 2035); PDE 2034 had 12 UPGNs, 98.7 MMm3/d"
+  },
+  {
+   "name": "Mexilhao UTG, Boaventura refinery, RPBC, REDUC",
+   "capacity": null,
+   "owner": null,
+   "tpa": null,
+   "ngl_lpg_yield": null,
+   "source_id": "INF-S11",
+   "confidence": "UNKNOWN",
+   "as_of": "2026-10-14",
+   "note": "RPBC UPGN authorisation revoked 2023 (PDE 2034); Boaventura refining 2028 (PDE 2035); REDUC receives etanized gas (S19); other numbers UNKNOWN"
+  }
+ ],
+ "tariffs": [
+  {
+   "name": "Gas transport tariff framework",
+   "value": "entry-exit capacity contracts; tariffs proposed by transporter and approved by ANP after public consultation",
+   "unit": "text",
+   "source_id": "INF-S15",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "Third-party access to escoamento pipelines and UPGNs",
+   "value": "ANP board approved 45-day public consultation on draft resolution on 2026-07-10: negotiated non-discriminatory access, owners' preference right extinguished 30 years after start-up, existing contracts reviewed",
+   "unit": "text",
+   "source_id": "INF-S20",
+   "confidence": "press",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "Escoamento plus processing share of delivered gas price (MME estimate)",
+   "value": 46,
+   "unit": "percent of price to final consumer",
+   "source_id": "INF-S20",
+   "confidence": "press",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "Numeric Rota 1/2/3 offshore export tariff",
+   "value": null,
+   "unit": "USD/MMBtu",
+   "source_id": null,
+   "confidence": "UNKNOWN",
+   "as_of": "2026-10-14",
+   "note": "negotiated bilaterally, not published in any fetched source"
+  },
+  {
+   "name": "Numeric UTGCA/UTGCAB/Boaventura processing tariff",
+   "value": null,
+   "unit": "USD/MMBtu",
+   "source_id": null,
+   "confidence": "UNKNOWN",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "NTS / TAG / TBG ANP-approved transport tariffs",
+   "value": null,
+   "unit": "R$/MMBtu or R$/m3/d",
+   "source_id": "INF-S26",
+   "confidence": "UNKNOWN",
+   "as_of": "2026-10-14",
+   "note": "NTS publishes at https://www.ntsbrasil.com/contratos-tarifas/tarifas/ (dynamic page, values not extractable); cites ANP Res 11/2016 and 42/2012"
+  },
+  {
+   "name": "Gassled (Norwegian analogue)",
+   "value": null,
+   "unit": "NOK/Sm3",
+   "source_id": null,
+   "confidence": "UNKNOWN",
+   "as_of": "2026-10-14",
+   "note": "not fetched in this session"
+  }
+ ],
+ "market": [
+  {
+   "name": "Gas quality ANP Res 16/2008 - CO2 max",
+   "value": 3.0,
+   "unit": "mol %",
+   "source_id": "INF-S14",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "Res 982/2025 (21 May 2025) now sets methane/ethane limits with pre-salt waiver mechanism (S19); revision of CO2 limit not verified"
+  },
+  {
+   "name": "Gas quality - total sulphur max",
+   "value": 70,
+   "unit": "mg/m3",
+   "source_id": "INF-S14",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "Gas quality - H2S max",
+   "value": "10 (N) / 13 (NE) / 10 (CO,SE,S)",
+   "unit": "mg/m3",
+   "source_id": "INF-S14",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "Gas quality - water dew point max at 1 atm",
+   "value": "-39 (N,NE) / -45 (CO,SE,S)",
+   "unit": "degC",
+   "source_id": "INF-S14",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "Gas quality - HC dew point max at 4.5 MPa",
+   "value": "15 (N,NE) / 0 (CO,SE,S)",
+   "unit": "degC",
+   "source_id": "INF-S14",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "Gas quality - HHV",
+   "value": "34000-38400 (N,NE) / 35000-43000 (CO,SE,S)",
+   "unit": "kJ/m3 at 293.15 K, 101.325 kPa, dry",
+   "source_id": "INF-S14",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "Gas quality - Wobbe index",
+   "value": "40500-45000 (N,NE) / 46500-53500 (CO,SE,S)",
+   "unit": "kJ/m3",
+   "source_id": "INF-S14",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "Gas quality - methane min / ethane max / propane max / C4+ max / O2 max / inerts max",
+   "value": "68 and 85 / 12 / 3 and 6 / 1.5 and 3.0 / 0.8 and 0.5 / 18, 8, 6",
+   "unit": "mol % (first value N,NE; second CO,SE,S)",
+   "source_id": "INF-S14",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "Potential gas supply, integrated grid",
+   "value": "128 (2025) to 169 (2035)",
+   "unit": "MMm3/d",
+   "source_id": "INF-S11",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "national gas share 36 to 50 percent; Bolivia 13 to 5 MMm3/d; LNG 49 percent of total on average"
+  },
+  {
+   "name": "Gross gas production forecast 2035 (peak 2033)",
+   "value": "299 (peak 309)",
+   "unit": "MMm3/d",
+   "source_id": "INF-S12",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "pre-salt about 80 percent of gross; net production peak about 127 MMm3/d at end of decade; derived net/gross about 42 percent (implied reinjection + own use + flaring + losses about 58 percent, derived estimate)"
+  },
+  {
+   "name": "Pre-salt share of net gas 2035",
+   "value": 61,
+   "unit": "percent",
+   "source_id": "INF-S12",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "City-gate gas price projection (EPE PDE 2035)",
+   "value": "10.4-11.8 (series A) and 15.0-16.5 (series B), 2024-2035",
+   "unit": "USD/MMBtu",
+   "source_id": "INF-S11",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "series labelling (market range vs energy-equivalence price) ambiguous after text extraction"
+  },
+  {
+   "name": "Gas price indexation",
+   "value": "almost all CDL contract formulas indexed to Brent and/or Henry Hub; Brent dominant (June 2025)",
+   "unit": "text",
+   "source_id": "INF-S11",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "LNG regasification terminals (capacity)",
+   "value": "TGS 15; TRSP 14; Itaguai 8.5; Guanabara Bay 20; Porto do Acu 21; Todos os Santos 20; Sergipe 21",
+   "unit": "MMm3/d",
+   "source_id": "INF-S11",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "8 existing terminals listed by EPE; 8th (not extracted) UNKNOWN"
+  },
+  {
+   "name": "Brent projection (EPE, real Dec-2024 USD)",
+   "value": "72 (2025) rising to 81 (2031) then 77 (2035)",
+   "unit": "USD/bbl",
+   "source_id": "INF-S22",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "reconstructed from extracted data series; verify in PDF"
+  },
+  {
+   "name": "Pre-salt crude marketing (Brent differential, API, sulphur, shuttle tanker cost, PPSA discount)",
+   "value": null,
+   "unit": "USD/bbl",
+   "source_id": null,
+   "confidence": "UNKNOWN",
+   "as_of": "2026-10-14",
+   "note": "Bacalhau: stabilised oil offloaded to shuttle tankers, 2 MMbbl storage (S9, S7)"
+  },
+  {
+   "name": "Bacalhau FPSO facts",
+   "value": "220 kbopd; 2 MMbbl storage; 2050 m water depth; 185 km offshore Ilhabela; 19 wells Phase 1; 900 bar reservoir; CO2 intensity about 9 kg/boe; CCGT",
+   "unit": "mixed",
+   "source_id": "INF-S8",
+   "confidence": "company",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "CO2 content of Bacalhau, Mero, Buzios, Libra gas",
+   "value": null,
+   "unit": "mol %",
+   "source_id": null,
+   "confidence": "UNKNOWN",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "Brazil CCS law (2025)",
+   "value": null,
+   "unit": "text",
+   "source_id": null,
+   "confidence": "UNKNOWN",
+   "as_of": "2026-10-14"
+  }
+ ],
+ "regulation": [
+  {
+   "name": "Gas Law 14.134/2021",
+   "value": "entry-exit transport regime; ANP-approved tariffs; access to escoamento, processing and LNG terminals",
+   "unit": "text",
+   "source_id": "INF-S15",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "Resolucao ANP 982/2025 (21 May 2025)",
+   "value": "gas specification incl. methane/ethane limits with waiver for pre-salt processing units; ANP rejected Petrobras waiver for Itaborai on 2026-10-02 but granted similar to UTGCA",
+   "unit": "text",
+   "source_id": "INF-S19",
+   "confidence": "press",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "Resolucao ANP 16/2008 gas spec",
+   "value": "see market entries",
+   "unit": "text",
+   "source_id": "INF-S14",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "Lei 15.042/2024 (SBCE, Brazilian GHG ETS)",
+   "value": "creates SBCE, operator monitoring plan and annual emission reporting; allocation, caps and price UNKNOWN here",
+   "unit": "text",
+   "source_id": "INF-S16",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "Lei 13.586/2017 (Repetro-Sped)",
+   "value": "special import regime suspending II, IPI, PIS/COFINS-import for definitive-stay goods used in E&P",
+   "unit": "text",
+   "source_id": "INF-S18",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "Lei 12.351/2010 individualisation of production",
+   "value": "unitisation of adjacent areas via Acordo de Individualizacao da Producao; PPSA/Union defines AIP terms with adjacent-area holder (Chapter IV)",
+   "unit": "text",
+   "source_id": "INF-S17",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "AIP for Bacalhau / Rodocrosita adjacency",
+   "value": null,
+   "unit": "text",
+   "source_id": null,
+   "confidence": "UNKNOWN",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "Corporate income tax IRPJ+CSLL",
+   "value": 34,
+   "unit": "percent",
+   "source_id": null,
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "note": "statutory 25 + 9; not verified in a fetched source in this session"
+  },
+  {
+   "name": "Third-party access resolution (draft)",
+   "value": "45-day consultation approved 2026-07-10; ANP also opened inquiry into Petrobras-PPSA dispute over access (Valor 2026-07-10, not retrieved)",
+   "unit": "text",
+   "source_id": "INF-S20",
+   "confidence": "press",
+   "as_of": "2026-10-14"
+  },
+  {
+   "name": "Decreto 10.712/2021 and Decreto 12.153/2024",
+   "value": "named; Decreto 12.153/2024 cited by EPE as measure to make gas infrastructure costs more efficient; content not fetched",
+   "unit": "text",
+   "source_id": "INF-S11",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  }
+ ],
+ "sources": {
+  "INF-S1": {
+   "title": "Petrobras Rota 3",
+   "url": "https://comunicabaciadesantos.petrobras.com.br/empreendimentos/rota-3",
+   "confidence": "official"
+  },
+  "INF-S2": {
+   "title": "Petrobras Rota 2",
+   "url": "https://comunicabaciadesantos.petrobras.com.br/empreendimentos/rota-2",
+   "confidence": "official"
+  },
+  "INF-S3": {
+   "title": "GEM Route 1",
+   "url": "https://www.gem.wiki/Route_1_Gas_Pipeline",
+   "confidence": "estimate"
+  },
+  "INF-S4": {
+   "title": "GEM Route 2",
+   "url": "https://www.gem.wiki/Route_2_Gas_Pipeline",
+   "confidence": "estimate"
+  },
+  "INF-S5": {
+   "title": "GEM Route 3",
+   "url": "https://www.gem.wiki/Route_3_Gas_Pipeline",
+   "confidence": "press"
+  },
+  "INF-S6": {
+   "title": "GEM Route 4a; GasNet 2020-11-04",
+   "url": "https://www.gem.wiki/Route_4a_Gas_Pipeline ; https://www.gasnet.com.br/Conteudo/21456/index.html",
+   "confidence": "press"
+  },
+  "INF-S7": {
+   "title": "MODEC FPSO Bacalhau",
+   "url": "https://www.modec.com/project/detail/bacalhau.html",
+   "confidence": "company"
+  },
+  "INF-S8": {
+   "title": "Equinor Bacalhau; news 2025-10-16",
+   "url": "https://www.equinor.com/energy/bacalhau ; https://www.equinor.com/news/20251016-bacalhau-production-started",
+   "confidence": "company"
+  },
+  "INF-S9": {
+   "title": "JPT 2022 (Reuters)",
+   "url": "https://jpt.spe.org/equinor-exxonmobil-plan-bacalhau-expansion-off-brazil",
+   "confidence": "press"
+  },
+  "INF-S10": {
+   "title": "OGJ 2024-09-12",
+   "url": "https://www.ogj.com/refining-processing/gas-processing/new-plants/article/55139607/petrobras-nears-startup-of-route-3-pre-salt-gas-plant-pipeline",
+   "confidence": "press"
+  },
+  "INF-S11": {
+   "title": "EPE PDE 2035 Caderno Gas Natural",
+   "url": "https://www.epe.gov.br/sites-pt/publicacoes-dados-abertos/publicacoes/PublicacoesArquivos/publicacao-894/PDE%202035_Caderno%20G%C3%A1s%20Natural_rev_MME%2001122025.pdf",
+   "confidence": "official"
+  },
+  "INF-S12": {
+   "title": "EPE PDE 2035 Caderno Producao",
+   "url": ".../publicacao-894/Caderno%20Produ%C3%A7%C3%A3o%20de%20Petr%C3%B3leo%20-%20PDE%202035_V8.pdf",
+   "confidence": "official"
+  },
+  "INF-S13": {
+   "title": "EPE PDE 2034 Caderno Gas Natural",
+   "url": "https://www.epe.gov.br/sites-pt/publicacoes-dados-abertos/publicacoes/PublicacoesArquivos/publicacao-804/topico-709/",
+   "confidence": "official"
+  },
+  "INF-S14": {
+   "title": "ANP Res 16/2008 (Normas Brasil)",
+   "url": "https://www.normasbrasil.com.br/norma/resolucao-16-2008_108978.html",
+   "confidence": "official"
+  },
+  "INF-S15": {
+   "title": "Lei 14.134/2021",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/L14134.htm",
+   "confidence": "official"
+  },
+  "INF-S16": {
+   "title": "Lei 15.042/2024",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2024/lei/L15042.htm",
+   "confidence": "official"
+  },
+  "INF-S17": {
+   "title": "Lei 12.351/2010",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2007-2010/2010/lei/l12351.htm",
+   "confidence": "official"
+  },
+  "INF-S18": {
+   "title": "Lei 13.586/2017",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2017/lei/L13586.htm",
+   "confidence": "official"
+  },
+  "INF-S19": {
+   "title": "TAGD/Eixos 2026-10-02 ANP rejects Rota 3 waiver",
+   "url": "https://tagdlaw.com.br/anp-rejeita-pedido-da-petrobras-para-flexibilizar-especificacoes-do-gas-da-rota-3/",
+   "confidence": "press"
+  },
+  "INF-S20": {
+   "title": "Poder360 2026-07-10 ANP access",
+   "url": "https://www.poder360.com.br/poder-energia/anp-avanca-para-dar-acesso-a-infraestrutura-de-gas-natural-a-terceiros/",
+   "confidence": "press"
+  },
+  "INF-S21": {
+   "title": "NTS home",
+   "url": "https://www.ntsbrasil.com/",
+   "confidence": "company"
+  },
+  "INF-S22": {
+   "title": "EPE PDE 2035 Caderno Precos Internacionais",
+   "url": ".../publicacao-894/PDE%202035_Caderno%20de%20Pre%C3%A7os%20Internacionais%20de%20Petr%C3%B3leo%20e%20Derivados.pdf",
+   "confidence": "official"
+  },
+  "INF-S23": {
+   "title": "EPE PIPE 2021",
+   "url": "https://www.epe.gov.br/sites-pt/publicacoes-dados-abertos/publicacoes/PublicacoesArquivos/publicacao-640/",
+   "confidence": "official"
+  },
+  "INF-S26": {
+   "title": "NTS tariffs page",
+   "url": "https://www.ntsbrasil.com/contratos-tarifas/tarifas/",
+   "confidence": "company"
+  },
+  "INF-S27": {
+   "title": "EPE PDE 2032 Caderno Gas",
+   "url": "https://static.poder360.com.br/2023/03/caderno-de-gas-natural-pde-2032.pdf",
+   "confidence": "official"
+  },
+  "INF-S28": {
+   "title": "ANP Santos/Campos map",
+   "url": "https://www.gov.br/anp/pt-br/assuntos/exploracao-e-producao-de-oleo-e-gas/dados-tecnicos/mapas-e-p/img-mapas/campos-santos.pdf",
+   "confidence": "official"
+  },
+  "INF-S29": {
+   "title": "Offshore magazine Bacalhau Phase 2",
+   "url": "https://www.offshore-mag.com/regional-reports/latin-america/news/55303417/subsea-integration-alliance-sia-partners-to-study-bacalhau-phase-2-field-development-concepts",
+   "confidence": "press"
+  }
+ }
+}

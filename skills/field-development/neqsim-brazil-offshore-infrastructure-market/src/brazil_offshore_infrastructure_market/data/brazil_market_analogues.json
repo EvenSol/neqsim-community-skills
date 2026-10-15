@@ -1,0 +1,1460 @@
+{
+ "meta": {
+  "title": "Brazil pre-salt market, marketing, cost benchmarks and host facts (trimmed)",
+  "as_of": "2026-10-14",
+  "source_id_convention": "MKT-S<n> keys of `sources` in this file; infrastructure file uses INF-S<n>",
+  "stale_warning": "Snapshot of public sources read on 2026-10-14 (ANP bulletin July 2026, Brent Aug 2026). Prices and volumes go stale.",
+  "confidence_scale": {
+   "official": "ANP/PPSA/BCB/EIA/EPE/company-published",
+   "press": "trade press or media",
+   "estimate": "derived by the analyst from cited numbers"
+  },
+  "unknown_convention": "value is null and status is UNKNOWN",
+  "fx_brl_usd_aug2026": 5.153,
+  "brent_aug2026_usd_bbl": 91.08
+ },
+ "market": [
+  {
+   "entity": "Brazil total, Jul 2026",
+   "attribute": "oil production",
+   "value": 4498423,
+   "unit": "bbl/d",
+   "source_id": "MKT-S13",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Brazil total, Jul 2026",
+   "attribute": "gas production",
+   "value": 214.97,
+   "unit": "MMSm3/d",
+   "source_id": "MKT-S13",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Brazil total, Jul 2026",
+   "attribute": "oil equivalent",
+   "value": 5.851,
+   "unit": "MMboe/d",
+   "source_id": "MKT-S13",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Brazil pre-salt, Jul 2026",
+   "attribute": "oil / gas / total",
+   "value": "3.728 MMbbl/d / 173.7 MMSm3/d / 4.821 MMboe/d",
+   "unit": "text",
+   "source_id": "MKT-S13",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Brazil pre-salt, Jul 2026",
+   "attribute": "share of national boe",
+   "value": 82.4,
+   "unit": "%",
+   "source_id": "MKT-S13",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Brazil, Jul 2026",
+   "attribute": "Petrobras-operated share of oil",
+   "value": 86.51,
+   "unit": "%",
+   "source_id": "MKT-S13",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "Equinor Brasil operator 102.5 kb/d oil (Bacalhau)"
+  },
+  {
+   "entity": "Brazil total, Dec 2025",
+   "attribute": "oil / gas / total",
+   "value": "4.015 MMbbl/d / 194.3 MMSm3/d / 5.237 MMboe/d",
+   "unit": "text",
+   "source_id": "MKT-S14",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Brazil pre-salt, Dec 2025",
+   "attribute": "oil / total",
+   "value": "3.211 MMbbl/d / 4.164 MMboe/d (79.5 %)",
+   "unit": "text",
+   "source_id": "MKT-S14",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "EPE PDE 2035",
+   "attribute": "oil forecast",
+   "value": "2025 3.8; 2026 4.4; 2027 4.5; 2028 4.8; 2029 4.7; 2030 4.9; peak 5.1 (2032)",
+   "unit": "MMbbl/d",
+   "source_id": "MKT-S41",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "actual July 2026 4.50 already above the 2026 forecast 4.4"
+  },
+  {
+   "entity": "EPE PDE 2035",
+   "attribute": "gas forecast",
+   "value": "gross 299 MMSm3/d in 2035 (peak 309 in 2033); net peak ~127",
+   "unit": "text",
+   "source_id": "MKT-S41",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Export destinations and volumes 2025-26",
+   "attribute": "exports",
+   "value": null,
+   "unit": "kb/d",
+   "source_id": null,
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "status": "UNKNOWN",
+   "note": "UNKNOWN: no export statistics fetched (ANP/MDIC/Kpler); Petrobras share of 2030 supply UNKNOWN"
+  },
+  {
+   "entity": "Brazil fields, Jul 2026",
+   "attribute": "ranking Mboe/d",
+   "value": "Buzios 1401; Mero 1084; Tupi 1042; Jubarte 231; Sepia 203; Atapu 184; Berbigao 153; Sapinhoa 142; Itapu 114; Peregrino 100; Roncador 91; Lapa 90; Bacalhau Norte 71; Bacalhau 65",
+   "unit": "Mboe/d",
+   "source_id": "MKT-S13",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  }
+ ],
+ "marketing": [
+  {
+   "entity": "Bacalhau",
+   "attribute": "ANP reference price Aug 2026",
+   "value": 2749.0197,
+   "unit": "R$/m3",
+   "source_id": "MKT-S15",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "royalty reference price, not a realised sales price"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "reference price in USD/bbl",
+   "value": 84.8,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S15",
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "note": "R$/m3 x 0.158987 / PTAX 5.153 (S16); difference to Brent Aug 2026 mean 91.08 (S17) = -6.3 USD/bbl"
+  },
+  {
+   "entity": "Mero",
+   "attribute": "ANP reference price Aug 2026",
+   "value": 2616.9264,
+   "unit": "R$/m3",
+   "source_id": "MKT-S15",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "royalty reference price, not a realised sales price"
+  },
+  {
+   "entity": "Mero",
+   "attribute": "reference price in USD/bbl",
+   "value": 80.7,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S15",
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "note": "R$/m3 x 0.158987 / PTAX 5.153 (S16); difference to Brent Aug 2026 mean 91.08 (S17) = -10.3 USD/bbl"
+  },
+  {
+   "entity": "Buzios",
+   "attribute": "ANP reference price Aug 2026",
+   "value": 2584.5172,
+   "unit": "R$/m3",
+   "source_id": "MKT-S15",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "royalty reference price, not a realised sales price"
+  },
+  {
+   "entity": "Buzios",
+   "attribute": "reference price in USD/bbl",
+   "value": 79.7,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S15",
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "note": "R$/m3 x 0.158987 / PTAX 5.153 (S16); difference to Brent Aug 2026 mean 91.08 (S17) = -11.3 USD/bbl"
+  },
+  {
+   "entity": "Tupi",
+   "attribute": "ANP reference price Aug 2026",
+   "value": 2661.5322,
+   "unit": "R$/m3",
+   "source_id": "MKT-S15",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "royalty reference price, not a realised sales price"
+  },
+  {
+   "entity": "Tupi",
+   "attribute": "reference price in USD/bbl",
+   "value": 82.1,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S15",
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "note": "R$/m3 x 0.158987 / PTAX 5.153 (S16); difference to Brent Aug 2026 mean 91.08 (S17) = -9.0 USD/bbl"
+  },
+  {
+   "entity": "Sapinhoa",
+   "attribute": "ANP reference price Aug 2026",
+   "value": 2645.0345,
+   "unit": "R$/m3",
+   "source_id": "MKT-S15",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "royalty reference price, not a realised sales price"
+  },
+  {
+   "entity": "Sapinhoa",
+   "attribute": "reference price in USD/bbl",
+   "value": 81.6,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S15",
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "note": "R$/m3 x 0.158987 / PTAX 5.153 (S16); difference to Brent Aug 2026 mean 91.08 (S17) = -9.5 USD/bbl"
+  },
+  {
+   "entity": "Sepia",
+   "attribute": "ANP reference price Aug 2026",
+   "value": 2541.4029,
+   "unit": "R$/m3",
+   "source_id": "MKT-S15",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "royalty reference price, not a realised sales price"
+  },
+  {
+   "entity": "Sepia",
+   "attribute": "reference price in USD/bbl",
+   "value": 78.4,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S15",
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "note": "R$/m3 x 0.158987 / PTAX 5.153 (S16); difference to Brent Aug 2026 mean 91.08 (S17) = -12.7 USD/bbl"
+  },
+  {
+   "entity": "Atapu",
+   "attribute": "ANP reference price Aug 2026",
+   "value": 2491.681,
+   "unit": "R$/m3",
+   "source_id": "MKT-S15",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "royalty reference price, not a realised sales price"
+  },
+  {
+   "entity": "Atapu",
+   "attribute": "reference price in USD/bbl",
+   "value": 76.9,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S15",
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "note": "R$/m3 x 0.158987 / PTAX 5.153 (S16); difference to Brent Aug 2026 mean 91.08 (S17) = -14.2 USD/bbl"
+  },
+  {
+   "entity": "Itapu",
+   "attribute": "ANP reference price Aug 2026",
+   "value": 2695.0001,
+   "unit": "R$/m3",
+   "source_id": "MKT-S15",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "royalty reference price, not a realised sales price"
+  },
+  {
+   "entity": "Itapu",
+   "attribute": "reference price in USD/bbl",
+   "value": 83.1,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S15",
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "note": "R$/m3 x 0.158987 / PTAX 5.153 (S16); difference to Brent Aug 2026 mean 91.08 (S17) = -7.9 USD/bbl"
+  },
+  {
+   "entity": "Berbigao",
+   "attribute": "ANP reference price Aug 2026",
+   "value": 2649.3381,
+   "unit": "R$/m3",
+   "source_id": "MKT-S15",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "royalty reference price, not a realised sales price"
+  },
+  {
+   "entity": "Berbigao",
+   "attribute": "reference price in USD/bbl",
+   "value": 81.7,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S15",
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "note": "R$/m3 x 0.158987 / PTAX 5.153 (S16); difference to Brent Aug 2026 mean 91.08 (S17) = -9.3 USD/bbl"
+  },
+  {
+   "entity": "Lapa",
+   "attribute": "ANP reference price Aug 2026",
+   "value": 2277.6019,
+   "unit": "R$/m3",
+   "source_id": "MKT-S15",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "royalty reference price, not a realised sales price"
+  },
+  {
+   "entity": "Lapa",
+   "attribute": "reference price in USD/bbl",
+   "value": 70.3,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S15",
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "note": "R$/m3 x 0.158987 / PTAX 5.153 (S16); difference to Brent Aug 2026 mean 91.08 (S17) = -20.8 USD/bbl"
+  },
+  {
+   "entity": "Jubarte (Parque das Baleias)",
+   "attribute": "ANP reference price Aug 2026",
+   "value": 2492.1475,
+   "unit": "R$/m3",
+   "source_id": "MKT-S15",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "royalty reference price, not a realised sales price"
+  },
+  {
+   "entity": "Jubarte (Parque das Baleias)",
+   "attribute": "reference price in USD/bbl",
+   "value": 76.9,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S15",
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "note": "R$/m3 x 0.158987 / PTAX 5.153 (S16); difference to Brent Aug 2026 mean 91.08 (S17) = -14.2 USD/bbl"
+  },
+  {
+   "entity": "Roncador",
+   "attribute": "ANP reference price Aug 2026",
+   "value": 2383.9042,
+   "unit": "R$/m3",
+   "source_id": "MKT-S15",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "royalty reference price, not a realised sales price"
+  },
+  {
+   "entity": "Roncador",
+   "attribute": "reference price in USD/bbl",
+   "value": 73.5,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S15",
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "note": "R$/m3 x 0.158987 / PTAX 5.153 (S16); difference to Brent Aug 2026 mean 91.08 (S17) = -17.5 USD/bbl"
+  },
+  {
+   "entity": "Peregrino",
+   "attribute": "ANP reference price Aug 2026",
+   "value": 2058.236,
+   "unit": "R$/m3",
+   "source_id": "MKT-S15",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "royalty reference price, not a realised sales price"
+  },
+  {
+   "entity": "Peregrino",
+   "attribute": "reference price in USD/bbl",
+   "value": 63.5,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S15",
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "note": "R$/m3 x 0.158987 / PTAX 5.153 (S16); difference to Brent Aug 2026 mean 91.08 (S17) = -27.6 USD/bbl"
+  },
+  {
+   "entity": "Frade/Wahoo",
+   "attribute": "ANP reference price Aug 2026",
+   "value": 2634.7798,
+   "unit": "R$/m3",
+   "source_id": "MKT-S15",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "royalty reference price, not a realised sales price"
+  },
+  {
+   "entity": "Frade/Wahoo",
+   "attribute": "reference price in USD/bbl",
+   "value": 81.3,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S15",
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "note": "R$/m3 x 0.158987 / PTAX 5.153 (S16); difference to Brent Aug 2026 mean 91.08 (S17) = -9.8 USD/bbl"
+  },
+  {
+   "entity": "Sepia",
+   "attribute": "PPSA spot sale premium/discount to Dated Brent, 2024-02-21, buyer CNOOC",
+   "value": -3.75,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S18",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "Union share cargo, 500 kbbl-1 Mbbl; one cargo per sale unless noted"
+  },
+  {
+   "entity": "Atapu",
+   "attribute": "PPSA spot sale premium/discount to Dated Brent, 2024-03-06, buyer Acelen",
+   "value": -4.36,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S18",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "Union share cargo, 500 kbbl-1 Mbbl; one cargo per sale unless noted"
+  },
+  {
+   "entity": "Sepia",
+   "attribute": "PPSA spot sale premium/discount to Dated Brent, 2024-09-18, buyer Petrobras",
+   "value": -4.05,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S18",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "Union share cargo, 500 kbbl-1 Mbbl; one cargo per sale unless noted"
+  },
+  {
+   "entity": "Atapu",
+   "attribute": "PPSA spot sale premium/discount to Dated Brent, 2024-09-18, buyer Galp",
+   "value": -3.66,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S18",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "Union share cargo, 500 kbbl-1 Mbbl; one cargo per sale unless noted"
+  },
+  {
+   "entity": "Itapu",
+   "attribute": "PPSA spot sale premium/discount to Dated Brent, 2024-09-18, buyer Acelen",
+   "value": -2.3,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S18",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "Union share cargo, 500 kbbl-1 Mbbl; one cargo per sale unless noted"
+  },
+  {
+   "entity": "Sepia",
+   "attribute": "PPSA spot sale premium/discount to Dated Brent, 2024-10-31, buyer PetroChina",
+   "value": -3.5,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S18",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "Union share cargo, 500 kbbl-1 Mbbl; one cargo per sale unless noted"
+  },
+  {
+   "entity": "Sepia (4 cargoes)",
+   "attribute": "PPSA spot sale premium/discount to Dated Brent, 2024-10-31, buyer Petrobras",
+   "value": -4.04,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S18",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "Union share cargo, 500 kbbl-1 Mbbl; one cargo per sale unless noted"
+  },
+  {
+   "entity": "Itapu (2 cargoes)",
+   "attribute": "PPSA spot sale premium/discount to Dated Brent, 2025-03-19, buyer Petrobras",
+   "value": -0.74,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S18",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "Union share cargo, 500 kbbl-1 Mbbl; one cargo per sale unless noted"
+  },
+  {
+   "entity": "Atapu",
+   "attribute": "PPSA spot sale premium/discount to Dated Brent, 2025-08-14, buyer Prio",
+   "value": -2.48,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S18",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "Union share cargo, 500 kbbl-1 Mbbl; one cargo per sale unless noted"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "PPSA spot sale premium/discount to Dated Brent, 2026-01-14, buyer Equinor",
+   "value": -3.62,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S18",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "Union share cargo, 500 kbbl-1 Mbbl; one cargo per sale unless noted"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "PPSA spot sale premium/discount to Dated Brent, 2026-04-15, buyer PetroChina",
+   "value": 4.7,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S18",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "Union share cargo, 500 kbbl-1 Mbbl; one cargo per sale unless noted"
+  },
+  {
+   "entity": "Atapu (900 kbbl)",
+   "attribute": "PPSA spot sale premium/discount to Dated Brent, 2026-06-03, buyer CNOOC",
+   "value": -7.41,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S18",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "Union share cargo, 500 kbbl-1 Mbbl; one cargo per sale unless noted"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "PPSA spot sale 9th auction (2026-09-30)",
+   "value": "ExxonMobil won 1 Mbbl cargo, loading late Nov 2026; price published 15 days after loading",
+   "unit": "text",
+   "source_id": "MKT-S19",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "premium UNKNOWN until published"
+  },
+  {
+   "entity": "Brazil average",
+   "attribute": "API gravity of national production, July 2026",
+   "value": 28.3,
+   "unit": "deg API",
+   "source_id": "MKT-S13",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Brent (EIA RBRTE) monthly mean",
+   "attribute": "2025 average Jan-Dec",
+   "value": 69.1,
+   "unit": "USD/bbl",
+   "source_id": "MKT-S17",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "computed from EIA daily; 2025 monthly means 79.3, 75.4, 72.7, 68.1, 64.5, 71.4, 71.0, 67.9, 68.0, 64.5, 63.8, 62.5"
+  },
+  {
+   "entity": "Brent (EIA RBRTE) monthly mean",
+   "attribute": "2026 months",
+   "value": "Jan 66.6, Feb 70.9, Mar 103.1, Apr 117.3, May 107.1, Jun 85.4, Jul 83.8, Aug 91.1, Sep 114.2, Oct (1-6) 125.3",
+   "unit": "USD/bbl",
+   "source_id": "MKT-S17",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "price spike since March 2026; last daily value 2026-10-06 = 125.44"
+  },
+  {
+   "entity": "PTAX BRL/USD",
+   "attribute": "August 2026 mean",
+   "value": 5.153,
+   "unit": "BRL per USD",
+   "source_id": "MKT-S16",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Sulphur",
+   "attribute": "Tupi <0.7 wt %; Bacalhau low; others UNKNOWN",
+   "value": null,
+   "unit": "wt %",
+   "source_id": "MKT-S37",
+   "confidence": "press",
+   "as_of": "2026-10-14",
+   "status": "UNKNOWN"
+  },
+  {
+   "entity": "Shuttle tanker cost",
+   "attribute": "USD per bbl",
+   "value": null,
+   "unit": "USD/bbl",
+   "source_id": null,
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "status": "UNKNOWN",
+   "note": "UNKNOWN"
+  },
+  {
+   "entity": "Crude ownership",
+   "attribute": "rule",
+   "value": "PSC: contractor owns cost oil + its profit-oil share; PPSA markets the Union profit oil; concession fields: concessionaire; shared deposits per AIP",
+   "unit": "text",
+   "source_id": "MKT-S42",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "PSC model contract Clause 9"
+  }
+ ],
+ "cost_benchmarks": [
+  {
+   "entity": "Buzios P-78 FPSO",
+   "attribute": "EPC contract",
+   "value": 2300,
+   "unit": "USD M",
+   "source_id": "MKT-S25",
+   "confidence": "press",
+   "as_of": "2026-10-14",
+   "note": "Keppel, May 2021"
+  },
+  {
+   "entity": "Buzios P-79 FPSO",
+   "attribute": "construction contract",
+   "value": 2300,
+   "unit": "USD M",
+   "source_id": "MKT-S25",
+   "confidence": "press",
+   "as_of": "2026-10-14",
+   "note": "Saipem/DSME JV, Jun 2021"
+  },
+  {
+   "entity": "Buzios P-80 FPSO",
+   "attribute": "EPC contract",
+   "value": 2900,
+   "unit": "USD M",
+   "source_id": "MKT-S25",
+   "confidence": "press",
+   "as_of": "2026-10-14",
+   "note": "Keppel, Aug 2022"
+  },
+  {
+   "entity": "Buzios 7 SURF",
+   "attribute": "EPCI rigid-riser subsea system",
+   "value": 940,
+   "unit": "USD M",
+   "source_id": "MKT-S25",
+   "confidence": "press",
+   "as_of": "2026-10-14",
+   "note": "Saipem, Nov 2021"
+  },
+  {
+   "entity": "Itapu FPSO P-71",
+   "attribute": "second-hand unit purchase",
+   "value": 353,
+   "unit": "USD M",
+   "source_id": "MKT-S27",
+   "confidence": "press",
+   "as_of": "2026-10-14",
+   "note": "Oct 2020"
+  },
+  {
+   "entity": "Itapu FPSO P-71",
+   "attribute": "modification works",
+   "value": 175,
+   "unit": "USD M",
+   "source_id": "MKT-S27",
+   "confidence": "press",
+   "as_of": "2026-10-14",
+   "note": "Jun 2021"
+  },
+  {
+   "entity": "Libra Pioneiro FPSO",
+   "attribute": "build cost (EWT unit)",
+   "value": 1000,
+   "unit": "USD M",
+   "source_id": "MKT-S28",
+   "confidence": "press",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Bacalhau phase 1",
+   "attribute": "total investment (FID Jun 2021)",
+   "value": 8000,
+   "unit": "USD M",
+   "source_id": "MKT-S21",
+   "confidence": "press",
+   "as_of": "2026-10-14",
+   "note": "19 wells, 130 km flowlines, 35 km umbilicals, FPSO 220 kbopd"
+  },
+  {
+   "entity": "Bacalhau phase 1",
+   "attribute": "unit capex",
+   "value": 36364,
+   "unit": "USD per bopd nameplate",
+   "source_id": "MKT-S21",
+   "confidence": "estimate",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Bacalhau phase 1",
+   "attribute": "drilling and well services contracts",
+   "value": 455,
+   "unit": "USD M",
+   "source_id": "MKT-S21",
+   "confidence": "press",
+   "as_of": "2026-10-14",
+   "note": "Baker Hughes, Halliburton, SLB; Nov 2020"
+  },
+  {
+   "entity": "Raia",
+   "attribute": "total investment (FID May 2023)",
+   "value": 9000,
+   "unit": "USD M",
+   "source_id": "MKT-S30",
+   "confidence": "press",
+   "as_of": "2026-10-14",
+   "note": "gas 16 MMSm3/d + condensate; first gas 2028"
+  },
+  {
+   "entity": "Raia",
+   "attribute": "production-well drilling contract",
+   "value": 498,
+   "unit": "USD M",
+   "source_id": "MKT-S30",
+   "confidence": "press",
+   "as_of": "2026-10-14",
+   "note": "Valaris"
+  },
+  {
+   "entity": "Raia",
+   "attribute": "drilling and well services",
+   "value": 109,
+   "unit": "USD M",
+   "source_id": "MKT-S30",
+   "confidence": "press",
+   "as_of": "2026-10-14",
+   "note": "SLB, Baker Hughes, Halliburton"
+  },
+  {
+   "entity": "Peregrino phase 2",
+   "attribute": "investment",
+   "value": 3000,
+   "unit": "USD M",
+   "source_id": "MKT-S36",
+   "confidence": "press",
+   "as_of": "2026-10-14",
+   "note": "heavy-oil Campos, not pre-salt"
+  },
+  {
+   "entity": "Pre-salt exploration well (ANP PEM valuation)",
+   "attribute": "regulatory equivalence 1,000 UT (OPP4 UT = R$ 461,700)",
+   "value": 89.6,
+   "unit": "USD M at 5.153",
+   "source_id": "MKT-S42",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "regulatory work-unit value in the edital, not a market cost; OPP3 UT is R$ 433,300 (derived)"
+  },
+  {
+   "entity": "3D seismic (ANP PEM valuation)",
+   "attribute": "0.17 UT/km2 (OPP4)",
+   "value": 15.2,
+   "unit": "USD k/km2 at 5.153",
+   "source_id": "MKT-S42",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "regulatory equivalence, not a market price"
+  },
+  {
+   "entity": "UNKNOWN",
+   "attribute": "subsea tie-back cost per km (15-25 km pre-salt)",
+   "value": null,
+   "unit": "",
+   "source_id": null,
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "status": "UNKNOWN",
+   "note": "not found in any fetched source; do not use a placeholder"
+  },
+  {
+   "entity": "UNKNOWN",
+   "attribute": "FPSO lease day-rate",
+   "value": null,
+   "unit": "",
+   "source_id": null,
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "status": "UNKNOWN",
+   "note": "not found in any fetched source; do not use a placeholder"
+  },
+  {
+   "entity": "UNKNOWN",
+   "attribute": "FPSO newbuild USD per bopd (capacity of P-78/79/80 not in fetched pages)",
+   "value": null,
+   "unit": "",
+   "source_id": null,
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "status": "UNKNOWN",
+   "note": "not found in any fetched source; do not use a placeholder"
+  },
+  {
+   "entity": "UNKNOWN",
+   "attribute": "gas export pipeline cost per km (Rota 3, Raia)",
+   "value": null,
+   "unit": "",
+   "source_id": null,
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "status": "UNKNOWN",
+   "note": "not found in any fetched source; do not use a placeholder"
+  },
+  {
+   "entity": "UNKNOWN",
+   "attribute": "break-even Brent for any pre-salt field",
+   "value": null,
+   "unit": "",
+   "source_id": null,
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "status": "UNKNOWN",
+   "note": "not found in any fetched source; do not use a placeholder"
+  },
+  {
+   "entity": "UNKNOWN",
+   "attribute": "OPEX USD/bbl (Bacalhau, Mero, Buzios)",
+   "value": null,
+   "unit": "",
+   "source_id": null,
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "status": "UNKNOWN",
+   "note": "not found in any fetched source; do not use a placeholder"
+  },
+  {
+   "entity": "UNKNOWN",
+   "attribute": "well cost and drilling days per pre-salt well",
+   "value": null,
+   "unit": "",
+   "source_id": null,
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "status": "UNKNOWN",
+   "note": "not found in any fetched source; do not use a placeholder"
+  },
+  {
+   "entity": "UNKNOWN",
+   "attribute": "rig day-rate (Valaris DS-?, West Saturn)",
+   "value": null,
+   "unit": "",
+   "source_id": null,
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "status": "UNKNOWN",
+   "note": "not found in any fetched source; do not use a placeholder"
+  },
+  {
+   "entity": "UNKNOWN",
+   "attribute": "shuttle tanker USD/bbl",
+   "value": null,
+   "unit": "",
+   "source_id": null,
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "status": "UNKNOWN",
+   "note": "not found in any fetched source; do not use a placeholder"
+  },
+  {
+   "entity": "UNKNOWN",
+   "attribute": "seismic acquisition market cost",
+   "value": null,
+   "unit": "",
+   "source_id": null,
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "status": "UNKNOWN",
+   "note": "not found in any fetched source; do not use a placeholder"
+  },
+  {
+   "entity": "Discovery to first oil (years)",
+   "attribute": "Mero 12; Lapa 9.3; Buzios 8; Bacalhau 13.6; Tupi 4.4; Raia: discovered c. 2013-14 (ANP), FID 2023, first gas 2028 planned",
+   "value": "see note",
+   "unit": "years",
+   "source_id": [
+    "MKT-S23",
+    "MKT-S25",
+    "MKT-S31",
+    "MKT-S22",
+    "MKT-S12"
+   ],
+   "confidence": "estimate",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "AIP timelines",
+   "attribute": "Tartaruga Verde signed 2014 effective 2018; Tupi negotiations Jul 2014, signed Aug 2015, effective Apr 2019; Sapinhoa signed Jan 2016 effective Nov 2018",
+   "value": "see note",
+   "unit": "years",
+   "source_id": "MKT-S20",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Pre-salt exploration cost per well",
+   "attribute": "ANP PEM proxy only",
+   "value": 89.6,
+   "unit": "USD M",
+   "source_id": "MKT-S42",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "treat as a regulatory proxy"
+  }
+ ],
+ "fields": [
+  {
+   "entity": "Bacalhau+Bacalhau Norte",
+   "attribute": "oil_production_2026-07",
+   "value": 102461,
+   "unit": "bbl/d",
+   "source_id": "MKT-S13",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "ANP bulletin July 2026, pre-salt section"
+  },
+  {
+   "entity": "Bacalhau+Bacalhau Norte",
+   "attribute": "gas_production_2026-07",
+   "value": 5.288,
+   "unit": "MMSm3/d",
+   "source_id": "MKT-S13",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "ANP \"Mm3/d\" = thousand Sm3/d; gross production, not sales gas"
+  },
+  {
+   "entity": "Bacalhau+Bacalhau Norte",
+   "attribute": "producing_GOR_2026-07",
+   "value": 325,
+   "unit": "Sm3/Sm3",
+   "source_id": "MKT-S13",
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "note": "gas/oil from ANP July 2026; = 1823 scf/bbl; field-wide average, not reservoir GOR"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "operator_equity",
+   "value": "Equinor 40 (op) / ExxonMobil 40 / Petrogal 20; PPSA manages the PSC",
+   "unit": "text",
+   "source_id": "MKT-S21",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "licences",
+   "value": "BM-S-8 (concession) + Norte de Carcara (PSC); shared deposit under an AIP: BM-S-8 48 % / Norte de Carcara 52 %",
+   "unit": "text",
+   "source_id": "MKT-S20",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "water_depth",
+   "value": 2050,
+   "unit": "m",
+   "source_id": "MKT-S21",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "distance_to_coast",
+   "value": 185,
+   "unit": "km (off Ilhabela SP)",
+   "source_id": "MKT-S21",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "water_depth_from_ANP_wells",
+   "value": "1996-2144 (27 wells within 25 km)",
+   "unit": "m",
+   "source_id": "MKT-S11",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "reservoir",
+   "value": "pre-salt carbonate, 318-402 m gross light-oil pay; overpressured (~900 bar per Equinor)",
+   "unit": "text",
+   "source_id": "MKT-S22",
+   "confidence": "press",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "api",
+   "value": 31,
+   "unit": "deg API (32 in one sample)",
+   "source_id": "MKT-S22",
+   "confidence": "press",
+   "as_of": "2026-10-14",
+   "note": "discovery/appraisal samples"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "sulphur",
+   "value": "low",
+   "unit": "text",
+   "source_id": "MKT-S21",
+   "confidence": "press",
+   "as_of": "2026-10-14",
+   "note": "numeric value UNKNOWN"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "co2_h2s_reservoir",
+   "value": "discovery and appraisal wells reported free of CO2 and H2S contamination; numeric mol % UNKNOWN",
+   "unit": "text",
+   "source_id": "MKT-S22",
+   "confidence": "press",
+   "as_of": "2026-10-14",
+   "note": "conflicts with expectation of CO2-rich pre-salt gas; verify with Equinor PVT"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "co2_mol_pct",
+   "value": null,
+   "unit": "mol %",
+   "source_id": "MKT-S22",
+   "confidence": "press",
+   "as_of": "2026-10-14",
+   "status": "UNKNOWN"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "h2s_ppm",
+   "value": null,
+   "unit": "ppm",
+   "source_id": "MKT-S22",
+   "confidence": "press",
+   "as_of": "2026-10-14",
+   "status": "UNKNOWN"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "recoverable_phase1",
+   "value": 1000,
+   "unit": "MMbbl (\">1 billion barrels\")",
+   "source_id": "MKT-S21",
+   "confidence": "press",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "recoverable_field",
+   "value": 2000,
+   "unit": "MMboe (\">2 Bboe\")",
+   "source_id": "MKT-S21",
+   "confidence": "press",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "fpso_oil_capacity",
+   "value": 220000,
+   "unit": "bopd",
+   "source_id": "MKT-S40",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "MODEC M350 hull; Equinor operates it after year 1 until 2053"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "fpso_gas_handling",
+   "value": 530,
+   "unit": "MMscfd (about 15.0 MMSm3/d)",
+   "source_id": "MKT-S40",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "processes and injects associated gas; no export pipeline in phase 1"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "fpso_water_injection",
+   "value": 200000,
+   "unit": "bwpd",
+   "source_id": "MKT-S21",
+   "confidence": "press",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "fpso_storage",
+   "value": 2000000,
+   "unit": "bbl",
+   "source_id": "MKT-S21",
+   "confidence": "press",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "topside_weight",
+   "value": 20000,
+   "unit": "t",
+   "source_id": "MKT-S21",
+   "confidence": "press",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "topside_spare_capacity",
+   "value": null,
+   "unit": "",
+   "source_id": "MKT-S21",
+   "confidence": "press",
+   "as_of": "2026-10-14",
+   "status": "UNKNOWN",
+   "note": "no public figure; ANP July 2026 oil rate is 102.5 kb/d = 47 % of 220 kb/d nameplate (ramp-up)"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "co2_treatment_membranes_reinjection",
+   "value": null,
+   "unit": "",
+   "source_id": "MKT-S40",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "status": "UNKNOWN",
+   "note": "not stated in fetched pages; Baker Hughes gas-technology contract 2023 headline seen only"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "power",
+   "value": "combined cycle, 4 gas turbines + 2 steam turbines",
+   "unit": "text",
+   "source_id": "MKT-S42",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "from earlier research file web_research_canjica_blocks.md"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "wag",
+   "value": null,
+   "unit": "",
+   "source_id": "MKT-S21",
+   "confidence": "press",
+   "as_of": "2026-10-14",
+   "status": "UNKNOWN"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "phase1_wells",
+   "value": 19,
+   "unit": "wells (producers + injectors)",
+   "source_id": "MKT-S39",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "phase1_subsea",
+   "value": "130 km flowlines and rigid risers, 35 km umbilicals; Subsea 7 / OneSubsea SPS",
+   "unit": "text",
+   "source_id": "MKT-S21",
+   "confidence": "press",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "manifold_riser_slot_spare",
+   "value": null,
+   "unit": "",
+   "source_id": "MKT-S21",
+   "confidence": "press",
+   "as_of": "2026-10-14",
+   "status": "UNKNOWN"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "phase1_capex",
+   "value": 8000,
+   "unit": "USD M",
+   "source_id": "MKT-S21",
+   "confidence": "press",
+   "as_of": "2026-10-14",
+   "note": "FID June 2021"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "unit_capex_phase1",
+   "value": 36364,
+   "unit": "USD per bopd nameplate",
+   "source_id": "MKT-S21",
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "note": "USD 8 bn / 220 kbopd; includes wells + SURF + FPSO lease/construction as budgeted"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "discovery",
+   "value": "2012-03 (4-SPS-86B, Petrobras)",
+   "unit": "date",
+   "source_id": "MKT-S22",
+   "confidence": "press",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "first_oil",
+   "value": "2025-10-15",
+   "unit": "date",
+   "source_id": "MKT-S39",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "years_discovery_to_first_oil",
+   "value": 13.6,
+   "unit": "years",
+   "source_id": "MKT-S22",
+   "confidence": "estimate",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "years_fid_to_first_oil",
+   "value": 4.3,
+   "unit": "years",
+   "source_id": "MKT-S21",
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "note": "FID 2021-06 -> first oil 2025-10"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "oil_production_2026-07_fpso",
+   "value": 102461,
+   "unit": "bbl/d",
+   "source_id": "MKT-S13",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "3 producing wells listed by ANP; best single well 7-BAC-1 = 49,324 bbl/d, highest in Brazil that month"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "gas_production_2026-07_fpso",
+   "value": 5.288,
+   "unit": "MMSm3/d",
+   "source_id": "MKT-S13",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "gas_flaring_2026-07",
+   "value": 0.236,
+   "unit": "MMSm3/d (122.45 + 113.03 thousand)",
+   "source_id": "MKT-S13",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "note": "4.5 % of gas produced"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "plateau_date_and_decline",
+   "value": null,
+   "unit": "",
+   "source_id": "MKT-S39",
+   "confidence": "official",
+   "as_of": "2026-10-14",
+   "status": "UNKNOWN",
+   "note": "Equinor promised an update in 2026; none found"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "shuttle_tanker_offloading",
+   "value": "stabilised oil by shuttle tanker",
+   "unit": "text",
+   "source_id": "MKT-S21",
+   "confidence": "press",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "phase2",
+   "value": "concept study awarded to Subsea Integration Alliance (Jul 2025); earlier reports of a second FPSO and a ~160 km gas pipeline (Reuters via JPT 2022); destination UNKNOWN",
+   "unit": "text",
+   "source_id": "MKT-S42",
+   "confidence": "press",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Bacalhau",
+   "attribute": "tieback_or_unitisation_with_rodocrosita",
+   "value": "no public statement of a tie-back; Equinor VP: \"potential synergy\"; Galp: \"optionality to explore potential synergies with Bacalhau\"; Rodocrosita is flagged non-unitisable in the ANP edital",
+   "unit": "text",
+   "source_id": "MKT-S42",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Raia (BM-C-33)",
+   "attribute": "operator_equity",
+   "value": "Equinor 35 (op) / Repsol Sinopec 35 / Petrobras 30",
+   "unit": "text",
+   "source_id": "MKT-S42",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Raia (BM-C-33)",
+   "attribute": "water_depth",
+   "value": 2900,
+   "unit": "m (up to)",
+   "source_id": "MKT-S30",
+   "confidence": "press",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Raia (BM-C-33)",
+   "attribute": "resource",
+   "value": ">1 Bboe; ~700 MMbbl light oil + 3 tcf gas in block",
+   "unit": "text",
+   "source_id": "MKT-S30",
+   "confidence": "press",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Raia (BM-C-33)",
+   "attribute": "gas_export",
+   "value": "16 MMSm3/d via ~200 km pipeline to Cabiunas; first gas 2028",
+   "unit": "text",
+   "source_id": "MKT-S42",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  },
+  {
+   "entity": "Raia (BM-C-33)",
+   "attribute": "capex",
+   "value": 9000,
+   "unit": "USD M",
+   "source_id": "MKT-S30",
+   "confidence": "press",
+   "as_of": "2026-10-14",
+   "note": "FID May 2023"
+  },
+  {
+   "entity": "Raia (BM-C-33)",
+   "attribute": "neighbour_of_itaimbezinho_and_jaspe",
+   "value": "ANP field polygon touches both blocks; Equinor says Itaimbezinho is ~15 km from Raia",
+   "unit": "text",
+   "source_id": "MKT-S10",
+   "confidence": "official",
+   "as_of": "2026-10-14"
+  }
+ ],
+ "declared": [
+  {
+   "entity": "Santos pre-salt gas",
+   "attribute": "co2_mol_pct_analogue_range",
+   "value": [
+    6,
+    34
+   ],
+   "unit": "mol %",
+   "source_id": null,
+   "confidence": "declared",
+   "as_of": "2026-10-14",
+   "note": "declared analogue range for a block with no PVT; not a fact about any block (see neqsim-brazil-presalt-analogue-basis)"
+  },
+  {
+   "entity": "tuned declared pre-salt oil",
+   "attribute": "feed_co2_to_gas_co2",
+   "value": {
+    "feed_co2_mole_fraction": [
+     0.04,
+     0.14,
+     0.3
+    ],
+    "separator_gas_co2_mol_pct": [
+     6.5,
+     19.5,
+     34.1
+    ],
+    "psat_100C_bara": [
+     253,
+     243,
+     232
+    ],
+    "gor_sm3_sm3": 325,
+    "api": 31.5
+   },
+   "unit": "mixed",
+   "source_id": null,
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "note": "NeqSim PR-EOS tuning result for low/base/high CO2 (task 2026-10-14); see SKILL.md recipe"
+  },
+  {
+   "entity": "Brazil pre-salt gas export",
+   "attribute": "wellhead_netback_basis",
+   "value": {
+    "city_gate_usd_mmbtu": 11.0,
+    "midstream_share": 0.46,
+    "wellhead_netback_usd_mmbtu": 5.94,
+    "gas_export_pct_of_oil_revenue_p50": 8
+   },
+   "unit": "mixed",
+   "source_id": "INF-S20",
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "note": "MME estimate that escoamento + processing = 46 % of delivered gas price; 8 % of oil revenue is a P50 screening result at about 5.9 USD/MMBtu and 50 % exportable gas"
+  },
+  {
+   "entity": "Bacalhau FPSO",
+   "attribute": "oil_per_producer_2026-07",
+   "value": 34,
+   "unit": "kbbl/d per producer",
+   "source_id": "MKT-S13",
+   "confidence": "estimate",
+   "as_of": "2026-10-14",
+   "note": "102.5 kbd from 3 producing wells per the 2026-10-14 task note (ANP bulletin); verify the well count"
+  }
+ ],
+ "sources": {
+  "MKT-S10": "https://www.equinor.com.br/noticias/equinor-arremata-dois-novos-blocos-na-bacia-de-campos-durante-3o-ciclo-da-opp (2025-10-22)",
+  "MKT-S11": "https://gishub.anp.gov.br/geoserver/wfs layer BD_ANP:POCOS_SIRGAS (WFS 1.0.0, bbox -45.4..-38.9 / -27.2..-21.9, 4,201 wells, 178 flagged confidential)",
+  "MKT-S13": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/arquivos-bmppgn/2026/julho.pdf (ANP monthly bulletin July 2026)",
+  "MKT-S14": "https://www.gov.br/anp/pt-br/centrais-de-conteudo/publicacoes/boletins-anp/arquivos-bmppgn/2025/dezembro.pdf",
+  "MKT-S15": "https://www.gov.br/anp/pt-br/assuntos/royalties-e-outras-participacoes/arq-royalties/prp/pr/2026/preco-referencia-petroleo-08.xlsx",
+  "MKT-S16": "https://api.bcb.gov.br/dados/serie/bcdata.sgs.1/dados?formato=json&dataInicial=01/08/2026&dataFinal=31/08/2026 (PTAX sell, mean 5.1532)",
+  "MKT-S17": "https://www.eia.gov/dnav/pet/hist_xls/RBRTEd.xls (Europe Brent spot, daily to 2026-10-06)",
+  "MKT-S18": "https://www.presalpetroleo.gov.br/wp-content/uploads/2026/08/Vendas-e-Leiloes-Spot-31agosto26.xlsx (PPSA spot sales)",
+  "MKT-S19": "https://www.presalpetroleo.gov.br/noticias/exxonmobil-e-totalenergies-vencem-o-9o-leilao-spot-de-petroleo-da-uniao/ and /noticias/9o-leilao-spot-ppsa-oferta-cargas-remanescentes-nesta-quarta-feira/",
+  "MKT-S20": "https://www.presalpetroleo.gov.br/acordos-de-individualizacao-de-producao/acordos-assinados/",
+  "MKT-S21": "https://www.offshore-technology.com/projects/bacalhau-oil-field-santos-basin-brazil/",
+  "MKT-S22": "https://www.offshore-technology.com/projects/carcara-discovery-santos-basin/",
+  "MKT-S25": "https://www.offshore-technology.com/projects/buzios-formerly-franco-field-cesso-onerosa-region-santos-basin/",
+  "MKT-S27": "https://www.offshore-technology.com/projects/itapu-oil-and-gas-field-santos-basin-brazil/",
+  "MKT-S28": "https://www.offshore-technology.com/projects/libra-oil-field-santos-basin/",
+  "MKT-S30": "https://www.offshore-technology.com/projects/bm-c-33-gas-condensate-field-campos-basin/",
+  "MKT-S36": "https://www.offshore-technology.com/projects/peregrino-phase-2-development-campos-basin/",
+  "MKT-S37": "https://en.wikipedia.org/wiki/Lula_oil_field",
+  "MKT-S39": "https://www.equinor.com/news/20251016-bacalhau-production-started",
+  "MKT-S40": "https://www.modec.com/project/detail/bacalhau.html",
+  "MKT-S41": "https://www.epe.gov.br/sites-pt/publicacoes-dados-abertos/publicacoes/PublicacoesArquivos/publicacao-894/Caderno%20Produ%C3%A7%C3%A3o%20de%20Petr%C3%B3leo%20-%20PDE%202035_V8.pdf",
+  "MKT-S42": "earlier research note web_research_canjica_blocks.md (same task set, accessed 2026-10-14; its S1-S35 ids refer to ANP OPP4 edital, ANP block maps, PSC model contract, Equinor/Galp press releases)",
+  "MKT-S12": "https://gishub.anp.gov.br/geoserver/wfs layer BD_ANP:CAMPOS_PRODUCAO_SIRGAS (85 polygons in bbox)",
+  "MKT-S23": "https://www.offshore-technology.com/projects/mero-oil-field-rio-de-janeiro/",
+  "MKT-S31": "https://www.offshore-technology.com/projects/lapa-oilfield-santos-basin/"
+ }
+}
