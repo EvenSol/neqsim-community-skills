@@ -76,6 +76,7 @@ print(screen_reach(3500.0, 8000.0, erd_string, env).limiting)
 
 - `neqsim.process.equipment.pipeline.PipeBeggsAndBrills` for the long-reach tubing and riser hydraulics that decide the producing rate once the well is drilled.
 - Skill `neqsim-near-well-and-injectivity` for inflow and VFP tables; `neqsim-subsea-and-wells` for well design and cost rollups.
+- Skill `neqsim-well-trajectory-anticollision` for the 3D path (curve-hold from slot or sidetrack tie-in), position uncertainty, separation factor against offset wells and slot occupancy; run it before quoting reach for a crowded template.
 
 ## References
 
