@@ -111,8 +111,11 @@ def test_slot_occupancy():
         {"name": "S-1 H", "easting": 0.0, "northing": 0.0, "status": "producing", "slot": "01"},
         {"name": "S-2 H", "easting": 2.4, "northing": 0.0, "status": "closed", "slot": "02"},
         {"name": "S-2 AH", "easting": 2.4, "northing": 0.1, "status": "plugged", "parent": "S-2 H"},
+        {"name": "S-3 H", "easting": 5.0, "northing": 0.0, "status": "plugged", "slot": "03"},
+        {"name": "S-3 AH", "easting": 5.0, "northing": 0.0, "status": "planning", "parent": "S-3 H"},
     ])
-    assert len(slots) == 2
+    assert len(slots) == 3
     assert check_slot(slots, slot="01")["status"] == "OCCUPIED"
     assert check_slot(slots, slot="02")["status"] == "RECOVERABLE"
+    assert check_slot(slots, slot="03")["status"] == "RESERVED"
     assert check_slot(slots, slot="04")["status"] == "FREE"

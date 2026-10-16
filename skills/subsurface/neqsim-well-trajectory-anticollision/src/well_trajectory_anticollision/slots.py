@@ -4,7 +4,8 @@ from __future__ import annotations
 import math
 from typing import Dict, Iterable, List, Optional
 
-ACTIVE = {"producing", "injecting", "online", "operational", "active", "suspended", "drilling"}
+ACTIVE = {"producing", "injecting", "online", "operating", "operational", "active", "suspended", "drilling"}
+PLANNED = {"planning", "planned", "reserved"}
 
 
 def group_by_surface(wellbores: Iterable[Dict], tol_m: float = 1.0) -> List[Dict]:
@@ -26,6 +27,7 @@ def group_by_surface(wellbores: Iterable[Dict], tol_m: float = 1.0) -> List[Dict
     for s in slots:
         statuses = {str(b.get("status") or "").lower() for b in s["wellbores"]}
         s["occupied"] = bool(statuses & ACTIVE)
+        s["reserved"] = bool(statuses & PLANNED)
         s["statuses"] = sorted(x for x in statuses if x)
     return slots
 
@@ -46,5 +48,8 @@ def check_slot(slots: List[Dict], slot: Optional[str] = None, easting: Optional[
     if match["occupied"]:
         return {"status": "OCCUPIED", "slot": match,
                 "message": "slot holds an active wellbore: choose a free slot or plan a sidetrack from an abandoned bore"}
+    if match.get("reserved"):
+        return {"status": "RESERVED", "slot": match,
+                "message": "slot already carries a planned wellbore: coordinate with that plan before reusing the slot"}
     return {"status": "RECOVERABLE", "slot": match,
             "message": "slot holds only closed/abandoned bores: plan as a slot-recovery sidetrack, tie in to the parent survey"}

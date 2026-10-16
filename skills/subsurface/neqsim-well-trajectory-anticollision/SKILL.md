@@ -58,7 +58,7 @@ this skill for 3D geometry, uncertainty and anti-collision. The two are compleme
   - warnings.
 - For parent bores: the last MD below STOP and below CAUTION, and the minimum SF after exit.
 - A pull-back sweep with the first target position that meets the required SF.
-- A slot-occupancy result per slot: FREE, OCCUPIED or RECOVERABLE.
+- A slot-occupancy result per slot: FREE, OCCUPIED, RESERVED (planned bore) or RECOVERABLE.
 
 ## Engineering Method
 
