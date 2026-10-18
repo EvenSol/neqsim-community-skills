@@ -1,9 +1,9 @@
 ---
 name: neqsim-compressor-antisurge-recycle
 calculation_basis: "neqsim-java"
-version: 0.3.0
-description: "Set up anti-surge recycle control for a centrifugal compressor in NeqSim, including compressor-chart generation, steady-state AntiSurgeRecycleCalculator use, dynamic AntiSurgeController PI control, and CompressorAntiSurgeApplication topology binding for hot/cold recycle valves and speed runback. USE WHEN: a task needs to protect a NeqSim compressor from surge with a recycle (spill-back) loop and a compressor performance chart is either supplied or must be generated."
-last_verified: "2026-09-23"
+version: 0.4.0
+description: "Anti-surge recycle for centrifugal compressors in NeqSim: chart generation, AntiSurgeRecycleCalculator, dynamic AntiSurgeController, CompressorAntiSurgeApplication binding, MinimumSpeedRecycleControllerStructure split-range control, speed-solve convergence and recycle power/CO2 savings. USE WHEN: a task must protect a compressor from surge with a recycle loop, coordinate speed and recycle at minimum speed, or value avoided recycle."
+last_verified: "2026-10-18"
 requires:
   python_packages: []
   java_packages:
@@ -392,6 +392,102 @@ explicitly submitted chart for that new request. Therefore its provenance is
 `submitted`; replay does not generate another map. This makes JSON round trips
 stable while preserving the original run's generation evidence in that run's
 response.
+
+## Compressor Pressure-Target Solves
+
+For `Compressor.setSolveSpeed(true)`, check `isSpeedSolveConverged()` after `run()`
+before accepting an optimization point. Read actual pressure from the outlet
+stream and the signed pressure error in bar from `getSpeedSolvePressureResidual()`.
+`getOutletPressure()` retains the requested setpoint, including after failure.
+The returned state uses the fixed-speed forward calculation, including anti-surge
+flow changes; these can leave the requested pressure unmet. `setLimitSpeed(false)`
+allows extrapolation, so pressure convergence does not establish mechanical
+feasibility. Check speed and operating-envelope constraints separately.
+`ProductionOptimizer` treats `Compressor.SpeedSolveException` as an infeasible
+trial and continues searching without evaluating stale outputs; unrelated
+exceptions propagate. Its hard `compressorSpeedSolve` constraint also rejects
+returned unconverged results even with capacity analysis enabled. Keep this gate
+when integrating chart-based compressor models into optimizers. See the
+[compressor curves guide](https://equinor.github.io/neqsim/process/equipment/compressor_curves.html)
+and `CompressorSpeedSolveConsistencyTest` for the tested contract.
+
+## Minimum-Speed Recycle Coordination (`MinimumSpeedRecycleControllerStructure`)
+
+`neqsim.process.controllerdevice.structure.MinimumSpeedRecycleControllerStructure`
+coordinates pressure control between compressor speed and recycle-valve opening when
+the compressor reaches its minimum speed. Use it to stop opposing speed demand and
+recycle-valve opening in a compressor pressure loop (control-optimization tasks).
+
+1. **Split-range output:** the pressure controller output is divided at a configurable
+   transition (e.g. 75 %).
+2. **Speed command range:** above the transition (75 % to 105 %) recycle addition is
+   zero and speed rises linearly from minimum (75 %) to maximum (100 %).
+3. **Inverse recycle addition:** below the transition (0 % to 75 %) speed is held at
+   minimum while recycle addition increases as pressure output falls.
+4. **Latch on entry:** on lower-range entry the previously selected recycle command is
+   latched and pressure-derived recycle is added to that baseline.
+5. **High-selector protection:** independent anti-surge and suction-pressure demands
+   join a high selector, $R_{selected} = \max(R_{latch} + R_{add}, R_{AS}, R_{suction})$,
+   so protection authority is never suppressed.
+6. **Unwind before speed increase:** on rising pressure, pressure-derived recycle
+   unwinds to the latched baseline before speed increases.
+7. **Dynamic saturation floor:** a lower output limit (`latched * 74 / 100`) prevents
+   integral windup.
+
+```java
+import neqsim.process.controllerdevice.ControllerDeviceInterface;
+import neqsim.process.controllerdevice.ControllerDeviceBaseClass;
+import neqsim.process.controllerdevice.structure.MinimumSpeedRecycleControllerStructure;
+
+ControllerDeviceInterface pressureController = new ControllerDeviceBaseClass("PIC-0205A");
+ControllerDeviceInterface antiSurgeController = new ControllerDeviceBaseClass("UIC-0231");
+ControllerDeviceInterface suctionController = new ControllerDeviceBaseClass("PIC-0131");
+
+// (pressureCtrl, antiSurgeCtrl, suctionCtrl, transitionPct, maxOutputPct, minSpeedPct, maxSpeedPct)
+MinimumSpeedRecycleControllerStructure coordStructure = new MinimumSpeedRecycleControllerStructure(
+    pressureController, antiSurgeController, suctionController, 75.0, 105.0, 75.0, 100.0);
+
+// In the transient loop or update step:
+coordStructure.update(pressureControllerOutput, antiSurgeOutput, suctionPressureOutput);
+
+double speedCommand = coordStructure.getSpeedOutput();             // % speed
+double recycleAddition = coordStructure.getRecycleAddition();      // % recycle addition
+double recycleCommand = coordStructure.getLatchedRecycleOutput();  // % latched baseline
+```
+
+## Energy and CO2 Savings from Avoided Recycle
+
+When recycle opens uncoordinatedly while the compressor runs at minimum or elevated
+speed, extra gas is re-compressed without increasing net forward production.
+
+1. Shaft power: $P_{shaft} = \dfrac{\dot{m}_{net}\, h_{poly}}{\eta_p (1 - \alpha_{recycle})}$,
+   with recycle fraction $0 \le \alpha < 1$.
+2. Power penalty: $\Delta P = P_0\,\dfrac{\alpha}{1 - \alpha}$.
+3. Fuel and CO2: $\Delta \dot{m}_{fuel} = \dfrac{\Delta P}{\eta_{driver}\,LHV}$ and
+   $\Delta \dot{m}_{CO2} = \Delta \dot{m}_{fuel}\, e_{CO2}$.
+4. Annual saving (MNOK/yr) $= \dfrac{\Delta m_{CO2,yr}\,\mathrm{Tax}_{CO2} + \Delta m_{fuel,yr}\,\mathrm{Value}_{gas}}{10^6}$.
+
+Recipe: build the recompressor with a fixed net feed, then sweep the recycle fraction
+by setting the suction flow to `net / (1 - alpha)` and re-running stream and compressor;
+the power difference to $\alpha = 0$ is the penalty. Quantify annual MWh, fuel-gas
+tonnes, CO2 tonnes and cost over the operating hours, and compare the dynamic
+pressure, speed, recycle, power and CO2 time series.
+
+## Fixed Minimum Flow Without a Numerical Recycle Loop
+
+For steady-state screening with a prescribed minimum suction flow and a return cooled
+to the net-feed suction state, use
+`neqsim.process.equipment.compressor.MinimumFlowSpill(name, netFeed)`.
+Set `setMinimumInletFlow(value, unit)` and configure `getCompressor()`.
+Add the assembly once to the `ProcessSystem`; the net forward outlet is
+`getOutletStream()`, while `getSpillStream()` is an internal discharge spill.
+`getSpillFlow(unit)` uses suction conditions even for actual volume.
+Use `getPower(unit)` for gross compression and `getSpillCoolingDuty(unit)` for
+ideal heat rejection. The assembly delegates capacity constraints to its compressor.
+Disable internal AntiSurge flow modification. Use physical valve, cooler and recycle
+equipment for composition changes, condensation, finite cooler approach or dynamics.
+See the [compressor equipment guide](https://equinor.github.io/neqsim/process/equipment/compressors.html)
+and `MinimumFlowSpillTest` for the executed synthetic material and energy checks.
 
 ## Validation Checklist
 

@@ -128,8 +128,8 @@ skills:
     min_neqsim_version: "3.7.0"
 
   - name: neqsim-firewater-deluge-design
-    version: "0.1.0"
-    description: "Educational fire-water and deluge coverage screening: area versus dedicated object demand, deluge nozzle-net sizing from both the flow and the spacing criterion, and fire-monitor screening with wind drift. USE WHEN: a task asks whether a process area has adequate fire-water coverage, how many deluge nozzles are needed, or whether monitors or passive fire protection can substitute for a fixed system."
+    version: "0.2.0"
+    description: "Fire-water and deluge coverage design per NORSOK S-001 / ISO 13702 / NFPA 15: area versus dedicated object demand, nozzle-net sizing from flow and spacing, fire monitors with wind drift, hydraulic feasibility, active-versus-passive substitution. USE WHEN: a task asks if an area has adequate deluge coverage, how many nozzles are needed, or whether monitors or PFP can replace fire water."
     author: "neqsim-community"
     repo: "equinor/neqsim-community-skills"
     path: "skills/safety/neqsim-firewater-deluge-design/SKILL.md"
@@ -209,8 +209,8 @@ skills:
     min_neqsim_version: "3.7.0"
 
   - name: neqsim-compressor-antisurge-recycle
-    version: "0.3.0"
-    description: "Set up anti-surge recycle control for a centrifugal compressor in NeqSim, including compressor-chart generation, steady-state AntiSurgeRecycleCalculator use, dynamic AntiSurgeController PI control, and CompressorAntiSurgeApplication topology binding for hot/cold recycle valves and speed runback. USE WHEN: a task needs to protect a NeqSim compressor from surge with a recycle (spill-back) loop and a compressor performance chart is either supplied or must be generated."
+    version: "0.4.0"
+    description: "Anti-surge recycle for centrifugal compressors in NeqSim: chart generation, AntiSurgeRecycleCalculator, dynamic AntiSurgeController, CompressorAntiSurgeApplication binding, MinimumSpeedRecycleControllerStructure split-range control, speed-solve convergence and recycle power/CO2 savings. USE WHEN: a task must protect a compressor from surge with a recycle loop, coordinate speed and recycle at minimum speed, or value avoided recycle."
     author: "neqsim-community"
     repo: "equinor/neqsim-community-skills"
     path: "skills/process/neqsim-compressor-antisurge-recycle/SKILL.md"
@@ -749,7 +749,7 @@ skills:
 
   - name: neqsim-ageing-life-extension-screening
     version: "0.2.0"
-    description: "Educational ageing-trend and remaining-life screening (Laplace test, Crow-AMSAA fit, failure projection, maintain-vs-replace) plus the installation technical life basis (design life, economic cut-off, programme validity, cessation, life-limiting populations). USE WHEN: asked whether equipment ages, how long a host or installation can operate, what limits technical life, or whether a study horizon (economics, tie-in, capacity) fits technical life."
+    description: "Educational ageing-trend and remaining-life screening (Laplace test, Crow-AMSAA fit, failure projection, maintain-vs-replace) plus the installation technical life basis (design life, cut-off, life-limiting populations). USE WHEN: asked whether equipment ages, how long a host or installation can operate, or whether a study horizon fits technical life."
     author: "neqsim-community"
     repo: "equinor/neqsim-community-skills"
     path: "skills/process/neqsim-ageing-life-extension-screening/SKILL.md"

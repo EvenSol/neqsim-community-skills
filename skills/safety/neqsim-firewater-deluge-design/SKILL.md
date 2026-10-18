@@ -1,12 +1,12 @@
 ---
 name: neqsim-firewater-deluge-design
 calculation_basis: "screening"
-version: "0.1.0"
-description: "Educational fire-water and deluge coverage screening: area versus dedicated object demand, deluge nozzle-net sizing from both the flow and the spacing criterion, and fire-monitor screening with wind drift. USE WHEN: a task asks whether a process area has adequate fire-water coverage, how many deluge nozzles are needed, or whether monitors or passive fire protection can substitute for a fixed system."
-last_verified: "2026-09-10"
+version: "0.2.0"
+description: "Fire-water and deluge coverage design per NORSOK S-001 / ISO 13702 / NFPA 15: area versus dedicated object demand, nozzle-net sizing from flow and spacing, fire monitors with wind drift, hydraulic feasibility, active-versus-passive substitution. USE WHEN: a task asks if an area has adequate deluge coverage, how many nozzles are needed, or whether monitors or PFP can replace fire water."
+last_verified: "2026-10-18"
 requires:
   python_packages: []
-  java_packages: []
+  java_packages: [neqsim.process.safety.firewater]
   env: []
   network: []
 ---
@@ -101,6 +101,132 @@ monitors = model.monitor_screening(
 print(monitors.effective_density_lpm_per_m2, monitors.verdict)
 ```
 
+## The Four Questions, in Order
+
+Answer them in this order. Reversing the order is the usual way these studies go wrong.
+
+1. **What fire are we protecting against?** A pressurised **gas jet fire** is not
+   extinguished by water; the creditable function is cooling of exposed surfaces and
+   control of escalation. A **liquid pool fire** can be controlled and extinguished by
+   foam-water. An area labelled "gas" that holds lube and seal-oil tanks still has the
+   pool-fire case live, a common omission. Take the fire from `neqsim-consequence-analysis`.
+2. **Can the inventory be removed faster than the target fails?** NORSOK S-001 makes
+   blowdown the *primary* means of protecting a pressurised inventory. Run
+   `DepressurizationSimulator` against `PfpDemandCalculator.bareSteelTimeToCriticalS()`.
+   Thick-walled vessels frequently outlive the blowdown; thin support steel frequently
+   does not, and that asymmetry decides where protection goes.
+3. **What does the requirement actually demand?** See the application-rate table and
+   the traps below, and read the *edition* of the standard carefully.
+4. **Only then:** size the water, lay out the nozzles, and test the hydraulics.
+
+## Java API (`neqsim.process.safety.firewater`)
+
+Java 8, all classes `Serializable`, all emit schema-versioned JSON via `toJson()`. Do
+**not** use `FireProtectionDesign.firewaterDemand(...)`
+(`neqsim.process.mechanicaldesign.designstandards`) for these questions: it returns one
+lumped m³/h figure and carries no coverage, nozzle, monitor or hydraulic-feasibility logic.
+
+```java
+// 1. demand: blanket area coverage
+FireWaterDemandCalculator area = new FireWaterDemandCalculator(510.0)
+    .setAreaRate(FireWaterDemandCalculator.NORSOK_PROCESS_AREA_LPM_M2)  // 10 (l/min)/m2
+    .setDurationMin(30.0)
+    .setFoamConcentratePercent(1.0);
+double lpm = area.totalDemandLpm();          // 5100
+double m3h = area.totalDemandM3PerHour();    // 306
+double vol = area.waterVolumeM3();           // 153
+
+// 1b. demand: dedicated object protection instead
+FireWaterDemandCalculator obj = new FireWaterDemandCalculator(0.0).setAreaRate(0.0);
+obj.addHorizontalVessel("HA-13-0001", 0.72, 6.606, 10.0);   // shell OD, length, rate
+double saving = 1.0 - obj.totalDemandLpm() / area.totalDemandLpm();
+
+// 2. nozzle net, governed by the LARGER of the flow and spacing criteria
+DelugeNozzleLayout.Nozzle hv26 = new DelugeNozzleLayout.Nozzle(
+    "HV26", 42.9, 3.5, 3.0, 1.0);   // K [(l/min)/sqrt(bar)], p_min, max spacing, clear depth
+DelugeNozzleLayout net = new DelugeNozzleLayout(510.0, 10.0, hv26)
+    .setOperatingPressureBarg(5.0)
+    .setCoverageEfficiency(1.0);    // < 1.0 tightens the grid for wind or shadowing
+net.nozzleCountFromFlow();          // 54
+net.nozzleCountFromCoverage();      // 57
+net.nozzleCount();                  // 57, coverage governs
+net.governingCriterion();           // "coverage"
+net.gridSpacingM();                 // 2.99
+net.isClearanceAdequate(0.8);       // false for an HV nozzle needing 1.0 m
+
+// 3. monitors as an alternative
+FireMonitorCoverage mon = new FireMonitorCoverage(510.0, 10.0)
+    .setMonitors(4, 4000.0).setGeometry(40.0, 120.0)
+    .setWind(15.0, 12.0)                       // wind speed, droplet fall height
+    .setCharacteristicTargetDimensionM(25.5)
+    .setLineOfSightObstructed(true);
+mon.nominalDensityLpmPerM2();     // 31.4, passes in still air
+mon.effectiveDensityLpmPerM2();   //  3.7, fails once the pattern drifts
+mon.verdict();
+
+// 4. can the existing system take it?
+FireWaterCoverageAssessment gate = new FireWaterCoverageAssessment(510.0, 5100.0)
+    .setCoveredAreaM2(0.0)
+    .setSpareSupplyFlowLpm(16748.0)
+    .setWorstCasePressureMarginBar(-0.9, "XX-71-0010B")   // worst DESIGN case, not normal case
+    .setRequiredPressureMarginBar(0.5);
+gate.verdict();          // SUPPLY_PRESSURE_DEFICIT
+gate.recommendation();
+
+// 5. active vs passive: what the framework does and does not allow
+ActiveFireProtectionScreening s = new ActiveFireProtectionScreening(
+        ActiveFireProtectionScreening.FireScenario.GAS_JET_FIRE)
+    .setIncidentHeatFluxKWPerM2(200.0)
+    .setBlowdownTimeToTargetS(359.0)
+    .setBareSteelTimeToCriticalS(98.7)
+    .setLoadBearingStructureExposed(true)
+    .setNozzlesCanBePlacedAboveEquipment(false);
+s.isWaterExtinguishing();             // false for a gas jet fire
+s.isPassiveSubstitutionPermitted();   // false, always
+s.isBlowdownFasterThanFailure();      // false here: thin steel loses the race
+s.rankedMeasures();
+```
+
+Validated by `FireWaterDesignTest` (orifice law, both nozzle-count criteria, wind-drift
+model, verdict routing, JSON contract).
+
+## Application Rates
+
+| Basis | Applies to | Rate |
+|---|---|---|
+| NORSOK S-001 Ed.4 §20.4.4 (Ed.5/6 §21) | Process areas **and equipment surfaces** | 10 (l/min)/m² |
+| NORSOK S-001 Ed.4 §20.4.4 | Wellhead, riser balconies, FPSO turret manifolds | 20 (l/min)/m² |
+| NORSOK S-001 Ed.4 §20.4.4 | Water at design pressure after a confirmed fire signal | ≤ 30 s |
+| NFPA 15 | Exposure protection of vessel shells | 10.2 (l/min)/m² (0.25 gpm/ft²) |
+| Common project practice | Enclosed utility/machinery rooms, sprinkler | 6 (l/min)/m² |
+
+NORSOK S-001 does not state a fire-water duration. Take it from the project basis (30 min
+is the usual foam figure and is often carried across) and say where it came from.
+
+## Traps
+
+- **Clause renumbering.** NORSOK S-001 **Ed.4 (2008)**: clause 20 = fire fighting systems,
+  clause 21 = escape and evacuation. **Ed.5 (2018) / Ed.6 (2020)**: clause 20 = passive fire
+  protection, clause **21 = active fire protection**. A finding citing "21.4.4" cites
+  Ed.5/6. Check which edition the installation's own basis invokes before agreeing that a
+  requirement applies.
+- **Fire water never substitutes for passive fire protection.** The Norwegian Facilities
+  Regulations §29 forbid crediting the cooling effect of fire-fighting equipment when
+  designing PFP, and §11 forbids crediting fire water when establishing design accidental
+  loads (NORSOK S-001 Ed.4 §19.4.2/§19.4.3 say the same). **The converse is also not
+  permitted**: PFP on one item does not discharge an area fire-water requirement.
+- **Flow alone under-counts nozzles.** A high-K nozzle meets the density with few nozzles
+  spaced far apart, leaving dry patches. Take the larger of the flow and spacing counts.
+- **Take the pressure margin from the worst *design* case, not the normal case.** Mature
+  fire-water systems are commonly pressure-limited, and the margin can be negative in a
+  two-pump case while looking healthy in the three-pump case.
+- **"Nozzles cannot go above the equipment" is not a reason to have no coverage.** Use
+  side-mounted nozzles or a dedicated spray ring. A project basis that excludes coverage
+  over an item is a *deviation* and must be recorded and accepted as one.
+- **Monitors are not equivalent to a fixed system.** NORSOK S-001 Ed.4 permits monitor
+  substitution only for the turret, and §20.4.7 binds monitors to the same density and
+  functionality. On an open deck, wind drift and shadowing usually settle the question.
+
 ## Validation Checklist
 
 - [ ] The application rate comes from the governing project standard, not from the
@@ -144,6 +270,11 @@ print(monitors.effective_density_lpm_per_m2, monitors.verdict)
 
 ## Related Skills
 
+- `neqsim-consequence-analysis` — fire type, heat flux and flame reach (upstream).
+- `neqsim-depressurization-mdmt` — blowdown time, the primary barrier (upstream).
+- `neqsim-technical-document-reading` — area geometry, nozzle K-factors, hydraulic report (upstream).
+- `neqsim-process-safety` — barrier register, performance standards, LOPA (downstream).
+- `neqsim-standards-lookup` — clause traceability into `results.json` (downstream).
 - `neqsim-jet-fire-radiation-screening` and `neqsim-relief-load-screening` — the fire side.
 - `neqsim-depressurization-screening` — inventory removal, the primary barrier for a
   pressurised system.
