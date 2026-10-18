@@ -49,21 +49,33 @@ SOURCE_REGISTRY: List[Dict[str, object]] = [
      "url": "https://www.norskpetroleum.no/en/environment-and-technology/emissions-to-air/",
      "provides": ["CO2 tax, EU ETS, NOx fund basis"], "licence": "attribution",
      "owner_skill": "neqsim-norwegian-continental-shelf-data"},
-    # ------------------------------------------------------------------ enterprise
-    {"id": "pdm-internal-api", "tier": "enterprise", "access": "api", "auth": "APIM key + Entra ID",
-     "provides": ["daily allocated production per field/well"], "owner_skill": "enterprise-pdm-api"},
-    {"id": "centuries-rnb", "tier": "enterprise", "access": "api", "auth": "Entra ID",
-     "provides": ["RNB / corporate production forecasts per field"], "owner_skill": "enterprise-acquire-api"},
-    {"id": "gassled-tariffs", "tier": "enterprise", "access": "governed input", "auth": "commercial",
-     "provides": ["transport tariffs, processing fees, capacity booking"], "owner_skill": "enterprise-gassled-tariff"},
-    {"id": "gas-quality-specs", "tier": "enterprise", "access": "governed input", "auth": "commercial",
+    # ------------------------------------------------------------------ private / enterprise (placeholders)
+    # Companies describe their own governed sources in a private enterprise repository and add them
+    # with register_private_source(); the entries below only show the pattern.
+    {"id": "company-production-allocation", "tier": "enterprise", "access": "api", "auth": "company SSO",
+     "provides": ["daily allocated production per field/well"], "owner_skill": "<your-enterprise-production-skill>"},
+    {"id": "company-production-forecast", "tier": "enterprise", "access": "api", "auth": "company SSO",
+     "provides": ["corporate production forecasts per field"], "owner_skill": "<your-enterprise-forecast-skill>"},
+    {"id": "company-transport-tariffs", "tier": "enterprise", "access": "governed input", "auth": "commercial",
+     "provides": ["transport tariffs, processing fees, capacity booking"], "owner_skill": "<your-enterprise-tariff-skill>"},
+    {"id": "company-gas-quality-specs", "tier": "enterprise", "access": "governed input", "auth": "commercial",
      "provides": ["entry/exit gas quality specifications"],
-     "owner_skill": "enterprise-gas-quality-specification"},
-    {"id": "ots-historian", "tier": "enterprise", "access": "api", "auth": "Entra ID",
-     "provides": ["metered export and terminal flows"], "owner_skill": "enterprise-ots-timeseries"},
-    {"id": "emisoft", "tier": "enterprise", "access": "api/sql", "auth": "Entra ID",
-     "provides": ["reported emissions and energy per installation"], "owner_skill": "enterprise-emisoft-api"},
+     "owner_skill": "<your-enterprise-gas-quality-skill>"},
+    {"id": "company-historian", "tier": "enterprise", "access": "api", "auth": "company SSO",
+     "provides": ["metered export and terminal flows"], "owner_skill": "<your-enterprise-historian-skill>"},
+    {"id": "company-emissions-reporting", "tier": "enterprise", "access": "api/sql", "auth": "company SSO",
+     "provides": ["reported emissions and energy per installation"], "owner_skill": "<your-enterprise-emissions-skill>"},
 ]
+
+
+def register_private_source(source: Dict[str, object]) -> None:
+    """Add a company-specific source to the registry (tier is forced to 'enterprise').
+
+    :param source: mapping with at least ``id``, ``provides`` and ``owner_skill``.
+    """
+    entry = dict(source)
+    entry["tier"] = "enterprise"
+    SOURCE_REGISTRY.append(entry)
 
 
 def sources_for(what: Optional[str] = None, tier: Optional[str] = None) -> List[Dict[str, object]]:

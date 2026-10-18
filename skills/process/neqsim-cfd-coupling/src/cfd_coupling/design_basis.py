@@ -2,7 +2,7 @@
 
 A CFD case is only as good as the geometry and process data behind it. In a real
 workflow those numbers arrive from several places at once - a P&ID, a tag register
-such as STID, a mechanical datasheet, a process datasheet, historian data, or an
+such as a plant tag database, a mechanical datasheet, a process datasheet, historian data, or an
 engineer's estimate. They overlap, they disagree, and some are missing.
 
 This module merges those sources by precedence, records where every accepted value
@@ -23,7 +23,7 @@ SOURCE_PRECEDENCE: tuple[str, ...] = (
     "mechanical_datasheet",
     "process_datasheet",
     "vendor",
-    "stid",
+    "tag_register",
     "plant_data",
     "pid",
     "estimate",
@@ -35,7 +35,7 @@ _CONFIDENCE_BY_SOURCE: dict[str, str] = {
     "mechanical_datasheet": "high",
     "process_datasheet": "high",
     "vendor": "high",
-    "stid": "medium",
+    "tag_register": "medium",
     "plant_data": "medium",
     "pid": "medium",
     "estimate": "low",
@@ -154,7 +154,7 @@ def build_design_basis(
 
     Each entry of ``sources`` is a mapping with a ``source`` key drawn from
     :data:`SOURCE_PRECEDENCE`, an optional ``reference`` string (document number,
-    STID tag, historian tag), and a ``values`` mapping of field name to value.
+    tag register tag, historian tag), and a ``values`` mapping of field name to value.
     Values that are ``None`` are ignored, so a partially populated document
     extraction can be passed in as-is.
     """

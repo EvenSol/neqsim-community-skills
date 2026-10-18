@@ -86,7 +86,7 @@ For validated utility specification and balances, redirect to NeqSim resources:
 
 - the `neqsim-utilities-specification` skill — steam levels, cooling water, instrument air, fuel gas, and nitrogen specification guidance.
 - `neqsim.standards.gasquality.Standard_ISO6976` — validated calorific value and Wobbe index per ISO 6976.
-- proposed `enterprise-utility-systems-review` — consolidated utility duty roll-up and capacity check; candidate enterprise extension.
+- proposed utility-systems review — consolidated utility duty roll-up and capacity check; candidate private extension.
 
 This skill is a public triage layer that decides when to invoke a validated utility balance.
 

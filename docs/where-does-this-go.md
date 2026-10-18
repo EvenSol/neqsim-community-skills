@@ -6,9 +6,9 @@ NeqSim agent/skill ecosystem stays consistent over time.
 Use this before opening a PR for any new agent, skill, or engineering method.
 
 > This guide is the **NeqSim-ecosystem-specific** detail (core vs. community vs.
-> enterprise, and screening vs. validated). For the umbrella cross-catalog routing
-> across all idea-sharing repositories, start from the shared
-> [Contribution Router](https://github.com/equinor/idea-sharing-AI-agents/blob/main/CONTRIBUTION-ROUTER.md).
+> enterprise, and screening vs. validated). Any company can follow the same pattern:
+> keep the public community repos as the shared base and add company data and policy in
+> its own private enterprise repositories.
 
 ## The five homes
 

@@ -3,7 +3,7 @@
 Seven layers, usable together or separately:
 
 ``design_basis``
-    Merge P&ID, STID, datasheet, insulation-specification, inspection and
+    Merge P&ID, tag register, datasheet, insulation-specification, inspection and
     plant-data inputs into one traceable design basis, and report what is missing
     before a mesh is generated.
 ``materials``

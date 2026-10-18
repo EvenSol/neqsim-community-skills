@@ -65,7 +65,7 @@ def test_entsog_404_is_empty_and_flows_convert_to_msm3():
 
 def test_source_registry_separates_open_and_enterprise():
     assert all(s["tier"] == "open" for s in sources_for(tier="open"))
-    assert any(s["owner_skill"] == "enterprise-pdm-api" for s in sources_for(tier="enterprise"))
+    assert any(s["id"] == "company-production-allocation" for s in sources_for(tier="enterprise"))
     assert any(s["id"] == "entsog-transparency" for s in sources_for("flow"))
 
 

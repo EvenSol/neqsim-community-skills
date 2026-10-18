@@ -15,8 +15,8 @@ def _sources():
             "values": {"inside_diameter_m": 0.30, "wall_material": "carbon-steel"},
         },
         {
-            "source": "stid",
-            "reference": "STID line 20-P-001",
+            "source": "tag_register",
+            "reference": "tag register line 20-P-001",
             "values": {"inside_diameter_m": 0.254, "wall_thickness_m": 0.0127},
         },
         {
@@ -55,9 +55,9 @@ def test_higher_precedence_source_wins_and_raises_a_conflict():
     basis = build_design_basis(
         tag="20-P-001", model_kind="insulated_pipe", sources=_sources()
     )
-    # STID outranks the P&ID, so the STID diameter is the accepted value.
+    # tag register outranks the P&ID, so the tag register diameter is the accepted value.
     assert basis.value("inside_diameter_m") == pytest.approx(0.254)
-    assert basis.source_of("inside_diameter_m") == "stid"
+    assert basis.source_of("inside_diameter_m") == "tag_register"
     conflicts = [c.field for c in basis.conflicts]
     assert "inside_diameter_m" in conflicts
     assert not basis.ready_for_meshing
@@ -80,7 +80,7 @@ def test_missing_fields_are_reported_rather_than_invented():
         model_kind="insulated_pipe",
         sources=[
             {
-                "source": "stid",
+                "source": "tag_register",
                 "values": {"inside_diameter_m": 0.254, "wall_thickness_m": 0.0127},
             }
         ],
@@ -119,8 +119,8 @@ def test_traceability_rows_carry_source_and_reference():
         tag="20-P-001", model_kind="pipe_wall", sources=_sources()
     )
     rows = {row["field"]: row for row in basis.traceability_rows()}
-    assert rows["wall_thickness_m"]["source"] == "stid"
-    assert rows["wall_thickness_m"]["reference"] == "STID line 20-P-001"
+    assert rows["wall_thickness_m"]["source"] == "tag_register"
+    assert rows["wall_thickness_m"]["reference"] == "tag register line 20-P-001"
     assert rows["wall_thickness_m"]["unit"] == "m"
 
 

@@ -157,8 +157,8 @@ regardless of how good the static model is.
 A single **common reference EOS/fluid** (a validated, detailed characterization)
 is the basis. Field or per-case fluids are produced by re-splitting the heavy
 end with an adjustable factor rather than characterizing every fluid from
-scratch. This is the "common EOS" concept: FluidMagic pairs a common `eos_full`
-with a lumped `eos_pseudo` and converts between them; NeqSim recommends a
+scratch. This is the "common EOS" concept: a common full-component EOS is paired
+with a lumped pseudo-component EOS and the fluid is converted between them; NeqSim recommends a
 consistent characterization model via `TBPfractionModel.recommendTBPModel`.
 
 ### Matching the factor to measured data

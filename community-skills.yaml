@@ -93,7 +93,7 @@ skills:
 
   - name: neqsim-pseudocomponent-split-characterization
     version: "0.1.0"
-    description: "Public plus-fraction (C7+) characterization by a controllable split factor: Whitson gamma split, lumping and delumping split factors, and the universal Paraffinic-Aromatic heavy-lump split factor S (Uleberg 2026). USE WHEN: splitting a heavy end with one adjustable factor, computing a delumping factor from a reference fluid, reconstructing a detailed composition from a lumped one, or splitting lumps into P/A copies before rigorous NeqSim characterization."
+    description: "Public plus-fraction (C7+) characterization by a controllable split factor: Whitson gamma split, lumping and delumping split factors, and the universal Paraffinic-Aromatic heavy-lump split factor S. USE WHEN: splitting a heavy end with one adjustable factor, computing a delumping factor from a reference fluid, reconstructing a detailed composition from a lumped one, or splitting lumps into P/A copies before rigorous NeqSim characterization."
     author: "neqsim-community"
     repo: "equinor/neqsim-community-skills"
     path: "skills/pvt/neqsim-pseudocomponent-split-characterization/SKILL.md"
@@ -486,6 +486,15 @@ skills:
     tags: [field-development, economics, capex, opex, cost, screening, education]
     min_neqsim_version: "3.7.0"
 
+  - name: neqsim-stage-gate-project-timeline
+    version: "0.1.0"
+    description: "Educational stage-gate project timelines for field-development screening: prospect maturation (exploration, appraisal, DG1-DG3, execution, first oil at a turnaround), host modification projects scheduled ASAP or just in time with cost in the phases that incur it, and host life-extension decision deadlines, combined into a portfolio plan, capex calendar and Gantt. USE WHEN: a tie-in, area-development or debottlenecking screening must respect that projects take time."
+    author: "neqsim-community"
+    repo: "equinor/neqsim-community-skills"
+    path: "skills/field-development/neqsim-stage-gate-project-timeline/SKILL.md"
+    tags: [field-development, project-plan, stage-gate, timeline, tie-in, host-modification, life-extension, gantt, screening, education]
+    min_neqsim_version: "3.7.0"
+
   - name: neqsim-asset-value-npv-screening
     version: "0.1.0"
     description: "Educational discounted-cash-flow (DCF) asset-value screening that builds a year-by-year net cash flow from revenue, OPEX, and a CAPEX schedule and returns NPV, IRR, and payback with a simple flat tax. USE WHEN: a task needs a public, screening-level NPV/IRR/payback before detailed NeqSim field-development economics or qualified commercial review."
@@ -739,12 +748,12 @@ skills:
     min_neqsim_version: "3.7.0"
 
   - name: neqsim-ageing-life-extension-screening
-    version: "0.1.0"
-    description: "Educational ageing-trend and remaining-life screening for repairable equipment from corrective-failure history: Laplace trend test, Crow-AMSAA power-law fit, failure projection to an end-of-life year, maintain-vs-replace crossover. USE WHEN: a task asks whether equipment is degrading with age, whether failures are trending worse, how many failures to expect before a life-extension year, or whether to keep repairing or replace."
+    version: "0.2.0"
+    description: "Educational ageing-trend and remaining-life screening (Laplace test, Crow-AMSAA fit, failure projection, maintain-vs-replace) plus the installation technical life basis (design life, economic cut-off, programme validity, cessation, life-limiting populations). USE WHEN: asked whether equipment ages, how long a host or installation can operate, what limits technical life, or whether a study horizon (economics, tie-in, capacity) fits technical life."
     author: "neqsim-community"
     repo: "equinor/neqsim-community-skills"
     path: "skills/process/neqsim-ageing-life-extension-screening/SKILL.md"
-    tags: [process, reliability, ageing, life-extension, remaining-life, crow-amsaa, laplace-trend, rocof, screening, education]
+    tags: [process, reliability, ageing, life-extension, technical-life, remaining-life, crow-amsaa, laplace-trend, rocof, screening, education]
     min_neqsim_version: "3.7.0"
 
   - name: neqsim-artificial-lift-screening
@@ -761,7 +770,7 @@ skills:
     author: "neqsim-community"
     repo: "equinor/neqsim-community-skills"
     path: "skills/process/neqsim-cfd-coupling/SKILL.md"
-    tags: [process, cfd, openfoam, multiphase, vof, aeroacoustics, tonal-noise, fsi-readiness, design-basis, stid, p-and-id, mass-transfer, wall-shear, mesh-quality, y-plus, coupling]
+    tags: [process, cfd, openfoam, multiphase, vof, aeroacoustics, tonal-noise, fsi-readiness, design-basis, tag_register, p-and-id, mass-transfer, wall-shear, mesh-quality, y-plus, coupling]
     min_neqsim_version: "3.7.0"
   - name: neqsim-fem-coupling
     version: "0.2.0"

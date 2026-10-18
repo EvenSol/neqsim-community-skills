@@ -2,7 +2,7 @@
 
 Runs the whole chain the skill exists for:
 
-    P&ID + STID + insulation specification + inspection report
+    P&ID + tag register + insulation specification + inspection report
         -> traceable design basis
     NeqSim flash (or the stated fallback state)
         -> film coefficient, Biot number, element size target
@@ -114,8 +114,8 @@ def main() -> None:
         model_kind="insulated_pipe",
         sources=[
             {
-                "source": "stid",
-                "reference": "STID line 20-P-001",
+                "source": "tag_register",
+                "reference": "tag register line 20-P-001",
                 "values": {"inside_diameter_m": 0.254, "wall_thickness_m": 0.0127,
                            "wall_material": "carbon-steel"},
             },

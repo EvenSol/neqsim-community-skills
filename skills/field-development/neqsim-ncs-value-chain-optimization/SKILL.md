@@ -27,10 +27,10 @@ it for every year, and answers:
 - which producing fields could ship more, and whether the field or the network
   limits them.
 
-Everything is public screening data. Governed inputs (RNB forecasts, Gassled
+Everything is public screening data. Governed inputs (corporate forecasts, Gassled
 tariffs, gas-quality specs, metered flows) enter through a scenario JSON
-produced by the enterprise binding skill
-`enterprise-ncs-value-chain-data-binding`. This skill never reads company
+produced by a private enterprise binding skill (a company writes its own; see
+the Enterprise Agent and Skill Repositories guide). This skill never reads company
 systems.
 
 ## When to Use
@@ -54,7 +54,7 @@ systems.
   - `discount_rate`;
   - `capacity_overrides`;
   - `outages` (element, years, available fraction);
-  - `forecast_overrides` (e.g. RNB per field);
+  - `forecast_overrides` (e.g. corporate forecast per field);
   - `include_discoveries`, `tieback_max_km`, `max_paths_per_entity`.
   All have stated public defaults.
 
@@ -179,7 +179,7 @@ vb.process_model_targets(res, net, "GOLIAT")  # rate targets for the optimize-pr
 
 - Nameplate capacities; no line-pack, pressure-dependent capacity, gas-quality
   blending, Gassco nomination rules or NGL product constraints at Kårstø.
-- Screening supply forecasts (decline + reserves cap). Replace them with RNB or
+- Screening supply forecasts (decline + reserves cap). Replace them with corporate or
   operator forecasts through `forecast_overrides` for decisions.
 - Tariffs and exit-market factors are placeholders until bound from governed
   commercial data.

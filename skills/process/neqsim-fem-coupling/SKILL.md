@@ -22,7 +22,7 @@ spreads in a direction the one-dimensional model does not have, and the U-value 
 was given is wrong by an amount nobody can estimate by hand.
 
 This skill closes that gap. It takes whatever is known about the component (P&ID,
-STID tag register, datasheets, insulation specification, inspection report), takes
+tag register, datasheets, insulation specification, inspection report), takes
 the fluid side from a NeqSim flash, builds and solves the finite-element model of
 the solid, and converts the field back into the number the one-dimensional model
 needed - an effective U-value, a multiplier on it, a hot-spot factor, a no-touch
@@ -108,7 +108,7 @@ to run them elsewhere.
 
 **Design basis by precedence.** Sources are ranked `measurement >
 mechanical_datasheet > material_certificate > insulation_specification >
-process_datasheet > vendor > stid > inspection_report > plant_data > pid >
+process_datasheet > vendor > tag_register > inspection_report > plant_data > pid >
 estimate > assumption`. A lower-ranked source never overwrites a higher-ranked
 one; if it disagrees by more than 2 % it raises a conflict, and any disagreement
 about a non-numeric field such as a material grade is always a conflict. The model
@@ -264,7 +264,7 @@ basis = build_design_basis(
     tag="20-P-001",
     model_kind="insulated_pipe",
     sources=[
-        {"source": "stid", "reference": "STID line 20-P-001",
+        {"source": "tag_register", "reference": "tag register line 20-P-001",
          "values": {"inside_diameter_m": 0.254, "wall_thickness_m": 0.0127,
                     "wall_material": "carbon-steel"}},
         {"source": "insulation_specification", "reference": "SPEC-INS-004 rev 1",

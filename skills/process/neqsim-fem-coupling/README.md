@@ -7,7 +7,7 @@ The skill has nine layers, each usable on its own:
 
 | Module | Purpose |
 |---|---|
-| `design_basis` | Merge P&ID, STID, datasheet, insulation-specification, inspection and plant-data inputs into one traceable design basis; report conflicts and missing fields before meshing |
+| `design_basis` | Merge P&ID, tag register, datasheet, insulation-specification, inspection and plant-data inputs into one traceable design basis; report conflicts and missing fields before meshing |
 | `materials` | Solid-side properties - conductivity, heat capacity, modulus, expansion, allowable - with the basis recorded, because NeqSim supplies only the fluid side |
 | `thermal` | Turn a flashed NeqSim fluid into a film coefficient, a Biot and Fourier number, a thermal penetration depth, and the element size and time step that follow |
 | `conduction` | A dependency-free one-dimensional multilayer finite-element solver, steady and transient, verified against the closed-form composite resistance; includes the cooldown model with a lumped bore inventory, and calibration of an unmeasured far boundary |
@@ -45,7 +45,7 @@ python examples/insulated_flowline_defect.py   # documents -> NeqSim -> 1D -> 2D
 python examples/subsea_cooldown.py             # NeqSim inventory + hydrate temperature -> no-touch time
 ```
 
-The first takes a line from a STID register, an insulation specification and an ROV
+The first takes a line from a tag register, an insulation specification and an ROV
 inspection report, flashes the fluid in NeqSim, derives the film coefficient and the
 mesh targets, solves the intact section in one dimension against a closed-form
 check, meshes the damaged section, runs it at two refinement levels, gates the

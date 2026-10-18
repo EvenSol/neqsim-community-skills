@@ -3,7 +3,7 @@
 Five layers, usable together or separately:
 
 ``design_basis``
-    Merge P&ID, STID, datasheet, plant-data and estimated inputs into one
+    Merge P&ID, tag register, datasheet, plant-data and estimated inputs into one
     traceable design basis, and report what is missing before meshing.
 ``boundary``
     Turn a flashed NeqSim fluid into single-phase CFD boundary conditions,

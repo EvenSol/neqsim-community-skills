@@ -74,9 +74,8 @@ can run close to maximum without tripping. The screening relation is dimensionle
 Obtain the local slopes `∂power/∂flow`, `∂power/∂P_suction`, `∂power/∂P_discharge`,
 `∂power/∂T_suction` by finite-differencing a validated `Compressor.getPower()` around
 the operating point (this screening class only gives the flow-proportional term). The
-**driver rated power and performance curves must come from STID/vendor data** before
-any margin is fixed. (Pattern first used for a Troll A export-compressor power-margin
-PEPR action; see the `compressor-agent` / `enterprise-compressor-agent`.)
+**driver rated power and performance curves must come from the equipment tag register/vendor data** before
+any margin is fixed. (Pattern: a compressor power-margin check for an export compressor; see the `compressor-agent`.)
 
 ## Python Usage Pattern
 

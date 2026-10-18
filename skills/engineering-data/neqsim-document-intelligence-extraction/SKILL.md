@@ -164,7 +164,7 @@ File-level metadata should additionally preserve content hash, document title/nu
 - Chain to `neqsim-technical-document-reading` for document-type schemas, engineering normalization, and physical validation.
 - Chain to `neqsim-pdf-ocr` when PDF text yield is low or pages are scanned.
 - Chain to P&ID, standards, compressor-chart, fluid, process-extraction, or other domain skills only after the evidence package is built.
-- Enterprise retrieval, identifiers, controlled-document status, and internal governance remain in enterprise skills; they should emit the same evidence contract. Enterprise **document/attachment retrieval** skills and task-solver agents (which download PEPR/STID/maintenance attachments and drawings) use this skill as their **intake/extraction layer** — every downloaded document, drawing, chart, or photograph is planned and packaged here (native text, OCR, and vision) before interpretation, so all information (including figures, photos, and P&IDs) reaches the model as governed evidence facts.
+- Enterprise retrieval, identifiers, controlled-document status, and internal governance remain in enterprise skills; they should emit the same evidence contract. Enterprise **document/attachment retrieval** skills and task-solver agents (which download action/tag register/maintenance attachments and drawings) use this skill as their **intake/extraction layer** — every downloaded document, drawing, chart, or photograph is planned and packaged here (native text, OCR, and vision) before interpretation, so all information (including figures, photos, and P&IDs) reaches the model as governed evidence facts.
 - Downstream calculations should use NeqSim input validation and retain links back to evidence facts.
 
 ## Related NeqSim Functionality

@@ -101,7 +101,7 @@ class WeatherDataService:
 
         raise LocationNotResolvedError(
             f"Could not resolve '{name}' to coordinates via the Sodir facility register or Open-Meteo "
-            "geocoding. Supply latitude/longitude directly from an authoritative source (STID, P&ID, "
+            "geocoding. Supply latitude/longitude directly from an authoritative source (tag register, P&ID, "
             "operator records)."
         )
 

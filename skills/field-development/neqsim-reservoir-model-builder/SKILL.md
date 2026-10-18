@@ -568,9 +568,9 @@ reconcile_volume(computed_stoiip_m3=stoiip, reported_p50_m3=19.3e6,
 #    when it fails: percent vs fraction, m3 vs rm3, TVD vs TVDSS, NTG counted twice
 ```
 
-Retrieval from a governed platform is a separate concern: on Equinor
-infrastructure the enterprise `enterprise-osdu-data-platform` skill resolves the
-model in the Reservoir DDMS, maps published property names to Eclipse keywords
+Retrieval from a governed platform is a separate concern: a company with a
+subsurface data platform (for example an OSDU / Reservoir DDMS deployment) resolves the
+model there in its own private enterprise skill, maps published property names to Eclipse keywords
 and reports dataspace access, then hands the arrays here.
 
 ## Using an operator's prospect-evaluation database

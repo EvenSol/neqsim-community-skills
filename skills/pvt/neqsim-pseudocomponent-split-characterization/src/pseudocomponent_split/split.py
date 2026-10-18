@@ -198,8 +198,7 @@ def calculate_split_factor(
     """Compute the delumping split factor from a detailed reference composition.
 
     For each lump, the split factor of a detailed component is its mole fraction
-    divided by the lump total. This mirrors FluidMagic's
-    ``EOSConverter.calculate_split_factor`` and lets a lumped composition be
+    divided by the lump total. This is the usual lumping/delumping convention and lets a lumped composition be
     reconstructed (delumped) back to detailed components using the reference
     fluid's internal distribution.
 

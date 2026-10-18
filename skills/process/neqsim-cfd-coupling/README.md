@@ -6,7 +6,7 @@ The skill has five layers, each usable on its own:
 
 | Module | Purpose |
 |---|---|
-| `design_basis` | Merge P&ID, STID, datasheet, plant-data and estimated inputs into one traceable design basis; report conflicts and missing fields before meshing |
+| `design_basis` | Merge P&ID, tag register, datasheet, plant-data and estimated inputs into one traceable design basis; report conflicts and missing fields before meshing |
 | `boundary` | Turn a flashed NeqSim fluid into single-phase CFD boundary conditions, turbulence inlet state, flow regime and solver class |
 | `multiphase` | Take both phases and the interfacial tension from one flash, derive the superficial and mixture quantities, and screen which multiphase model is defensible |
 | `openfoam` | Write, run and read back a complete OpenFOAM case - steady single-phase RANS or transient volume of fluid - on pipe, duct or arbitrary imported geometry |
@@ -33,11 +33,11 @@ pytest
 ## Run the examples
 
 ```bash
-python examples/pid_to_openfoam_case.py     # P&ID + STID -> NeqSim -> steady case
+python examples/pid_to_openfoam_case.py     # P&ID + tag register -> NeqSim -> steady case
 python examples/multiphase_vof_case.py      # two-phase flash -> VOF case
 ```
 
-The first takes a line from a P&ID and a STID tag register, flashes the fluid in
+The first takes a line from a P&ID and a tag register, flashes the fluid in
 NeqSim, derives boundary conditions, sizes the near-wall cell for a y+ target,
 writes a complete OpenFOAM case, runs it when OpenFOAM is available, and converts
 the solved wall shear into a mass-transfer enhancement factor.

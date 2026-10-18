@@ -1,4 +1,4 @@
-"""End-to-end example: P&ID and STID inputs -> NeqSim -> OpenFOAM case.
+"""End-to-end example: P&ID and tag register inputs -> NeqSim -> OpenFOAM case.
 
 Run with::
 
@@ -38,8 +38,8 @@ basis = build_design_basis(
             "values": {"nominal_size_inch": 12.0, "service": "wet gas"},
         },
         {
-            "source": "stid",
-            "reference": "STID line 20-P-001",
+            "source": "tag_register",
+            "reference": "tag register line 20-P-001",
             "values": {"inside_diameter_m": 0.3048, "length_m": 6.0, "material": "carbon steel"},
         },
         {

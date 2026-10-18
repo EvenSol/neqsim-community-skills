@@ -1,7 +1,7 @@
 """Scenario schema ``ncs_value_chain_scenario.v1`` and defaults.
 
 A scenario is plain JSON so an enterprise binding skill can emit it from
-governed data (PDM actuals, RNB forecasts, Gassled tariffs, gas-quality specs,
+governed data (production allocation, corporate forecasts, tariffs, gas-quality specs,
 UMM outages) without this public skill touching those systems.
 
 Every default below is a stated public screening assumption, overridable.
@@ -30,7 +30,7 @@ DEFAULT_SCENARIO: Dict[str, Any] = {
     },
     "tariffs": {
         # screening transport + processing cost per unit shipped; Gassled tariffs are
-        # governed commercial data - bind them from enterprise-gassled-tariff
+        # governed commercial data - bind them from a private enterprise binding skill
         "gas_nok_per_sm3_default": 0.12,
         "gas_nok_per_sm3_by_arc": {},
         "liquid_nok_per_sm3_default": 30.0,

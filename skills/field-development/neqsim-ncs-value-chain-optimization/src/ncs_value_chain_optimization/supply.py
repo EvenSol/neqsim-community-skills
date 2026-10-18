@@ -8,7 +8,7 @@
   reserves.
 * Discoveries: a screening build-up / plateau / decline profile sized from Sodir
   recoverable volumes. Start year is phased by maturity status.
-* Enterprise or user forecasts (e.g. RNB) replace any entity's profile via
+* Company or user forecasts replace any entity's profile via
   the scenario (``forecast_overrides``).
 
 Units: gas MSm3/d, liquid (oil + condensate) Sm3/d, both as annual averages.

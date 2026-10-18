@@ -1,8 +1,8 @@
 """Universal Paraffinic-Aromatic (P/A) heavy-end split factor helpers.
 
 Plant-agnostic, dependency-free implementation of the universal P/A
-characterisation split of Uleberg (2026) -- the "Legacy Common-Slate vs.
-Universal Paraffinic-Aromatic Fluid Characterisation" method. A single fixed
+characterisation split -- a "universal Paraffinic-Aromatic fluid
+characterisation" method. A single fixed
 component set (10 light + N paraffinic + N aromatic heavy lumps) represents any
 feed; the feed's heavy-end character is carried by a split factor ``S`` -- the
 paraffinic fraction of each heavy lump -- rather than by re-tuned properties.
@@ -23,13 +23,8 @@ the C7+ molecular weight.
 
 These are screening-level helpers. The critical properties, acentric factors,
 volume shifts and BIPs of the paraffinic and aromatic families are fixed by the
-universal EOS (for example the FluidMagic ``pa_universal.e300`` merged
-Paraffin_Base + Aromatic_Base slate); this module only performs the molar split.
-
-Reference:
-    K. Uleberg, "Legacy Common-Slate vs. Universal Paraffinic-Aromatic Fluid
-    Characterisation in Process Simulation: A Sleipner A Multi-Feed Case Study",
-    Equinor ASA, June 2026 (Eqs. 3-4, Section 2.2).
+universal EOS (for example a merged paraffinic-base plus aromatic-base E300
+slate supplied by the user); this module only performs the molar split.
 """
 
 from __future__ import annotations
@@ -369,7 +364,7 @@ def map_source_to_pa_core_totals(
     is later applied (:func:`constant_pa_split`).
 
     :param source_names: source component names (for example a reservoir E300 or
-        a Fluid Symphony sample composition).
+        a PVT-report sample composition).
     :param source_fractions: source mole fractions, aligned with ``source_names``.
     :param source_molecular_weights: source molecular weights (g/mol), aligned
         with ``source_names``.

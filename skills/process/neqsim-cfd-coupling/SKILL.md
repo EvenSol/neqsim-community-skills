@@ -19,7 +19,7 @@ headers, tube bundles. Screening models bridge that gap with generic textbook
 multipliers.
 
 This skill closes the gap properly. It takes whatever is known about a component
-(P&ID, STID tag register, datasheets, plant data), takes the fluid from a NeqSim
+(P&ID, tag register, datasheets, plant data), takes the fluid from a NeqSim
 flash, builds and runs an OpenFOAM case on the real geometry, and converts the
 solved field back into the factor the one-dimensional model was guessing at. When
 a CFD study already exists it qualifies that study instead of running a new one.
@@ -99,7 +99,7 @@ written and can be transferred and run elsewhere.
 ## Engineering Method
 
 **Design basis by precedence.** Sources are ranked
-`measurement > mechanical_datasheet > process_datasheet > vendor > stid >
+`measurement > mechanical_datasheet > process_datasheet > vendor > tag_register >
 plant_data > pid > estimate > assumption`. A lower-ranked source never overwrites
 a higher-ranked one; if it disagrees by more than 2 % it raises a conflict. The
 component class determines which geometry fields are required, so an
@@ -207,7 +207,7 @@ basis = build_design_basis(
     sources=[
         {"source": "pid", "reference": "P&ID 20-PID-001 rev C",
          "values": {"nominal_size_inch": 12.0}},
-        {"source": "stid", "reference": "STID line 20-P-001",
+        {"source": "tag_register", "reference": "tag register line 20-P-001",
          "values": {"inside_diameter_m": 0.3048, "length_m": 6.0}},
         {"source": "process_datasheet", "reference": "20-DS-014 rev 2",
          "values": {"temperature_c": 45.0, "pressure_bara": 65.0,

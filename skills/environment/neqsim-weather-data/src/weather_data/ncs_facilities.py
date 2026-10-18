@@ -9,7 +9,7 @@ the geometry in ``outSR=4326`` (WGS84) directly rather than guessing separate
 lat/lon columns.
 
 This is a convenience resolver, not an authoritative position source. Verify
-the returned coordinates against STID/P&ID or the operator's own records
+the returned coordinates against tag register/P&ID or the operator's own records
 before any safety-critical siting decision; do not use it to place equipment.
 """
 

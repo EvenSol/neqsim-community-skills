@@ -15,8 +15,8 @@ def _sources():
             "values": {"inside_diameter_m": 0.30, "service": "wet gas"},
         },
         {
-            "source": "stid",
-            "reference": "STID line 20-P-001",
+            "source": "tag_register",
+            "reference": "tag register line 20-P-001",
             "values": {"inside_diameter_m": 0.3048, "length_m": 6.0},
         },
         {
@@ -34,9 +34,9 @@ def _sources():
 def test_higher_precedence_source_wins() -> None:
     basis = build_design_basis(tag="20-P-001", component_kind="pipe", sources=_sources())
 
-    # STID outranks the P&ID, so the tag register diameter is the accepted value.
+    # tag register outranks the P&ID, so the tag register diameter is the accepted value.
     assert basis.value("inside_diameter_m") == pytest.approx(0.3048)
-    assert basis.source_of("inside_diameter_m") == "stid"
+    assert basis.source_of("inside_diameter_m") == "tag_register"
     assert basis.ready_for_meshing
 
 
@@ -49,7 +49,7 @@ def test_disagreement_beyond_tolerance_is_reported_as_a_conflict() -> None:
     assert len(basis.conflicts) == 1
     conflict = basis.conflicts[0]
     assert conflict.field == "inside_diameter_m"
-    assert conflict.accepted_source == "stid"
+    assert conflict.accepted_source == "tag_register"
     assert conflict.rejected_source == "pid"
     # A conflict blocks meshing even though nothing is missing.
     assert not basis.ready_for_meshing
@@ -82,7 +82,7 @@ def test_none_values_are_ignored_so_partial_extractions_can_be_passed_through() 
     basis = build_design_basis(tag="20-P-001", component_kind="pipe", sources=sources)
 
     assert basis.value("length_m") == pytest.approx(6.0)
-    assert basis.source_of("length_m") == "stid"
+    assert basis.source_of("length_m") == "tag_register"
 
 
 def test_unknown_component_kind_is_rejected() -> None:

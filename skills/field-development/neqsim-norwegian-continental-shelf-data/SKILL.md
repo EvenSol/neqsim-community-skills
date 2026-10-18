@@ -255,218 +255,31 @@ quantitative NCS production analysis use:
 | Forecasting from R/P | Reading the static R/P ratio as a forecast | Use NeqSim `SimpleReservoir` / `runReservoir` |
 | Undrilled licence or prospect has no data | Looking in the field tables | Read the neighbourhood from the Sodir FactMaps FeatureServer (below) |
 
-### Fresh discovery pair and its host profile (verified 2026-10-10, PL1140 Lofn / Langemann)
-
-- Discoveries named `15/5-8 S (Lofn)` and `15/5-8 A (Langemann)` are in `discovery_reserves` (layer 7008, join on `dscNpdidDiscovery`, status `Production not evaluated`, RC `7F`); `wellbore_coordinates` (FactPages CSV table) gives their position (decimal degrees `wlbNsDecDeg`, `wlbEwDecDeg`), TD and age at TD. `licence_licensee_hst`, `licence_phase_hst` and `discovery` CSV tables return HTML (not served) - use the licence layer 3000 for dates and take partners from the brief.
-- Centuries Forecast 2027 holds them as project `Lofn & Langemann` (RC5) under field names `15/5-8 S (Lofn)` / `15/5-8 A (Langemann)` and facility `GINA KROG`; the Centuries gas and liquid are a fraction of the Sodir recoverable (43 % and 23 % at Lofn / Langemann), so quote both.
-- Host capacity for a screening ullage = Sodir peak annual gas throughput (`field_production_yearly`, max of `prfPrdGasNetBillSm3` x 1000 / 365), host end = last Centuries year with gas above 0.02 MSm3/d; a host's Centuries profile can end before a neighbouring project that is planned to use it (Gina Krog 2036 vs Lofn & Langemann 2038): flag that as a life-extension question.
-
-### Neighbourhood of an undrilled licence (verified 2026-10-09, PL1252)
+### Reading the neighbourhood of an undrilled licence or prospect (Sodir FactMaps)
 
 Base `https://factmaps.sodir.no/api/rest/services/Factmaps/FactMapsWGS84/FeatureServer/<layer>/query`
 with `f=json&outSR=4326&returnGeometry=true` and an envelope (`geometry`, `geometryType=esriGeometryEnvelope`,
-`spatialRel=esriSpatialRelIntersects`). Layers: 616 licence (filter `prlName='1252'`, TFO licences use the bare number),
+`spatialRel=esriSpatialRelIntersects`). Layers: 616 licence (filter `prlName='<number>'`; TFO licences use the bare number),
 304 facilities in place, 311 pipelines, 503 discoveries, 502 fields, 204 exploration wellbores, 201 all wellbores;
 tables: 532 discovery reserves (join on `dscNpdidDiscovery`), 515 field reserves, 651 licence phases, 652 licence tasks.
-Facility geometry is a point (`x`,`y`), discoveries and fields are polygons: take the minimum vertex distance, not a centroid.
-Useful reads: distance to candidate hosts, analogue discoveries with recoverable volumes, wildcat hit rate (biased by
-infrastructure-led exploration), the status mix of nearby discoveries (platform-drilled sub-discoveries "included in other discovery"
-versus stand-alone "production unlikely"), and ERD precedent as `sqrt(wlbTotalDepth^2 - wlbFinalVerticalDepth^2)` for wells
-drilled from a candidate host (layer 201 filtered on the platform well-name prefix).
+The DataService MapServer (`https://factmaps.sodir.no/api/rest/services/DataService/Data/MapServer/<id>/query`) is the easier
+entry for lists: facilities 6000, pipelines 6100, discoveries 7000, fields 7100.
 
-### Undrilled prospect in a named reservoir formation (verified 2026-10-10, Linnorm Lange)
-
-Analogues and temperature for a prospect with no prospect data come from layer 201/204 wellbores and layer 503/502 discoveries and fields:
-
-- **Formation filter:** use equality, never LIKE: `wlbFormationWithHc1='LANGE FM' OR wlbFormationWithHc2='LANGE FM' OR wlbFormationWithHc3='LANGE FM'`. A `LIKE '%LANGE%'` query returns an empty response from this service.
-- **Analogue volumes:** join the hosting discoveries/fields to table 532/515 recoverable volumes (gas in GSm3 = MSm3 o.e. equivalent, oil/condensate in MSm3); fit a lognormal to the nonzero values (8 Lange analogues: P90/P50/P10 2.1 / 6.3 / 18.9 MSm3 o.e.). State the survivor bias: analogues are discoveries.
-- **Geotherm:** regress `wlbBottomHoleTemperature` on `wlbFinalVerticalDepth` (Norwegian Sea n=279: 34.2 K/km); leave out the neighbour wells, test the fit against them, and add a declared anomaly where they are warmer (Linnorm/Onyx +3 to +12 K). BHT is a drilling temperature, so it is a lower bound of formation temperature.
-- **Pore pressure:** Sodir has no formation pressure for an undrilled prospect; declare an EMW range (1.30-1.85 sg) and show the HPHT probability (P > 690 bara and T > 150 C) explicitly.
-- **Other tables:** formation tops, DST and well history are separate tables (layers for `wlbFormationTops`, `wlbDST`, `wlbHistory`), not columns of the wellbore layer.
-
-### Producing licence with unnamed opportunities (verified 2026-10-09, PL190 Tune)
-
-When the brief names opportunities that are not in Sodir (no wellbore, discovery or facility with the name), say so
-and value them from the neighbourhood instead of searching further:
-
-- Licence layer 616 uses the bare number (`prlName='190'`); its polygon can be a long strip, so draw a prior
-  location uniformly over the polygon and report the distance distribution to each candidate node, not one number.
-- Ownership: `OwnershipReader().licence("190")` and `.field("TUNE")` (name without `PL`).
-- A field with `fldRemainingOE` near zero in layer 515 (Tune: 0.05 of 23.0 MSm3 OE) has an idle template and export
-  route: the first tie-in candidate. Cross-check with the Centuries base profile of the field.
-- The Sodir pipeline layer (311) holds trunklines only; infield lines are not there, so existing-route lengths are
-  straight-line estimates to be confirmed by subsea integrity.
-- Step-out precedent by drilling facility: layer 205 (development wellbores) in an envelope, group on
-  `wlbDrillingFacility`, take the upper bound `sqrt(MD^2 - TVD^2)`; rig names and platform names are mixed in that column,
-  so quote the best well name (template wells reached 5.4-6.4 km, Oseberg platforms 8.0-9.6 km).
-- A wildcat just completed in the licence (`wlbCompletionYear` = current year, `wlbContent` empty, P&A) has no public result
-  yet: record it as an evidence gap and as an update to Pg, never infer the outcome.
-- Centuries may hold an RC5 project of the same field (Tune: "Tune Statfjord", TLI 0.35 to 0.5, first production 2034). Use
-  it as a volume and profile-shape anchor, and do not map it to a named opportunity without confirmation.
-
-### Producing licence with a platform host (verified 2026-10-09, PL193 Kvitebjorn)
-
-When the unnamed opportunity sits in a licence whose own field has a fixed platform:
-
-- The licence layer gives the strip geometry and the platform jacket is in layer 304; draw the prior location over the part of the
-  licence on the side named in the brief (e.g. north of the platform for 'Nord') and report the share within extended-reach distance
-  (here 60 % within 6 km), because a platform well is then the base concept and subsea only the fallback.
-- The field and its licence have the same partners and no host tariff: charge only downstream transport and variable cost.
-  Partners come from OwnershipReader().field("<NAME>") (names with special characters work, e.g. `KVITEBJØRN`).
-- Host capacity proxy: the 30-day peak of the field's PDM export streams (<FIELD>-PROD_<FIELD>-G and -C in NET_VOL);
-  the Centuries base profile of an old field ends well before its cut-off year, so read both and show the tail.
-- Pressure state of the target (connected to the depleted main tank or an isolated compartment) changes well rate by a factor of
-  four and the subsea break-even volume by a factor of two; make it a discrete uncertainty, not a fluid case.
-- Check the Centuries projects of the field (IOR infill, pressure-reduction, other tie-ins with the field as host) for overlap
-  with the opportunity before valuing it.
-
-### Producing field with a subsea template and a stand-alone tie-back candidate (verified 2026-10-09, Sleipner Ost / Loke Ty)
-
-- The DataService MapServer (`https://factmaps.sodir.no/api/rest/services/DataService/Data/MapServer/<id>/query`) is the easier
-  entry for lists: facilities 6000, pipelines 6100, discoveries 7000, fields 7100 (tables 7113 and 7008). Facility attributes give
-  start-up year, design life, water depth and slot count, so the age of a reused template at first gas is computed, not assumed.
-  The subsea template itself is often not named in the facility layer: match it by distance to the host and the slot count, and say
-  that it is an assumption.
-- Yearly production: the factpages table view `field_production_yearly` as CSV works (all fields; filter the host fields),
-  while the norskpetroleum.no `csv.php` export answered HTTP 500. Field names arrive with an encoding artefact for Oe/Ae/Aa
-  (for example `SLEIPNER ╪ST`); decode as UTF-8 and compare diacritic-folded.
-- Host throughput history is the cheapest way to show that gas volume is not the constraint for a small tie-back: Sleipner-hosted
-  fields went from 15.2 GSm3/yr (2005) to 4.5 (2025). Show the load of every concept in the same year with success-case area volumes.
-- Never turn an unnamed brief item (here 'Hod') into a Sodir field of the same name; the Sodir field 'Hod' is an oil field in another
-  area. Record it as a data gap.
-
-### Exploration prospect in a named licence (verified 2026-10-09, Abel PL1204 / Utsira North)
-
-- A prospect has no public volume or coordinates. Position proxy = centroid of the licence polygon (`licence` layer 3000 with
-  `returnGeometry=true`, `where=prlName like '%1204%'`; keep `prlStatus='ACTIVE'`); the licence rows also give grant date and
-  `prlDateValidTo`/initial-period expiry, i.e. the drill-or-drop date. Sodir lists one row per licensee, so partners are not complete.
-- The Sodir WAF answers `Request Rejected` (HTTP 200, HTML) to POST queries and to long `OR` chains of `like` clauses: use GET, one
-  `where` per block or licence, and retry. Wellbore layer 5000 gives total depth, bottom-hole temperature and discovery per wellbore
-  (HPHT context without pressure data); filter with `wlbWell like '25/7-%'`.
-- Neighbour resources: join discovery reserves (layer 7008) to discoveries (layer 7000) on `dscNpdidDiscovery` and field reserves
-  (7113) to fields (7100) on `fldNpdidField`; the reserves table repeats a field per reporting date, so take the latest row. The oil/gas
-  ratio of the recoverable volumes gives an analogue GOR bracket (Busta 864, Norma 3610 Sm3/Sm3) for a fluid when no PVT exists.
-- Run a nearest-infrastructure screen (haversine from the prospect to all in-service facilities, plus pipeline chord distance) before
-  accepting the hosts named in a brief: here Alvheim (14 km), Heimdal gas pipelines (3 km) and Grane (39 km) were closer than every
-  host named, which were 60-125 km away. Name the extra hosts and flag third-party ownership.
-- Prospect with no public data next to an ageing satellite (Aurelius, south of Sigyn, 2026-10-10): wellbore label and brief can
-  disagree (16/10-4 is `DRY` in layer 5000 while the brief reports residual oil and a gas cloud) - quote both and use the brief for
-  the fluid, Sodir for depth, temperature and position; query wellbores by GET with one `wlbWellboreName like '16/10-%'` per block;
-  the APA licence layer returns no rows for awards that are not yet published, so record the licence number and drill-or-drop
-  date as a data gap instead of guessing. When the host is a depleting satellite whose Centuries plan ends before first production
-  plus plateau (Sigyn ends 2039, tie-back production 2033-2044), add an explicit life-extension cost and an NPV "no extension"
-  comparison, and size the existing lines from the host's own flow (Sigyn 0.3 MSm3/d in Centuries, 0.06 in Sodir 2025) - the lines
-  are then almost empty and the value of a "released" line is small compared with the extension cost.
-
-### Discovery maturing to a project basis with an area host (verified 2026-10-09, Fogelberg / Asgard)
-
-- Discovery layer 7000 gives name, wellbore (here 6506/9-2 S) and operator; discovery reserves (7008, latest reporting date) give recoverable
-  gas, oil and NGL and the resource class (RC7F). Positions come from the wellbore layer 5000, host and template positions from the facility
-  layer 6000: a haversine screen gives 9.5 km to the nearest template and 17.3 km to the host semi-submersible, times about 1.15 for a route.
-- Licence layer 3000: query with an equality filter (`prlName='1227'`); `like` returned `Request Rejected`. The licensee table (partners, equity %,
-  operator) is the factpages CSV table view, not a layer. The licence rows give the initial-period end and `prlDateValidTo`, i.e. the decision window
-  that sets the VPbo schedule.
-- Centuries holds the same discovery under two forecast cycles with different resource classes and first-gas years (FC2026 RC7 first gas 2030,
-  FC2027 RC5 first gas 2031) and a changed NGL split (here -21 % NGL, +7 % dry gas): compare against Sodir before using either as base.
-  Host profiles (the declining host fields at the receiving platform) are the cheap test of whether gas volume constrains the tie-in.
-
-### Prospect licence with partners, hosts of another operator (verified 2026-10-10, Trollebotsnova PL1247)
-
-- Licensee shares and operator of a licence: FactPages CSV tables `licence_licensee_hst` (columns `prlName`, `cmpLongName`, `prlLicenseeInterest`,
-  `prlLicenseeDateValidTo`; current = empty valid-to) and `licence_oper_hst`; layer 3010 returns licence TASKS per company (decision to drill,
-  BoK, BoV, PDO dates), not shares. Host-field ownership: `field_licensee_hst` (`fldName`, `fldCompanyShare`, current = empty valid-to).
-  PL1247 = Aker BP 60 % operator, Equinor 40 %: the licence operator is also the operator of Edvard Grieg and Ivar Aasen.
-- Centuries holds only Equinor-operated or Equinor-partnered fields: Edvard Grieg and Solveig return no records and the `find_fields` call ignores
-  its filter and returns all 349 fields (filter locally). For such hosts build a Sodir proxy: fit the decline of `field_production_yearly` for the
-  last three full years (2026 is a partial year) and bracket it with a reserve-tail decline that exhausts `fldRemaining*`; capacity = 1.1 x the
-  historic peak, flagged as a proxy.
-- The discovery layer 7000 returns geometry only with `outFields=*`; use it to list the analogue discoveries within 30 km of a licence centroid
-  (here Brokk-Mju, Sigrun, Apollo, Gudrun, Ivar Aasen) before choosing the fluid cases.
-- A brief label such as "Sleipner area" can be a region, not a distance: the licence centroid was 59 km from Sleipner A but 11-17 km from three other
-  hosts. Run the haversine screen to all in-service facilities before accepting the hosts named in the brief.
-
-### Several partner-operated licences at once (verified 2026-10-10, five Greater Horda licences)
-
-- Licence names in a brief (Hesje/Staur, Lindstrom, Viva, Robin) are Equinor internal labels: Sodir publishes the PL number only, and a name
-  search over wellbores, discoveries and fields returns nothing (only Litjklakken matches a discovery, 25/1-9). Say so explicitly. A name with
-  a letter suffix is stored with a space (`1183 S`); use an equality filter on `prlName`.
-- Survey layer 420 `surveyTypeMain` is in Norwegian ("Ordinaer seismisk undersokelse", "Havbunnseismisk ..."): a filter on `SEISMIC` finds
-  nothing. Use `"seismisk" in type.lower()` with `surveyTypePart == "3D"`; names are also stored without the o-slash in ASCII folds (Gjoa, Byrding).
-- Tasks of the licence (layer 652) give the decision-to-drill (DOD) dates; the five licences here fall within 31 days (2027-02-17 to 2027-03-20),
-  which is a scheduling finding in itself. The initial-extended phase (PL1151, PL1144) means the earlier work programme is complete.
-- The hit rate of all Sodir wildcats near a licence (0.5-0.7 here) counts sub-commercial finds; use it as an upper bound for Pg of a
-  commercial-size discovery, not as Pg.
-
-- Neighbourhood gotchas (verified 2026-10-10, four Greater Tampen licences): an internal label such as "Valemon Sor" can match only the neighbouring
-  field and its discoveries (Valemon, Valemon Nord, Valemon Vest), whose polygons touch the licence edge (0.0-0.2 km); report that as "name not found
-  as such". A wildcat with status DRILLING in the wells layer (here 34/10-56 S, 2.2 km from the edge, operator Equinor) has no content, year or
-  discovery: list it as a pending data point, not as a hit or a dry hole. When no wildcat lies within 30 km the hit rate is undefined (`None`), widen to
-  45 or 60 km and say which radius was used. The block list of a multi-polygon licence can include blocks far from the main area (PL1263 lists 6201/9 to
-  34/1); use the polygon area, not the block list, for distances. Ownership `stakes` carry `is_operator`; Equinor's share of the licence and of the host
-  field are different numbers and both are needed for the net value.
-
-### Undrilled satellite next to a producing subsea cluster (verified 2026-10-10, Drage / Hanz / Symra / Ivar Aasen)
-
-- A prospect is not in `discoveries` (7000) or `fields` (7100) and not in Centuries; take position and volume from the brief and state the position as
-  assumed. The facility layer 6000 returns `geometry.x` as the string `NaN` for some rows: coerce with `float()` in a `try`, and look up templates by the
-  name prefix (`25/10-C-1 H`), the field name is appended in the label. Small subsea tie-backs (Hanz, Symra) are absent from the pipeline layer 6100.
-- The analogue named in a brief may sit in another reservoir: Hanz is Intra-Draupne / Hugin sand in the wellbore `wlbFormationWithHc*` fields, while the
-  Heimdal analogues are Symra, Verdandi, Apollo and Lillefix. Check this before using the analogue for relative permeability or recovery.
-- `field_production_monthly` (factpages table view, same URL pattern as `field_production_yearly`) gives a monthly series from start-up: Hanz went from
-  11 % to 65 % water cut and GOR 130 to 950 in 16 months; this is the cheapest back-test for coning parameters. Negative monthly oil values occur
-  (allocation corrections): filter `> 0.003 MSm3`.
-- `field_reserves` (7113) holds one row per annual estimate: sort by `fldDateOffResEstDisplay` and take the last (Hanz recoverable oil 2.5 to 0.4 MSm3
-  in the 2025 revision); a dictionary keyed by field name silently keeps an arbitrary row.
-- Centuries host plan: `discover_forecast_dimensions(forecast_name, field_name, facility_name)` for `IVAR AASEN` with facility `IVAR AASEN` also returns the
-  `Backout from Hanz` and `Deferral IA` projects; use the Reserves classes as planned throughput and the sum of IA, Hanz and Symra as the host load. The
-  plan water (13.2 kSm3/d) exceeded the Sodir demonstrated water (10 kSm3/d), so a host capacity proxy must be at least the plan peak.
-
-### Gas-condensate prospect next to an ageing host (verified 2026-10-10, Lambda Hugin PL1200S / Sleipner A)
-
-- Licence gates are public: the licence-task table (factpages layer 652; FactMaps `MapServer/3010` with `prlName like '%1200%'` also returned it) lists
-  `prlTaskTypeEn` / `prlTaskExpiryDate` for `Drill exploration well`, `(BoK) Decision to concretize`, `(BoV) Decision to continue`, `(PDO) Submit plan for
-  development` and `Decision to enter extension period` (epoch ms): PL1200S had BoK 2028-03-15, BoV 2030-03-15 and PDO 2031-03-15 = licence end. Use them as
-  the hard decision-gate dates of a success plan instead of generic DG1-DG3 timings. The licence layer (3000) matched `like '%1200%'` but not `like 'PL1200%'`.
-- A cheap fluid benchmark exists next door: recoverable (NGL + condensate) / gas from `field_reserves` of the neighbouring Hugin field (Sleipner Vest
-  292.6 Sm3/MSm3) matched the brief CGR 295 within 1 %; use it before assuming a PVT. Wellbore layer 5000 rejects a long `or` list of `like` terms
-  ("Request Rejected"): one query per block prefix.
-- Host life is a Centuries question, not a Sodir one: `SLEIPNER VEST` Forecast 2027 has Base profile 2026-2034 (6.7 GSm3), contingent `Low pressure SLT` (RC4,
-  2028-2039) and `Low pressure phase 2` (RC4, 2030-2039), while the Sleipner A complex plan runs to 2045; a late first gas (2032-33) is exposed to which
-  of these windows is real. The A-complex Centuries throughput (2.9 MSm3/d in 2027) is much lower than the Sodir 2025 throughput of the same fields (9.6 MSm3/d).
-- NeqSim `ConstantVolumeDepletion` returns relative volume, Z and liquid dropout but not produced-stream standard volumes: for recoverable condensate vs
-  abandonment pressure loop `TPflash`, remove the excess gas (`addComponent(i, -n x_i)`), flash the removed composition at 15 C / 1.01325 bara and sum
-  gas and condensate. A brief that gives gas RF 65 % and condensate RF 57 % for a lean condensate (CGR 338) is not reproduced: depletion gives 47 % at
-  gas RF 67 %.
-
-### Prospect with a neighbouring discovery and a sibling tie-back (verified 2026-10-10, Pedalo North / Loke Ty / Sleipner A)
-
-- Sodir has no prospect objects: a prospect name (Pedalo) returns nothing in the discovery, field or wellbore layers, while the similarly named `Loke` is
-  discovery 15/9-17, "included in other discovery", 9 km north of Sleipner A. State this in the data gaps; equity, Pg and licence dates of a prospect are
-  not public. FactMaps accepts GET only; POST is rejected by the WAF.
-- A synergy with a sibling tie-back must be tested after tax (a pre-tax saving is worth about 22 % after the 78 % shield) and as a scenario matrix against
-  two own lines (S0 own lines, joint start, accelerated start), reporting the delta with P(positive) from common random numbers. The sign follows the
-  geometry: report the break-even direct-line length (14.7 km for a 12 in spur) instead of a yes/no.
-- A shared trunk is limited by API RP 14E erosion, not by pressure: add both producers at peak and check v/ve before sizing the spur.
-- Brief EMV vs success NPV: back-calculate the implied Pg of a stated EMV under three NPV bases (brief, model mean case, Monte Carlo mean); the Monte Carlo
-  mean is well below the mean case when host-life and connectivity risk are included.
-- NeqSim `hydrateFormationTemperature` can throw `IsNaNException` for a rich gas condensate with MEG: retry with a different start temperature.
-
-### Stranded infill targets on an old host (verified 2026-10-10, Sleipner A, My 2 / Gungne infill)
-
-- A brief that quotes a target as "0,7 MSm3/d o.e" can mean a VOLUME in MSm3 o.e.: Centuries Forecast 2027 holds the same targets as RC7 projects
-  `My2 well` (field `SLEIPNER ØST`: 0.424 GSm3 rich gas, 2032-35, oilEquivalents 0.76 MSm3) and `Gungne infill` (field `GUNGNE`: 0.481 GSm3, 0.81 MSm3 o.e.);
-  as rates the brief would be 2.4-3.6 times the Centuries gas. Read `oilEquivalents` (Sm3 o.e.) and `richGasProductionRate` before asserting a unit, and
-  list the sibling RC7 projects of the same host (`Hod` 1.3 GSm3, `Ty reopen with coil tubing drilling`, `Loke Ty additional`) - they share the same stranded rig
-  and are the portfolio upside of any rig decision.
-- Centuries project rows are per field and facility: `discover_forecast_dimensions(forecast_name="Forecast 2027", field_name="GUNGNE")` lists every project with
-  `metadata.resourceClass` / `resourceSubClassCode` and `equity` (Equinor 59.6 % Sleipner Øst, 62.0 % Gungne); filter `corporateEquity == "Field100Percent"` and `unitSet == "Metric"`.
-- Calibrate a tank/IPR model to the Centuries yearly gas of the project (fit the productivity multiplier and the in-place gas together) and show the model-versus-Centuries
-  table; deliverability-limited abandonment pressure makes the in-place gas 50 % larger than recoverable / (p/z recovery to 45 bara).
-- Sleipner A platform wells to Gungne are extended-reach (15/9-A-2 8561 m, A-3 7743 m, A-19 A 7209 m, A-14 A 9661 m MD; Gungne wells 7-9 km from the platform); a
-  Lambda-type subsea template 6 km away from the target is not closer than the platform, so test the synergy by distance before assuming one.
-- Rig dependency: a platform rig that is needed for PP&A anyway turns the rig cost into a timing penalty (PV of the rig now versus at the PP&A date plus care and
-  maintenance); report the break-even share of the rig cost that PP&A would otherwise carry (here 89 % versus coiled-tubing drilling, after depreciating the avoided PP&A rig cost with the same tax treatment as the rig capex; without that symmetry the break-even is wrongly low) instead of one NPV.
-- The methane hydrate literature check is 6.5 / 12.4 / 15.6 C at 50 / 100 / 150 bara (NeqSim CPA 6.4 / 12.8 / 16.1 C); do not use 17 C at 100 bara (that is a rich-gas value).
+- Facility geometry is a point (`x`,`y`); discoveries and fields are polygons: take the minimum vertex distance, not a centroid.
+- A prospect has no public volume or coordinates: use the licence polygon and a declared prior location, and report a distance
+  distribution to each candidate host instead of one number.
+- Analogue volumes: join hosting discoveries/fields to table 532/515 recoverable volumes and fit a lognormal to the nonzero
+  values. State the survivor bias: analogues are discoveries.
+- Formation filter: use equality, never LIKE (`wlbFormationWithHc1='LANGE FM' OR ...`); a `LIKE` query can return an empty response.
+- Geotherm: regress `wlbBottomHoleTemperature` on `wlbFinalVerticalDepth`; BHT is a drilling temperature, so it is a lower bound
+  of formation temperature. Sodir has no formation pressure for an undrilled prospect: declare an EMW range instead.
+- Step-out precedent: layer 205 (development wellbores) grouped on `wlbDrillingFacility`, upper bound `sqrt(MD^2 - TVD^2)`.
+- The pipeline layer (311) holds trunklines only; infield line lengths are straight-line estimates to be confirmed.
+- Yearly production: the factpages table view `field_production_yearly` as CSV works; field names can arrive with an encoding
+  artefact for Oe/Ae/Aa, so decode as UTF-8 and compare diacritic-folded.
+- Never turn an unnamed brief item into a Sodir field of the same name; record it as a data gap.
+- A wildcat just completed in the licence (`wlbContent` empty) has no public result yet: record an evidence gap, never infer the outcome.
+- Operator and partner shares come from `OwnershipReader`; licence operator and field operator can differ.
 
 ## Limitations
 

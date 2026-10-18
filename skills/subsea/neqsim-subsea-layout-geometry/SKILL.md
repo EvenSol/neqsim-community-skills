@@ -131,7 +131,7 @@ This skill only prepares layout geometry. The validated, design-grade calculatio
 - `neqsim.process.equipment.pipeline.AdiabaticTwoPhasePipe` — two-phase pipe hydraulics for tie-back screening.
 - The NeqSim MCP `runPipeline` and `runFlowAssurance` tools for arrival-condition and hydrate screening along the route.
 
-In Python these classes are reachable through the `neqsim` package (for example `from neqsim import jneqsim`). Detailed subsea routing and tie-back length should use validated routing data; the enterprise `enterprise-well-production-routing` skill provides the live-data counterpart.
+In Python these classes are reachable through the `neqsim` package (for example `from neqsim import jneqsim`). Detailed subsea routing and tie-back length should use validated routing data; the company can supply live routing data through a private enterprise skill.
 
 ## References
 

@@ -2,7 +2,7 @@
 
 A finite-element model is only as good as the geometry, the material assignment
 and the boundary conditions behind it. In a real workflow those numbers arrive
-from several places at once - a P&ID, a tag register such as STID, a mechanical
+from several places at once - a P&ID, a tag register such as a plant tag database, a mechanical
 datasheet, an insulation specification, a coating report, an inspection report,
 historian data, or an engineer's estimate. They overlap, they disagree, and some
 are missing.
@@ -32,7 +32,7 @@ SOURCE_PRECEDENCE: tuple[str, ...] = (
     "insulation_specification",
     "process_datasheet",
     "vendor",
-    "stid",
+    "tag_register",
     "inspection_report",
     "plant_data",
     "pid",
@@ -47,7 +47,7 @@ _CONFIDENCE_BY_SOURCE: dict[str, str] = {
     "insulation_specification": "high",
     "process_datasheet": "high",
     "vendor": "high",
-    "stid": "medium",
+    "tag_register": "medium",
     "inspection_report": "medium",
     "plant_data": "medium",
     "pid": "medium",
@@ -219,7 +219,7 @@ def build_design_basis(
 
     Each entry of ``sources`` is a mapping with a ``source`` key drawn from
     :data:`SOURCE_PRECEDENCE`, an optional ``reference`` string (document number,
-    STID tag, historian tag), and a ``values`` mapping of field name to value.
+    tag register tag, historian tag), and a ``values`` mapping of field name to value.
     Values that are ``None`` are ignored, so a partially populated document
     extraction can be passed in as-is.
     """

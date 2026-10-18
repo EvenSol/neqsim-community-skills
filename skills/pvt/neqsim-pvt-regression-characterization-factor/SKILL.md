@@ -15,7 +15,7 @@ requires:
 
 Use this skill to **regress a single split / characterization factor against
 several measured PVT or separator targets at once**, with per-target weights and
-explicit residual reporting. It mirrors FluidMagic's regression (which fits
+explicit residual reporting. It follows standard PVT regression practice (fitting
 EOS/characterization parameters to measured PVT experiment values with weights)
 and NeqSim's characterization plus PVT-simulation workflow.
 

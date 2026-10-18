@@ -190,7 +190,7 @@ stability_class = estimate_pasquill_stability_class(
       `sodir-facility-register`, or `open-meteo-geocoding`) so provenance is
       traceable.
 - [ ] Any coordinate resolved by name (Sodir or geocoding) is verified against
-      an authoritative source (STID, P&ID, operator records) before any
+      an authoritative source (tag register, P&ID, operator records) before any
       safety-critical use.
 - [ ] `SiteConditionsSummary.warnings` is checked before quoting min/mean/max
       or percentile values as a design basis.

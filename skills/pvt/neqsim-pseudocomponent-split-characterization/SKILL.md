@@ -2,7 +2,7 @@
 name: neqsim-pseudocomponent-split-characterization
 calculation_basis: "screening"
 version: "0.1.0"
-description: "Public plus-fraction (C7+) characterization by a controllable split factor: Whitson gamma split, lumping and delumping split factors, and the universal Paraffinic-Aromatic heavy-lump split factor S (Uleberg 2026). USE WHEN: splitting a heavy end with one adjustable factor, computing a delumping factor from a reference fluid, reconstructing a detailed composition from a lumped one, or splitting lumps into P/A copies before rigorous NeqSim characterization."
+description: "Public plus-fraction (C7+) characterization by a controllable split factor: Whitson gamma split, lumping and delumping split factors, and the universal Paraffinic-Aromatic heavy-lump split factor S. USE WHEN: splitting a heavy end with one adjustable factor, computing a delumping factor from a reference fluid, reconstructing a detailed composition from a lumped one, or splitting lumps into P/A copies before rigorous NeqSim characterization."
 last_verified: "2026-07-14"
 requires:
   python_packages: []
@@ -40,7 +40,7 @@ NeqSim `neqsim.thermo.characterization` Java classes described below.
 - When a fluid is represented on a **universal Paraffinic-Aromatic (P/A)** set
   (fixed 10 light + N paraffinic + N aromatic heavy lumps) and its heavy-end
   character is carried by a single **split factor S** (the paraffinic fraction
-  of each heavy lump), per the Uleberg (2026) universal characterisation.
+  of each heavy lump), as in a universal paraffinic-aromatic characterisation.
 
 ## Inputs
 
@@ -78,11 +78,11 @@ higher `alpha` narrows the distribution and lightens the tail.
 For each lump, the split factor of a detailed component is its mole fraction
 divided by the lump total (each lump's factors sum to 1). A lumped composition
 is delumped by multiplying each lump value by its component split factors. This
-mirrors FluidMagic's `EOSConverter.calculate_split_factor` / `_delump`.
+is the standard lumping / delumping convention.
 
 ### Universal Paraffinic-Aromatic (P/A) split factor S
 
-The universal characterisation of Uleberg (2026) keeps one fixed component set
+The universal paraffinic-aromatic characterisation keeps one fixed component set
 (10 light + N paraffinic + N aromatic heavy lumps) and carries each feed's
 heavy-end character in a single split factor. For heavy lump `i` with total mole
 fraction `Z_i`, the split factor `S_i` (the paraffinic fraction) divides it into
@@ -218,9 +218,6 @@ In Python these are reachable through the `neqsim` package (for example
 
 ## References
 
-- Uleberg, K. (2026). *Legacy Common-Slate vs. Universal Paraffinic-Aromatic
-  Fluid Characterisation in Process Simulation: A Sleipner A Multi-Feed Case
-  Study*, Equinor ASA (universal P/A split factor S, Eqs. 3-4, Section 2.2).
 - Whitson, C.H., Brulé, M.R. (2000). *Phase Behavior*, SPE Monograph 20.
 - Pedersen, K.S., Christensen, P.L., Shaikh, J.A. (2015). *Phase Behavior of
   Petroleum Reservoir Fluids*, 2nd ed.

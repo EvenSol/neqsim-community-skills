@@ -2,9 +2,9 @@
 
 All functions are public, deterministic, and dependency-free. The forward model
 is injected: it maps a candidate factor to a mapping of predicted quantities
-keyed by target name. This mirrors FluidMagic's regression, which fits EOS/
-characterization parameters to measured PVT experiment values with per-target
-weights, and NeqSim's characterization plus PVT-simulation workflow.
+keyed by target name. This follows the usual PVT regression practice of fitting
+EOS/characterization parameters to measured PVT experiment values with
+per-target weights, and NeqSim's characterization plus PVT-simulation workflow.
 """
 
 from __future__ import annotations
