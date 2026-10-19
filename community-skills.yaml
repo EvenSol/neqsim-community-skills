@@ -424,6 +424,15 @@ skills:
     tags: [field-development, norwegian-continental-shelf, infrastructure, pipelines, gas-transport, network, open-data, open-api, tie-back, screening]
     min_neqsim_version: "3.7.0"
 
+  - name: neqsim-ncs-area-process-model
+    version: "0.1.0"
+    description: "Assemble one common NeqSim ProcessModel for an NCS catchment: all field/platform models that deliver to one terminal (Kollsnes, Kaarstoe, Nyhamna, Mongstad) plus shared structures and export pipelines, with back-pressure coupling, common fluid basis and verification against terminal flow. USE WHEN: field models exist and a value-chain model to a terminal is wanted, or a shared export line couples several platforms."
+    author: "neqsim-community"
+    repo: "equinor/neqsim-community-skills"
+    path: "skills/field-development/neqsim-ncs-area-process-model/SKILL.md"
+    tags: [field-development, norwegian-continental-shelf, value-chain, process-model, export-pipeline, terminal, kollsnes, network, screening]
+    min_neqsim_version: "3.7.0"
+
   - name: neqsim-ncs-ownership-equity
     version: "0.1.0"
     description: "Reads who owns Norwegian Continental Shelf fields, discoveries and licences from Sodir (partners, equity %, operator, history, company portfolio) and turns it into net-equity inputs for field evaluation and economics. Prospect equity is not public: user-supplied or a labelled licence proxy. USE WHEN: an evaluation needs partners and working interests, a net-to-company view of volumes, capex, opex or cash flow, a portfolio roll-up, or a check of an equity assumption."

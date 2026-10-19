@@ -199,6 +199,19 @@ that the recent year has no overloaded element.
   returns facility x/y (lon/lat) for distance-to-host checks.
 - **Gassco UMM.** It sits behind a terms click-through with no API. Never
   automate acceptance; the user exports outage messages and supplies them.
+- **Open route versus operating route.** Routes are text-mined and can lag
+  operations. The 2026-09 snapshot sends Valemon gas to Heimdal, while the
+  operator model and historian show gas and condensate going to Kvitebjoern
+  (and on to Kollsnes) since 2023. Before using a route as a model topology,
+  check it against P&ID valve states, historian flows or metered terminal
+  flows, and record any override with its source.
+- **Gas catchment is not the liquid catchment.** For Kollsnes the gas
+  catchment (Troll, Kvitebjoern, Visund, Fram, Fram H-Nord, Byrding) differs
+  from the liquid legs (Troll B/C oil to Mongstad, Kvitebjoern condensate via
+  Kollsnes to Mongstad, Gjoea oil to Troll C). List them per product.
+- **Nameplate versus coupled hydraulics.** Utilisation here is a feasibility
+  screen. When several platforms share a line, build the coupled model in
+  `neqsim-ncs-area-process-model`.
 
 ## Limitations
 
@@ -221,6 +234,9 @@ that the recent year has no overloaded element.
   `fit_arps_decline`.
 - `neqsim-resource-classification-screening`: maturity of the discoveries
   listed here.
+- `neqsim-ncs-area-process-model`: assembles the field models of one catchment
+  and its shared export lines into one coupled `ProcessModel` anchored on the
+  terminal.
 - `neqsim-ncs-ownership-equity`: partners and working interests of the fields
   and discoveries listed here, for net-to-company economics.
 - `neqsim-production-network-routing`, `neqsim-step-out-screening`,
