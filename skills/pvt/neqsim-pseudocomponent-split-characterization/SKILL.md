@@ -99,6 +99,16 @@ not by `S`. The fixed critical properties, acentric factors, volume shifts and
 BIPs of the paraffinic and aromatic families live in the universal EOS; this
 skill only performs the molar split.
 
+**Precharacterized per-sample splits.** Where a library of per-sample fitted
+`(S1, Sn)` end points exists (for example a table with one row per fluid sample, a
+field-average `S1`/`Sn` for samples without their own fit, and the sample's own
+composition), use the sample's own pair with its own composition instead of
+re-fitting; the field average is a screening fallback. Saturation pressure is a
+light-end lever that is essentially orthogonal to `S`: an optional methane-heavy BIP
+that ramps linearly in molecular weight from 0 at the lightest heavy lump to `k_top` at
+the heaviest recovers reservoir psat without moving surface GOR or density, but it is
+field-specific and breaks the single universal EOS, so keep it opt-in.
+
 ## Python Usage Pattern
 
 ```python
