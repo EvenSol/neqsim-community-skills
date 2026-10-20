@@ -49,5 +49,6 @@ quality acceptance are not verified; the sketch is not a controlled document.
 
 ## Related
 
-`neqsim-tie-in-pipeline-concept`, `neqsim-pid-process-operations`.
+`neqsim-tie-in-pipeline-concept`, `neqsim-pid-process-operations`. On Equinor data, mark up the original controlled P&ID
+instead of (or after) this conceptual sketch with the enterprise skill `enterprise-stid-pid-markup`.
 

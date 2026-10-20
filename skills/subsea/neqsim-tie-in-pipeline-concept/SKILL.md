@@ -62,6 +62,13 @@ Arrival pressure at the landing point, steel and design pressure, that the corri
 upstream water handling and stabilisation are outside the line, and that free span, stability, buckling, surge,
 wax and pigging are not assessed.
 
+**Read the landing pressure from the host P&ID, do not assume it.** The Martin Linge screening used 10 barg
+arrival; the Oseberg A P&ID of the export oil booster pumps (11-1A-KE-T01-21-EC-00211) shows 45 barg pump
+discharge and 43.2 bar differential, so the booster suction is only about 2 barg. A tie-in upstream of the boosters
+needs a few barg at arrival; a tie-in downstream needs the full header pressure at the source and a higher design
+pressure. Run both landing options through `size_pipeline` with `arrival_pressure_barg` set from the sheet, and say
+which sheet and revision the pressure came from.
+
 ## Common mistakes
 
 | Symptom | Cause | Fix |
