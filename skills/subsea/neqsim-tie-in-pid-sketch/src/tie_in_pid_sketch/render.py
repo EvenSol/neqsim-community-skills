@@ -69,8 +69,8 @@ def _symbol(el: Element, x: float, y: float) -> List[str]:
         out.append(f'<path d="M{x},{y-70} L{x},{y-14} Q{x},{y} {x+14},{y}" fill="none" stroke="{col}" stroke-width="{sw+1.5}"/>')
         out.append(_txt(x + 8, y - 74, "stigerør til dekk", 10, "start", fill="#555"))
     elif k in ("equipment", "note_box"):
-        out.append(f'<rect x="{x-48}" y="{y-34}" width="96" height="68" rx="6" {base}'
-                   f'{" stroke-dasharray=\"6 3\"" if k == "note_box" else ""}/>')
+        dash = ' stroke-dasharray="6 3"' if k == "note_box" else ""
+        out.append(f'<rect x="{x-48}" y="{y-34}" width="96" height="68" rx="6" {base}{dash}/>')
     return out
 
 
