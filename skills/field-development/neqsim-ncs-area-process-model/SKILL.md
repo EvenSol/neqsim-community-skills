@@ -169,6 +169,19 @@ with rate, P and T at every node; the binding constraint ranking from the equipm
 constraints plus line velocity, pressure and erosional limits; the terminal arrival profile; the
 list of model boundaries that were imposed instead of computed; the override log from Step 1.
 
+### Step 8 - Show it on a map
+
+A catchment result is read faster on a map than in a table. Draw four figures from open data: (1) base state, (2) margin to the pressure the
+system needs and the scenario deltas, (3) a zoom on any corridor where lines run in parallel, (4) pressure and temperature against distance
+to the terminal. Conventions that worked on the Kollsnes catchment:
+
+- Lines from Sodir FactMaps layer 6100 (as-laid polylines, open data), platforms from layer 6000, coast from Natural Earth (public domain).
+- Colour each gas line by the modelled pressure from `PipeBeggsAndBrills.getPressureProfile()` (bara; `getTemperatureProfile()` is Kelvin),
+  mapped on distance along the drawn polyline; one colour scale for the whole chain.
+- Put the number on the figure: rate (MSm3/d), pressure (bara), temperature, margin (bar), scenario delta (bar and MW), first binding machine.
+- Margin colours: below 2 bar binding, 2 to 6 bar watch, above 6 bar comfortable. Draw assumed objects ringed or dashed and say "assumed".
+- Keep gas and liquid legs apart; keep every callout inside the axes; open each image before using it.
+
 ## Common Mistakes
 
 - Adding an export line that is already inside the platform model (double pressure drop).
