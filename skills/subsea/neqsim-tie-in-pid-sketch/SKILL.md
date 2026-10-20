@@ -24,6 +24,24 @@ and green, invented tags carry `*`. Built for the Martin Linge A to Oseberg A oi
 
 Not for controlled P&IDs, HAZOP, or anything that is built from.
 
+## Inputs
+
+- Source and landing facility names.
+- Options for the templates: `new_export_pump`, `with_booster`, `keep_old_route`.
+- STID tags read from the real P&ID for existing equipment (`existing_tag`, `header_tag`); leave blank when not read.
+
+## Outputs
+
+A `TieInEndSketch` per end (elements, `options` block of open choices, `validate()` findings) and an SVG string
+from `render_svg`. Existing plant is drawn thin and dark, new scope bold and green, invented tags with `*`.
+
+## Engineering Method
+
+The templates encode the isolation, pigging, metering and sampling philosophy of an oil export tie-in: pump,
+metering, pig launcher, ESDV and riser at the source end; riser, ESDV, pig receiver, sampling, pressure control,
+spectacle blind and tie-in to an existing header at the landing end. `validate()` checks completeness against that
+list. Nothing is sized here; line size and pressure come from `neqsim-tie-in-pipeline-concept`.
+
 ## Workflow
 
 1. Read the real P&ID (STID) for the existing equipment at each end: name the export header, pump and battery
@@ -40,12 +58,41 @@ Not for controlled P&IDs, HAZOP, or anything that is built from.
 Tags are proposals; routes of the main line are conceptual; capacity of the existing header, riser slot and
 quality acceptance are not verified; the sketch is not a controlled document.
 
-## Common mistakes
+## Python Usage Pattern
+
+```python
+from tie_in_pid_sketch import pair_sketch, render_svg
+
+pair = pair_sketch("Source A", "Landing B")
+for end, sketch in pair.items():
+    assert sketch.validate() == []
+    with open("figures/tie_in_{}.svg".format(end), "w", encoding="utf-8") as handle:
+        handle.write(render_svg(sketch))
+```
+
+## Validation Checklist
+
+- [ ] `sketch.validate()` returns an empty list, or each finding is explained in the report.
+- [ ] Every tag read from STID is passed as `existing_tag` / `header_tag`; all other tags keep the `*`.
+- [ ] The old route has a blind or isolation when it stays in place.
+- [ ] Open choices from `options` are listed as questions to the facility owners.
+
+## Common Mistakes
 
 - Inventing STID tags. Use `proposed=True` (default) and keep the asterisk.
 - Showing the landing as a single point. Keep the ESDV, pig receiver and spectacle blind: they are what makes the
   tie-in operable and isolable.
 - Forgetting the old route. A blind towards the old export (FSO or tanker) is needed to isolate it safely.
+
+## Limitations
+
+One-line conceptual drawings of an oil export tie-in only; no instrument loops, line numbers, relief or control
+philosophy, and no check that the existing header or riser slot can accept the line.
+
+## References
+
+- ISO 10628, Diagrams for the chemical and petrochemical industry.
+- STID controlled P&IDs of the existing facilities: the only source for real tags.
 
 ## Related
 

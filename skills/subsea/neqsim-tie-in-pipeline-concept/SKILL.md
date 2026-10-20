@@ -50,6 +50,17 @@ studies, or any design-grade basis.
    pass water-containing cargo oil (a trace of water gave a second phase and a convergence failure in testing).
 6. Hand off to `neqsim-tie-in-pid-sketch` for the end connections and to the enterprise Echo skill for 3D views.
 
+## Engineering Method
+
+- Corridor: great-circle line sampled every `spacing_km` (default 0.5 km) with EMODnet bathymetry depths; the
+  profile gives 3D length, net elevation and steep intervals.
+- Hydraulics: single-phase liquid, Haaland friction, constant overall heat-transfer coefficient, density and
+  viscosity corrected for temperature along the line.
+- Wall thickness: pressure containment and collapse limit states of DNV-ST-F101 plus a D/t handling limit, evaluated
+  per nominal size; the smallest size that passes velocity, pressure and D/t checks is recommended.
+- Landing candidates: ranked by distance, existing feeders, terminal status and spare capacity; each score term
+  carries a rationale string.
+
 ## Outputs
 
 `candidates` with score rationale, `profile`, `statistics`, `sizing` (wall per size, cases, recommended size and
@@ -69,7 +80,35 @@ needs a few barg at arrival; a tie-in downstream needs the full header pressure 
 pressure. Run both landing options through `size_pipeline` with `arrival_pressure_barg` set from the sheet, and say
 which sheet and revision the pressure came from.
 
-## Common mistakes
+## Python Usage Pattern
+
+```python
+from tie_in_pipeline_concept import OilProperties, run_concept
+
+# props: OilProperties(...) from the stabilised export stream of a NeqSim model (see OilProperties fields)
+result = run_concept(
+    {"name": "Source A", "lat": 60.5, "lon": 2.0},
+    {"name": "Landing B", "lat": 60.5, "lon": 2.8},
+    props,
+    {"turndown": 2600.0, "design": 6000.0},  # Sm3/d per case
+    "design",
+    "turndown",
+    hosts=[{"name": "Landing B", "lat": 60.5, "lon": 2.8}],
+    basis_overrides={"arrival_pressure_barg": 12.0},
+)
+print(result["sizing"]["recommended"], result["statistics"]["route_3d_length_km"])
+```
+
+## Validation Checklist
+
+- [ ] End-point depths agree with the reported facility water depths.
+- [ ] Velocity is inside the allowed window for both the design and the turndown case.
+- [ ] Inlet pressure is below the design pressure, and the arrival pressure comes from a cited host document.
+- [ ] D/t is within the handling limit and the governing wall-thickness limit state is named.
+- [ ] Every default in `basis` that was not confirmed is listed under assumptions.
+- [ ] Recommended size is cross-checked against a NeqSim `PipeBeggsAndBrills` run on dry oil.
+
+## Common Mistakes
 
 | Symptom | Cause | Fix |
 |---|---|---|
@@ -82,6 +121,12 @@ which sheet and revision the pressure came from.
 
 Single-phase, constant U, Haaland friction, hand implementation of two DNV-ST-F101 limit states, DTM resolution
 of several hundred metres. Use `DnvStF101PipelineDesignCalculator` in NeqSim for the full limit-state set.
+
+## References
+
+- DNV-ST-F101, Submarine pipeline systems.
+- EMODnet Bathymetry (https://emodnet.ec.europa.eu/en/bathymetry), open digital terrain model.
+- Haaland, S.E. (1983), Simple and explicit formulas for the friction factor in turbulent pipe flow, J. Fluids Eng.
 
 ## Related
 
