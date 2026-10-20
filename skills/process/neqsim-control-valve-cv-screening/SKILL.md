@@ -88,6 +88,35 @@ print(result.choked)
 print(result.valve_warning)
 ```
 
+## Inverse use: capacity test at a travel stop
+
+`control_valve_cv_screening.capacity` answers the inverse questions that come up when a
+valve is held at a mechanical travel stop and a capacity test disagrees with the design
+number: what Cv did the test demonstrate, what will the same stop pass at another
+pressure drop (for example a relief/flare case), and which opening would just meet a flow
+limit.
+
+```python
+from control_valve_cv_screening import verify_stop_capacity
+
+res = verify_stop_capacity(
+    [{"q_sm3h": 579e3, "p1_bara": 189.4, "p2_bara": 135.8}],   # measured test
+    cv_max=602.8, stop_fraction=0.38,                          # datasheet Cv, stop position
+    temperature_k=353.15, molar_mass=17.8, z=0.88, k=1.3, xt=0.5,
+    limit_case={"p1_bara": 214.0, "p2_bara": 192.0, "q_limit_sm3h": 729e3},
+)
+print(res.ratio_to_nominal, res.flow_at_limit_case_sm3h, res.opening_fraction_for_limit)
+```
+
+Gotchas verified on a gas-export valve study: (1) check the pressure-drop basis of every
+quoted "maximum flow" - a number sized at 65 bar drop is not valid at 22 bar; (2) a flow
+that is the same in three successive tests at different dates is a physical capacity, not
+a mis-set stop, whereas one older test with a much higher flow shows the stop moved;
+(3) report the sensitivity to `xt`, `z`, molar mass and temperature (they move the back-
+calculated Cv by about 10 percent but cancel largely in the prediction at another
+pressure drop); (4) a valve whose command sits at 100 percent for most hours is a fixed
+restriction, not a controller - screen that with the control-authority agent.
+
 ## Related NeqSim Functionality
 
 For validated control-valve behaviour, redirect to existing NeqSim classes:
