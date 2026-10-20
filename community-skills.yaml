@@ -486,6 +486,24 @@ skills:
     tags: [subsea, pipeline, route, elevation-profile, screening, education]
     min_neqsim_version: "3.7.0"
 
+  - name: neqsim-tie-in-pipeline-concept
+    version: "0.1.0"
+    description: "Screening of a new export or tie-in pipeline between two facilities: ranked landing points on neighbouring hosts, seabed profile from open EMODnet bathymetry, pressure drop, thermal decay, DNV-ST-F101 wall thickness and a recommended nominal size per rate case. USE WHEN: a task asks where an oil or gas line can be tied in, what size and wall thickness it needs, what inlet pressure a pump must deliver, or wants a pipe profile before a NeqSim pipeline study."
+    author: "neqsim-community"
+    repo: "equinor/neqsim-community-skills"
+    path: "skills/subsea/neqsim-tie-in-pipeline-concept/SKILL.md"
+    tags: [subsea, pipeline, tie-in, export, profile, wall-thickness, screening, open-data]
+    min_neqsim_version: "3.7.0"
+
+  - name: neqsim-tie-in-pid-sketch
+    version: "0.1.0"
+    description: "Conceptual P&ID sketches (SVG) of both ends of a new tie-in line - source platform end with pump, metering, pig launcher, ESDV and riser; landing end with riser, ESDV, pig receiver, sampling, pressure control, spectacle blind and tie-in to an existing header - plus a completeness check. USE WHEN: a tie-in or export concept needs a drawing of possible connection points and the isolation, pigging and metering philosophy before a controlled P&ID is made."
+    author: "neqsim-community"
+    repo: "equinor/neqsim-community-skills"
+    path: "skills/subsea/neqsim-tie-in-pid-sketch/SKILL.md"
+    tags: [subsea, pid, tie-in, drawing, svg, screening]
+    min_neqsim_version: "3.7.0"
+
   - name: neqsim-capex-opex-screening
     version: "0.1.0"
     description: "Educational factored CAPEX/OPEX screening that turns a bare equipment cost into a total installed CAPEX (Lang/Hand-style installation factor + contingency), an annual OPEX, and a lifecycle total cost of ownership. USE WHEN: a task needs a public, screening-level CAPEX and OPEX magnitude before detailed NeqSim CostEstimationCalculator estimating or qualified cost-engineering review."
