@@ -106,8 +106,9 @@ composition), use the sample's own pair with its own composition instead of
 re-fitting; the field average is a screening fallback. Saturation pressure is a
 light-end lever that is essentially orthogonal to `S`: an optional methane-heavy BIP
 that ramps linearly in molecular weight from 0 at the lightest heavy lump to `k_top` at
-the heaviest recovers reservoir psat without moving surface GOR or density, but it is
-field-specific and breaks the single universal EOS, so keep it opt-in.
+the heaviest, recovers reservoir psat without moving surface GOR or density, but it is
+field-specific and breaks the single universal EOS. It is for reservoir BIP modelling only: agents
+must not touch it, and it must in no way be used for topside/process simulations.
 
 ## Python Usage Pattern
 
