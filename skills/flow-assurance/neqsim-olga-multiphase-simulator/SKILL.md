@@ -960,6 +960,30 @@ point: OLGA gives 2.14 / 2.38 / 3.12 across the sweep and Darcy 2.10 / 2.28 /
 returning a flat `n` ≈ 2 reproduces one operating point while having the wrong
 sensitivity — which a single-rate benchmark cannot detect.
 
+### Terrain and transient benchmark (2026-10, OLGA 2025.1.0, same fluid and boundary conditions)
+
+Four fluids (dry gas, dead oil, gas condensate, gas-oil) each on a flat and an undulating route, steady and with a
+mass-flow step at the inlet and a fixed outlet pressure. Judge terrain by the **increment** (terrain minus flat),
+not by the terrain case alone.
+
+| Case | NeqSim against OLGA | Quote NeqSim? |
+| --- | --- | --- |
+| Single-phase gas or oil, steady, flat or terrain | dP -0.2 to -1.5 %, terrain increment identical (0.57 bar gas, 3.18 bar oil) | Yes |
+| Single-phase rate step (line pack, liquid step) | inlet-pressure step within 0.5 % flat; 120 s against 122 s half-way time | Yes |
+| Liquid-full terrain line, transient | starts 0.36-0.43 bar (about 5 % of the drop) away from its own steady state | Read changes, not levels |
+| Gas condensate, steady, flat and terrain | dP +12 % (conservative), holdup -11 % flat and +20 % terrain, increment +15 % | With +15 % margin |
+| Gas condensate turndown and restart on terrain | both accumulate liquid and sweep it out; rate 30 against 41 m3/h, surge +35 %, recovery +32 %, no inlet-pressure rise from the liquid | Indication only |
+| Gas-oil, steady flat | dP -29 % (non-conservative), holdup +6 % | No |
+| Gas-oil ramp-up, flat | inventory +7.6 m3 where OLGA gives -10.1 m3, no outflow overshoot | No |
+| Gas-oil ramp-up on terrain | repeated inlet-pressure spikes to 62 bara (OLGA smooth at 44.3), not removed by a half time step | No |
+
+Two cautions when you reproduce this. First, **OLGA includes wall heat capacity** (20 mm steel here) and
+`TwoFluidPipe` does not, so an outlet-temperature transient after a rate change differs by up to 1.7 K for hours;
+a 0.5 mm OLGA wall brings the time scales together (`OLGA_WALL_M` in the harness). Do not compare transient
+temperatures without saying so. Second, a null run of `TwoFluidPipe.runTransient` with constant boundary conditions is a
+cheap check of any terrain case: on a liquid-full undulating line the inlet pressure moves by about 5 % of the
+steady drop in the first step (NIP-01 in the task record).
+
 ## Validation Checklist
 
 - [ ] The engine used is `OlgaExecutables/Olga-<version>.exe`, not an `OLGA-S` path.
