@@ -987,6 +987,31 @@ cheap check of any terrain case; before the fix a liquid-full undulating line mo
 in the first step because the external faces carried the end-cell centre pressure as traction (half the pressure
 force against full gravity). `TwoFluidPipeTerrainTransientNullTest` pins this.
 
+### Subsea sweep and slug-unit calibration (2026-10, OLGA 2025.1.0, 8-20 in, 25-100 bara)
+
+A 28-case steady sweep (gas-oil, gas-condensate, gas-oil-water, wet gas; flat and flowline plus 200 m riser; 15-160 kg/s)
+on top of the earlier matrix showed where the two-phase gaps come from. **The unit holdup of a slug unit follows from
+the translational and bubble velocities alone** (`hs + (vB/vt)(1-hs) - vsG/vt`); the film balance only moves the film
+holdup and slug fraction, so scanning interfacial friction cannot fix a holdup error. OLGA's unit gas velocity falls from
+1.25 vm at Froude 2 to about `1.12 - 0.25 vsL/vm` times vm above Froude 4.5; Bendiksen's `1.2 vm` held 20-40 % too much
+liquid there. `SlugUnitModel` now scales both velocities towards no-slip (default on,
+`TwoFluidPipe.setSlugHighFroudeSlipReductionEnabled`) and counts the front-mixing term with a horizontal-only weight
+(`setSlugFrontMixingLossWeight`).
+
+| Case family | NeqSim against OLGA after the change | Quote NeqSim? |
+| --- | --- | --- |
+| Horizontal gas-oil and gas-oil-water lines, 15-160 kg/s (18 cases, no risers) | mean holdup error 11.8 % to 4.7 %, mean dP error 12.9 % to 8.4 %; worst remaining dP -24 % (30 bara, 20 kg/s) and +24 % (3-phase, 25 kg/s, where OLGA is stratified and NeqSim slug); low-rate cases below Froude 2.3 unchanged | With +-15 % margin, not at Froude below 2.3 for three-phase |
+| Gas-oil ramp-up 25 to 50 kg/s | inlet pressure RMS 0.60 bar (was 2.26), end offset -0.08 bar (was -2.10); inventory change still +9.0 m3 against OLGA's -10.1, no surge peak | End pressure only |
+| Gas-condensate turndown 60 to 30 kg/s | liquid accumulation 5 m3 against OLGA's 38 m3 | No |
+| Flowline plus riser | dP +11..+18 % (+90 % at 15 kg/s); OLGA riser holdup is almost no-slip (unit gas velocity 1.01-1.06 vm), NeqSim's annular/slug riser holds 2-3 times more; `setUseInclinedFilmBridgingCriterion(true)` cuts the mean error from 31 % to 20 % | No |
+| Horizontal annular gas condensate and wet gas | dP +8..+15 %, holdup +50 % at 140 kg/s | With +15 % margin |
+| Undulating lean wet gas, 40 km, +-20/35/50 m | dP +12 / -2 / +33 % against OLGA | Below 35 m amplitude |
+
+Do not lower the Andritsos-Hanratty enhancement (bound or a 1.5 m/s wave-onset floor) to fix low-rate flat wet gas: it
+improves that case (holdup -22 % to -4 %) but raises the undulating wet-gas error to +43 % and +62 % at 35 and 50 m,
+because the thin film that climbs gentle slopes needs the current interfacial friction. Check any interfacial-friction
+change on a terrain amplitude sweep as well as a flat line.
+
 ## Validation Checklist
 
 - [ ] The engine used is `OlgaExecutables/Olga-<version>.exe`, not an `OLGA-S` path.
