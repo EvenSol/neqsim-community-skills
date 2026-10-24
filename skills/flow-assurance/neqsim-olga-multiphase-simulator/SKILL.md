@@ -1005,12 +1005,16 @@ liquid there. `SlugUnitModel` now scales both velocities towards no-slip (defaul
 | Gas-condensate turndown 60 to 30 kg/s | liquid accumulation 5 m3 against OLGA's 38 m3 | No |
 | Flowline plus riser | dP +11..+18 % (+90 % at 15 kg/s); OLGA riser holdup is almost no-slip (unit gas velocity 1.01-1.06 vm), NeqSim's annular/slug riser holds 2-3 times more; `setUseInclinedFilmBridgingCriterion(true)` cuts the mean error from 31 % to 20 % | No |
 | Horizontal annular gas condensate and wet gas | dP +8..+15 %, holdup +50 % at 140 kg/s | With +15 % margin |
-| Undulating lean wet gas, 40 km, +-20/35/50 m | dP +12 / -2 / +33 % against OLGA | Below 35 m amplitude |
+| Low-rate stratified gas condensate / wet gas, flat (2.4 m/s, 82 bara) | dP +5 / +14 %, holdup -8 / -5 % after the depth-squared roughness (was +17/+29 %, -23/-22 %) | Yes |
+| Undulating lean wet gas, 40 km, +-20/35/50 m | dP +4 / +5 / +6 % against the reference (was +12 / -2 / +33 %); holdup 20-50 % high, about 30 % of it from NeqSim condensing more liquid than the reference's PVT table | Pressure drop yes; inventory with margin |
 
-Do not lower the Andritsos-Hanratty enhancement (bound or a 1.5 m/s wave-onset floor) to fix low-rate flat wet gas: it
-improves that case (holdup -22 % to -4 %) but raises the undulating wet-gas error to +43 % and +62 % at 35 and 50 m,
-because the thin film that climbs gentle slopes needs the current interfacial friction. Check any interfacial-friction
-change on a terrain amplitude sweep as well as a flat line.
+Do not lower the Andritsos-Hanratty enhancement by a bound or a wave-onset floor to fix low-rate flat wet gas: it
+improves that case but raises the undulating wet-gas error to +43 % and +62 % at 35 and 50 m. What works is changing
+the **shape**: `InterfacialFriction.stratifiedWaveEnhancement` (2026-10) is `1 + 80 (h_L/D)^2 min(r-1, 4)`, thin
+layers nearly smooth, thick ones rough. On this terrain line it gives +4/+5/+6 % dP at ±20/35/50 m (reference
++5/+30/+70 % above flat in both codes) and the low-rate flat cases +5/+14 % (holdup -8/-5 %). Check any
+interfacial-friction change on a terrain amplitude sweep as well as a flat line; the uphill Taitel-Dukler balance has
+three roots and the thin one disappears first when the interface is smoothed.
 
 ## Validation Checklist
 
