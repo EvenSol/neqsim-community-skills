@@ -20,6 +20,25 @@ field-agnostic. Use NeqSim process models (ProcessSystem, ProcessModel) for the 
 NeqSim `SimpleReservoir` or OPM Flow when a 3D reservoir model exists; this skill is the fast layer
 between them.
 
+## Detailed models and Python/Java handoff
+
+This skill's Python tank/deliverability/capacity workflow remains a declared
+screening model. For a natural-language request to build the connected reservoir,
+wells, SURF, multiphase flowlines/risers, facilities, utilities and downstream
+process, use the core `neqsim-production-system-modeling` skill and
+`network-energy-systems` composition workflow with installed community specialists.
+Preserve the requested Python or Java language; both call the same NeqSim Java
+engine for detailed models. Do not port these screening surrogates to Python
+and describe them as equivalent to a detailed Java process model.
+
+Carry composition/pseudo-components, standard conditions, PVT/VFP units, time,
+well inflow and host backpressure across the interface. Include shared utility
+capacity and downstream product specifications in the coupled solution. Use
+`ProcessSystem` areas inside a `ProcessModel` for detailed facilities. Spatial
+reservoir simulation stays in the selected external reservoir engine; NeqSim
+provides the PVT/well/process coupling. Company data/policy overlays remain in
+private repositories and are optional for public synthetic examples.
+
 ## When to Use
 
 - Reservoir depletion must be linked to a platform or export system in one model.

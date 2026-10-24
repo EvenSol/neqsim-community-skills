@@ -402,24 +402,33 @@ Gas condensate: `'GAS' 'WGR' 'OGR'` (OGR ~ 1/GOR; GOR 2990 → 3.3e-4). Oil:
 extrapolates linearly outside the table and says nothing about it.
 
 Read the table before using it. A minimum in inlet pressure against rate (riser
-liquid loading below, friction above) marks the unstable region: a well held on
-THP below that rate will oscillate or die in the simulator exactly as it would in
-the field. Keep the low-rate points so the simulator sees the turning point, and
-report the minimum-stable rate as a result, not a numerical nuisance.
+liquid loading below, friction above) indicates a turning point in the steady
+hydraulic response: a well held on
+THP below that rate may encounter liquid-loading or branch-selection problems.
+Keep the low-rate points and report the turning-point rate; establish operational
+stability separately with an applicable transient model or independent evidence.
 
 The table carries no arrival temperature; keep it in a side file per point for the
 hydrate and cooldown hand-off (`neqsim-flow-assurance`).
 
 ### VFP tables and Flow stalls
 
-A tubing table that is U-shaped in rate (high BHP at the lowest rate, minimum near
-the loading rate, rising with friction) makes the well switch between rate and THP
-control: Flow drops to 0.02-day steps with `Oscillating behavior detected` and a
-24-year run never finishes (Othello Sor, Upper zone, rate cap 1500 Sm3/d on a
-high-PI sand; the lower-PI zone of the same set ran fine). Make each BHP row
-non-decreasing in rate before writing it (`np.maximum.accumulate`) - it raises the
-low-rate points by a few bar and removes the multiple solutions - and keep the raw
-table for the minimum-stable-rate report. The table's BHP pivots on the bubble
+A U-shaped tubing BHP-versus-rate curve can introduce multiple operating branches
+and control switching. Diagnose the raw table, units, interpolation domain,
+control changes and simulator logs before changing the hydraulic response.
+Preserve the raw turning points and their provenance. A turning point alone
+is not a validated transient-stability criterion or a guaranteed field outcome.
+
+Do not automatically apply `np.maximum.accumulate` to exported BHP rows. It raises
+later entries below the running maximum, which changes the computed lift curve;
+it does not specifically repair low-rate points. If a solver requires an
+operating-branch restriction or regularization, document its physical/numerical
+basis, domain, error against the raw curve and effect on rates/controls. Retain
+both tables and obtain the study's required engineering review before using the
+modified response for a forecast. A smaller timestep or a completed run does
+not establish that the modified physics is correct.
+
+The table's BHP pivots on the bubble
 point for an undersaturated oil: below Pb the column is gassy and light, above it
 dense, so with an 18-60 bara outlet the floor sits close to Pb whatever the lift
 and depletion recovery is set by Pb and the outlet pressure, not by the lift gas
@@ -444,7 +453,7 @@ Deck traps that cost a run each:
 | wells produce at the pressure floor with no lift limit | `WCONPROD` BHP floor only, no `VFPPROD` | generate a lift-curve table from the tubing / flowline geometry and control on THP (see above) |
 | `VFPPROD` generated in kg/hr | `LiftCurveGenerator` sweeps mass rate; the exporter rejects it | recombine at standard conditions and sweep in Sm3/d |
 | Flow exits silently, no message | non-English locale | `LANG=C.UTF-8 LC_ALL=C.UTF-8` |
-| Flow crawls at 0.02-day steps, `Oscillating behavior detected`, run never ends | U-shaped `VFPPROD` BHP against rate: the well flips between ORAT and THP control | make every BHP row non-decreasing in rate (`np.maximum.accumulate`); see "VFP tables and Flow stalls" |
+| Flow crawls at 0.02-day steps, `Oscillating behavior detected`, run never ends | U-shaped `VFPPROD` BHP against rate: the well flips between ORAT and THP control | inspect raw curves, controls and operating branches; document and qualify any regularization; see "VFP tables and Flow stalls" |
 | zone B of a threaded batch reports zone A's contact error | deck module keeps geometry in module globals; two threads interleave | lock the deck generation, run the simulator outside the lock |
 | `Non-monotonic values in keyword PVTO` on a table that looked fine | undersaturated branch pressures `p0 + 60`, `p0 + 150`, then `P_MAX` run past `P_MAX` for the high-Pb rows | add an offset only if `p0 + dp < P_MAX - 10`, then close every branch at `P_MAX` |
 | `SATNUM` (or other region arrays) rejected or ignored | written inside the GRID include | `SATNUM` belongs in `REGIONS`; write it to its own include |
