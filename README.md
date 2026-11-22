@@ -35,17 +35,18 @@ For this multi-skill repository, each skill is cataloged by a path such as `skil
 
 ## Skill Catalog
 
-The complete source of truth is [`community-skills.yaml`](community-skills.yaml). The catalog currently contains 57 community skills across these public domains:
+The complete source of truth is [`community-skills.yaml`](community-skills.yaml). The catalog currently contains 69 community skills across these public domains:
 
 | Domain | Folder | Skills |
 | --- | --- | ---: |
+| Engineering data | [skills/engineering-data](skills/engineering-data) | 1 |
 | Environment | [skills/environment](skills/environment) | 2 |
-| Field development | [skills/field-development](skills/field-development) | 7 |
-| Flow assurance | [skills/flow-assurance](skills/flow-assurance) | 7 |
-| Process | [skills/process](skills/process) | 25 |
-| PVT | [skills/pvt](skills/pvt) | 2 |
+| Field development | [skills/field-development](skills/field-development) | 8 |
+| Flow assurance | [skills/flow-assurance](skills/flow-assurance) | 8 |
+| Process | [skills/process](skills/process) | 28 |
+| PVT | [skills/pvt](skills/pvt) | 6 |
 | Safety | [skills/safety](skills/safety) | 8 |
-| Subsea | [skills/subsea](skills/subsea) | 6 |
+| Subsea | [skills/subsea](skills/subsea) | 8 |
 
 Representative skills include:
 
@@ -58,6 +59,8 @@ Representative skills include:
 | [skills/safety/vacuum-collapse-screening](skills/safety/vacuum-collapse-screening) | `neqsim-vacuum-collapse-screening` | Public cooldown and external-pressure screening for blocked-in vessels |
 | [skills/subsea/subsea-layout-geometry](skills/subsea/subsea-layout-geometry) | `neqsim-subsea-layout-geometry` | Public subsea layout geometry and step-out screening |
 | [skills/environment/energy-emissions-screening](skills/environment/energy-emissions-screening) | `neqsim-energy-emissions-screening` | Field-life energy and CO2-equivalent emissions screening |
+| [skills/subsea/offshore-field-map](skills/subsea/offshore-field-map) | `neqsim-offshore-field-map` | Field maps from Sodir FactMaps and EMODnet bathymetry (folium, matplotlib, GeoJSON) with routes coloured by NeqSim results |
+| [skills/flow-assurance/pipeline-profile-plot](skills/flow-assurance/pipeline-profile-plot) | `neqsim-pipeline-profile-plot` | NeqSim pipeline depth/P/T/hydrate-margin profile plots, P-T path and combined map+profile dashboard |
 
 These skills are intentionally simple and public. They are suitable for learning, testing agent workflows, and demonstrating repository structure. They are not design tools.
 

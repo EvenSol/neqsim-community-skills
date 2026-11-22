@@ -109,3 +109,5 @@ In Python the NeqSim classes are reachable through the `neqsim` package (for exa
 - NeqSim Community Skills: https://github.com/equinor/neqsim-community-skills
 - GeoJSON: RFC 7946 (public specification for `Point` features and `FeatureCollection`).
 - Related community skills: `subsea-layout-geometry`, `pipe-route-profile`, `step-out-screening`
+- Nodes with geographic coordinates can be drawn on a field map with `neqsim-offshore-field-map`
+  (`FieldMapBuilder.add_nodes`).

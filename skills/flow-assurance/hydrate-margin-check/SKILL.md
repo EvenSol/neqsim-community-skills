@@ -96,3 +96,5 @@ In Python the same classes are reachable through the `neqsim` package (for examp
 - NeqSim repository: https://github.com/equinor/neqsim
 - NeqSim Skills Guide: https://github.com/equinor/neqsim/blob/master/docs/integration/skills_guide.md
 - Sloan and Koh, Clathrate Hydrates of Natural Gases, for public hydrate background.
+- For the same margin rule applied at every station along a pipeline, with plots, use
+  `neqsim-pipeline-profile-plot`.
