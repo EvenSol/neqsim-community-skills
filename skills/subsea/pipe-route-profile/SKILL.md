@@ -113,3 +113,6 @@ In Python these classes are reachable through the `neqsim` package (for example 
   export rather than planned waypoints; it adds sign normalisation, resolution filtering,
   erroneous-point flagging, span and cover candidates, and a processing log.
 - Great-circle (haversine) distance on a spherical Earth is a standard public geodesy relation.
+- To illustrate the route on a field map (Sodir facilities and pipelines, EMODnet bathymetry) use
+  `neqsim-offshore-field-map`; to plot NeqSim pressure, temperature and hydrate margin along it use
+  `neqsim-pipeline-profile-plot`.

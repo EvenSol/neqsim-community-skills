@@ -6,7 +6,7 @@
 # To publish a skill, submit the corresponding entry to the main NeqSim repo.
 
 catalog_version: "1.0"
-last_updated: "2026-07-11"
+last_updated: "2026-11-22"
 trust: community
 
 skills:
@@ -359,6 +359,24 @@ skills:
     repo: "equinor/neqsim-community-skills"
     path: "skills/subsea/pipe-route-profile/SKILL.md"
     tags: [subsea, pipeline, route, elevation-profile, screening, education]
+    min_neqsim_version: "3.7.0"
+
+  - name: neqsim-offshore-field-map
+    version: "0.1.0"
+    description: "Offshore field maps for NeqSim studies from open data: Sodir FactMaps facilities, pipelines and fields (NLOD 2.0) plus EMODnet Bathymetry overlay and route depth sampling (CC BY 4.0), rendered as folium HTML, matplotlib planform or GeoJSON, with tie-in routes coloured by a NeqSim result such as hydrate margin. USE WHEN: a task needs a map of a field, host facility, existing pipelines, new wells and a candidate tie-in route on the NCS, seabed depth along a route, or NeqSim pipeline results shown spatially."
+    author: "neqsim-community"
+    repo: "equinor/neqsim-community-skills"
+    path: "skills/subsea/offshore-field-map/SKILL.md"
+    tags: [subsea, map, visualization, folium, sodir, emodnet, bathymetry, open-data]
+    min_neqsim_version: "3.7.0"
+
+  - name: neqsim-pipeline-profile-plot
+    version: "0.1.0"
+    description: "Along-route pipeline profile plots and hydrate-margin screening from NeqSim results: PipeBeggsAndBrills legs over a KP/depth route, hydrateFormationTemperature per station, stacked depth/P/T/margin panels, P-T path over the hydrate curve, margin-coloured planform and a combined map+profile dashboard. USE WHEN: a task needs to show pressure, temperature and hydrate margin along a flowline or tie-in route, find the KP where a line enters the hydrate region, or produce report figures of a NeqSim pipeline run."
+    author: "neqsim-community"
+    repo: "equinor/neqsim-community-skills"
+    path: "skills/flow-assurance/pipeline-profile-plot/SKILL.md"
+    tags: [flow-assurance, pipeline, hydrate, visualization, matplotlib, profile]
     min_neqsim_version: "3.7.0"
 
   - name: neqsim-capex-opex-screening

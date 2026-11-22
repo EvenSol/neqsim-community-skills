@@ -110,3 +110,5 @@ In Python the NeqSim classes are reachable through the `neqsim` package (for exa
   survey rather than seabed soundings, and a processing log and erroneous-point flagging
   are needed.
 - Linear interpolation and slope from `atan2` are standard public numerical relations.
+- Soundings can be sampled from open EMODnet Bathymetry data along a route with
+  `neqsim-offshore-field-map` (`sample_route_depths`).
