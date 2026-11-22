@@ -77,7 +77,8 @@ run them elsewhere.
 | `plant_from_dexpi` | `path`, `positions`, `sizes`, `new_tags`, `modified_tags` | A DEXPI P&ID XML file; positions and sizes by tag where known |
 | `plant_from_topology` | `items`, `connections`, `positions` | `TopologyItem(tag, kind, size_m, utilisation, status)` and `TopologyConnection(name, source, target, diameter_m, value, valves, status)` from any other source |
 | `vessel_from_design_data` | `document`, `head_type` | NeqSim design-data JSON (schema 1.0); the head shape is stated by the caller |
-| `positions_from_layout_study` | `study`, `alternative` | A `neqsim layout-study` dataset and one of its alternatives |
+| `plant_from_layout_study` | `study`, `alternative`, `new_tags`, `utilisation` | A `neqsim layout-study` dataset and one of its alternatives, drawn where it was placed with its route estimates |
+| `positions_from_layout_study` | `study`, `alternative` | The same dataset, as positions for the model and P&ID builders |
 | `render_openfoam_case` | `case_dir`, `field`, `views`, `time` | A solved case; a field such as `U`, `p`, `T`, `alpha.water`; views from `surface`, `slice`, `clip`, `streamlines` |
 
 `utilisation` is whatever the study calculated, with 1.0 meaning at the limit.
@@ -157,6 +158,12 @@ rack, crosses and drops to its target. Positions from a layout study replace
 this whenever they are given. Every automatic position, default size and assumed
 diameter is counted in the caption, and such a figure is marked not to scale: it
 is a schematic arrangement, not a plot plan.
+
+**A studied layout.** `plant_from_layout_study` draws one alternative of the main repository's `neqsim layout-study`
+exactly where the study placed it, deck by deck, and - when the study ran `--route` - with its route estimates as lines.
+This is the figure for a new design: `neqsim layout-study --optimize --route` chooses and checks the arrangement against
+the project's rules, and this skill shows it with results and scope on it. The route lines stay what the study says they
+are: software estimates, not physical routes.
 
 **Tie-in scope.** Marking tags as new or modified switches the colouring from
 results to status: new in blue, modified in orange, existing in grey, with
@@ -282,6 +289,9 @@ render_scene(arranged.scene(color_by="status"), "figures/scope")
 render_scene(arranged.scene(color_by="results", colormap_name="coolwarm"),
              "figures/results", colormap="coolwarm")
 
+# A layout-study alternative as placed, with its route estimates (dataset/plant_layout.json):
+# arranged = plant_from_layout_study(dataset["study"], dataset["alternatives"][0])
+
 # The same from a P&ID file, at the positions of a layout study when there is one:
 # positions = positions_from_layout_study(study, alternative)
 pid = plant_from_dexpi("pid.xml", new_tags=("23-KA-001",))
@@ -401,7 +411,9 @@ numbers it shows come from NeqSim:
   the design-data JSON read by `vessel_from_design_data`.
 - The `neqsim layout-study` dataset (`devtools/layout_study.py`,
   `devtools/layout_model.py`) supplies positions through
-  `positions_from_layout_study`.
+  `positions_from_layout_study`, and a whole placed alternative with the
+  `route_estimates` of `devtools/layout_routing.py` through
+  `plant_from_layout_study`.
 - NeqSim is reached from Python with `from neqsim import jneqsim`.
 - CFD figures are drawn from cases written by `neqsim-cfd-coupling`; solid
   temperature fields are rendered by `neqsim-fem-coupling`.

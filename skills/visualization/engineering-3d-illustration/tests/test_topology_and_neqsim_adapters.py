@@ -15,6 +15,7 @@ from engineering_3d_illustration import (
     equipment_kind,
     flow_levels,
     nominal_diameter_m,
+    plant_from_layout_study,
     plant_from_neqsim_process,
     plant_from_topology,
     positions_from_layout_study,
@@ -364,6 +365,64 @@ def test_layout_study_positions_follow_the_dataset_convention():
     alternative["placements"][0]["rotation_deg"] = 45
     with pytest.raises(ValueError, match="orthogonal"):
         positions_from_layout_study(study, alternative)
+
+
+def test_layout_study_alternative_is_drawn_where_it_was_placed_with_its_route_estimates():
+    study = {
+        "project": {"id": "SYN-1", "title": "Synthetic module"},
+        "decks": [
+            {"id": "LOWER", "elevation_m": 0.0, "width_m": 30.0, "depth_m": 20.0},
+            {"id": "MAIN", "elevation_m": 8.0, "width_m": 30.0, "depth_m": 20.0},
+            {"id": "UNUSED", "elevation_m": 16.0, "width_m": 30.0, "depth_m": 20.0},
+        ],
+        "equipment": [
+            {"tag": "V-101", "kind": "separator", "size_m": [6.0, 3.0, 4.0]},
+            {"tag": "K-101", "kind": "compressor", "size_m": [6.0, 4.0, 4.0]},
+            {"tag": "U-101", "kind": "utility_package", "size_m": [5.0, 3.0, 3.0]},
+        ],
+    }
+    alternative = {
+        "id": "ALT-01",
+        "placements": [
+            {"tag": "V-101", "deck": "LOWER", "x_m": 2.0, "y_m": 4.0},
+            {"tag": "K-101", "deck": "MAIN", "x_m": 2.0, "y_m": 4.0, "rotation_deg": 90},
+            {"tag": "U-101", "deck": "LOWER", "x_m": 12.0, "y_m": 4.0},
+        ],
+        "route_estimates": {
+            "routes": [
+                {
+                    "connection_id": "L1",
+                    "from_tag": "V-101",
+                    "to_tag": "K-101",
+                    "points_m": [[5.0, 5.5, 4.0], [5.0, 5.5, 8.0]],
+                },
+                {"connection_id": "L2", "from_tag": "V-101", "to_tag": "U-101", "points_m": []},
+            ]
+        },
+    }
+    arranged = plant_from_layout_study(
+        study, alternative, new_tags=("K-101",), utilisation={"V-101": 0.8}
+    )
+    plant = arranged.plant
+    vessel, compressor, package = (plant.equipment_by_tag(t) for t in ("V-101", "K-101", "U-101"))
+    assert vessel.kind == "horizontal_vessel" and vessel.position == (5.0, 5.5, 0.0)
+    assert vessel.envelope()[0] == pytest.approx(6.0)  # the vessel fills the length of its box
+    assert vessel.utilisation == 0.8
+    assert compressor.position == (4.0, 7.0, 8.0) and compressor.rotation_deg == 90.0
+    assert compressor.status == "new"
+    assert package.kind == "box" and package.size_m == (5.0, 3.0, 3.0)
+    assert [d.name for d in plant.decks] == ["LOWER", "MAIN"]
+    assert [p.name for p in plant.pipes] == ["L1"] and plant.pipes[0].status == "new"
+    caption = arranged.scene().caption()
+    assert "Positions from layout study SYN-1 alternative ALT-01" in caption
+    assert "they are not physical routes" in caption
+    assert "1 connections between touching or unrouted items are not drawn" in caption
+    assert arranged.assumed_positions == ()
+
+    plain = plant_from_layout_study(
+        study, {"id": "ALT-02", "placements": alternative["placements"]}
+    )
+    assert plain.plant.pipes == () and "no route estimates" in plain.scene().caption()
 
 
 # ------------------------------------------------------------- with NeqSim itself

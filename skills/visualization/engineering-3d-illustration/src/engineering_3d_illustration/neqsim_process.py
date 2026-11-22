@@ -21,6 +21,8 @@ import re
 from typing import Any, Mapping, Sequence
 
 from .model import VesselSpec
+from .model import Deck
+from .plant import Equipment, PipeRun, PlantSpec
 from .topology import ArrangedPlant, TopologyConnection, TopologyItem, plant_from_topology
 
 # Unit conversions and names for the stream value shown on the lines.
@@ -495,3 +497,111 @@ def positions_from_layout_study(
             float(rotation),
         )
     return positions
+
+
+def plant_from_layout_study(
+    study: Mapping[str, Any],
+    alternative: Mapping[str, Any],
+    *,
+    default_pipe_diameter_m: float = 0.25,
+    new_tags: Sequence[str] = (),
+    modified_tags: Sequence[str] = (),
+    utilisation: Mapping[str, float] | None = None,
+) -> ArrangedPlant:
+    """Draw one alternative of a ``neqsim layout-study`` dataset as it was placed.
+
+    Equipment stands at the studied coordinates on its deck, shaped from the
+    ``kind`` and the ``size_m`` box of the study (a separator as a vessel that
+    fills its box, an unknown kind as the box itself). When the study ran
+    ``--route``, each route estimate becomes a line along its corner points;
+    line diameters are not in the dataset and are drawn at
+    ``default_pipe_diameter_m``. ``utilisation`` (by tag) and the tie-in tags
+    are added by the caller, since a layout study does not hold them.
+    """
+    positions = positions_from_layout_study(study, alternative)
+    records = {item["tag"]: item for item in study["equipment"]}
+    utilisation = dict(utilisation or {})
+    equipment = []
+    for tag, (x, y, z, rotation) in positions.items():
+        length, width, height = (float(v) for v in records[tag]["size_m"])
+        kind = equipment_kind(str(records[tag].get("kind", ""))) or "box"
+        if kind == "horizontal_vessel" and length > width:
+            size: tuple[float, ...] = (width, length - width / 2.0)
+        elif kind in ("vertical_vessel", "column"):
+            size = (min(length, width), height)
+        elif kind == "heat_exchanger" and length > width:
+            size = (width / 1.25, length)
+        elif kind in ("pump", "compressor"):
+            size = (length,)
+        else:
+            kind, size = "box", (length, width, height)
+        equipment.append(
+            Equipment(
+                tag,
+                kind,
+                (x, y, z),
+                size,
+                rotation,
+                utilisation.get(tag),
+                _statuses(tag, new_tags, modified_tags),
+            )
+        )
+
+    pipes = []
+    skipped = 0
+    estimate = alternative.get("route_estimates") or {}
+    for route in estimate.get("routes", []):
+        points = [tuple(float(v) for v in point) for point in route.get("points_m") or []]
+        distinct = [p for i, p in enumerate(points) if i == 0 or p != points[i - 1]]
+        if len(distinct) < 2:
+            skipped += 1
+            continue
+        pipes.append(
+            PipeRun(
+                str(route["connection_id"]),
+                tuple(distinct),
+                default_pipe_diameter_m,
+                None,
+                (),
+                _line_status(route["from_tag"], route["to_tag"], (), new_tags, modified_tags),
+            )
+        )
+
+    used = {placement["deck"] for placement in alternative.get("placements", [])}
+    decks = tuple(
+        Deck(
+            str(deck["id"]),
+            0.0,
+            float(deck["width_m"]),
+            0.0,
+            float(deck["depth_m"]),
+            float(deck["elevation_m"]),
+        )
+        for deck in study["decks"]
+        if deck["id"] in used
+    )
+    notes = [
+        f"Positions from layout study {study.get('project', {}).get('id', '')} "
+        f"alternative {alternative.get('id', '')}".replace("  ", " ")
+    ]
+    if pipes:
+        notes.append(
+            f"{len(pipes)} lines follow the study's software route estimates at an assumed "
+            f"{default_pipe_diameter_m * 1000.0:.0f} mm diameter; they are not physical routes"
+        )
+    elif not estimate:
+        notes.append("The study holds no route estimates, so no lines are drawn")
+    if skipped:
+        notes.append(f"{skipped} connections between touching or unrouted items are not drawn")
+    return ArrangedPlant(
+        PlantSpec(
+            str(study.get("project", {}).get("title", "Layout study")),
+            tuple(equipment),
+            tuple(pipes),
+            decks,
+        ),
+        tuple(notes),
+        (),
+        (),
+        tuple(pipe.name for pipe in pipes),
+    )

@@ -67,7 +67,7 @@ This skill draws what NeqSim already knows instead of asking for it again:
 | `DexpiXmlReader`, `DexpiTopologyResolver` | A DEXPI P&ID in 3D |
 | `CapacityConstrainedEquipment.getMaxUtilization()` | Utilisation on equipment |
 | `MechanicalDesign.toDesignDataJson()` | Vessel shell dimensions |
-| `neqsim layout-study` dataset | Real equipment positions |
+| `neqsim layout-study` dataset | Real equipment positions, decks and pipe-route estimates of a studied arrangement |
 
 Where no position, size or diameter is available, a default is used and counted
 in the caption. An automatic arrangement is a schematic in flow order, not a plot
