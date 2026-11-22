@@ -2,7 +2,10 @@
 
 Educational, offline, source-attributed snapshot of headline NCS facts from
 norskpetroleum.no and the Norwegian Offshore Directorate FactPages, with query
-and screening-analysis helpers for production and resource studies.
+and screening-analysis helpers for production and resource studies; a live,
+opt-in client for the Sodir DataService REST API (host-field production, GOR and
+water-cut trends, ullage proxy, nearby tie-in discoveries); and a parser for
+Gassco UMM export-availability events.
 """
 
 from .analysis import (
@@ -42,6 +45,52 @@ from .decline import (
     ProductionForecast,
     fit_arps_decline,
     forecast_production,
+)
+from .gassco_umm import (
+    GASSCO_ATTRIBUTION,
+    GASSCO_UMM_PRINCIPLES_URL,
+    GASSCO_UMM_URL,
+    PUBLICATION_THRESHOLD_MSM3_D,
+    REALTIME_FLOW_POINTS,
+    UMM_TABLE_COLUMNS,
+    CapacityImpact,
+    UmmEvent,
+    capacity_impact,
+    events_to_rows,
+    filter_events,
+    latest_revisions,
+    parse_umm_atom,
+    parse_umm_csv,
+    parse_umm_rows,
+)
+from .host_analysis import (
+    HostContext,
+    MonthlyRates,
+    RatioTrend,
+    StreamUllage,
+    TieInCandidate,
+    UllageIndicator,
+    haversine_km,
+    host_context,
+    monthly_rates,
+    nearby_discoveries,
+    pick_host_location,
+    ratio_trend,
+    ullage_indicator,
+)
+from .sodir_api import (
+    SODIR_ATTRIBUTION,
+    SODIR_DATASERVICE_URL,
+    TABLE_IDS,
+    Discovery,
+    DiscoveryResources,
+    Facility,
+    ProductionRecord,
+    SodirApiError,
+    SodirDataService,
+    discovery_from_attributes,
+    facility_from_attributes,
+    production_record_from_attributes,
 )
 from .sources import (
     DownloadTarget,
@@ -87,4 +136,47 @@ __all__ = [
     "SODIR_FACTPAGES",
     "refresh_instructions",
     "sodir_download_plan",
+    # Live Sodir DataService client
+    "SODIR_ATTRIBUTION",
+    "SODIR_DATASERVICE_URL",
+    "TABLE_IDS",
+    "Discovery",
+    "DiscoveryResources",
+    "Facility",
+    "ProductionRecord",
+    "SodirApiError",
+    "SodirDataService",
+    "discovery_from_attributes",
+    "facility_from_attributes",
+    "production_record_from_attributes",
+    # Host / tie-in analysis
+    "HostContext",
+    "MonthlyRates",
+    "RatioTrend",
+    "StreamUllage",
+    "TieInCandidate",
+    "UllageIndicator",
+    "haversine_km",
+    "host_context",
+    "monthly_rates",
+    "nearby_discoveries",
+    "pick_host_location",
+    "ratio_trend",
+    "ullage_indicator",
+    # Gassco UMM
+    "GASSCO_ATTRIBUTION",
+    "GASSCO_UMM_PRINCIPLES_URL",
+    "GASSCO_UMM_URL",
+    "PUBLICATION_THRESHOLD_MSM3_D",
+    "REALTIME_FLOW_POINTS",
+    "UMM_TABLE_COLUMNS",
+    "CapacityImpact",
+    "UmmEvent",
+    "capacity_impact",
+    "events_to_rows",
+    "filter_events",
+    "latest_revisions",
+    "parse_umm_atom",
+    "parse_umm_csv",
+    "parse_umm_rows",
 ]

@@ -1,13 +1,15 @@
 ---
 name: neqsim-norwegian-continental-shelf-data
-version: "0.4.0"
-description: "Public Norwegian Continental Shelf (NCS) reference-facts database, carbon-cost basis, decline-curve forecasting, and screening analysis. USE WHEN: a task needs offline, source-attributed NCS production, resource, field, carbon-cost/emission-abatement, or Arps decline-forecast facts (from norskpetroleum.no / Norwegian Offshore Directorate FactPages) to orient a production, resource-accounting, field-inventory, emission-reduction, or production-forecast screening before a validated NeqSim reservoir/process study."
-last_verified: "2026-07-13"
+version: "0.5.0"
+description: "Public Norwegian Continental Shelf (NCS) reference-facts database, live Sodir DataService client, tie-in host screening (monthly rates, GOR/water-cut trends, historic-peak ullage proxy, nearby undeveloped discoveries), Gassco UMM export-availability parsing, carbon-cost basis, decline-curve forecasting, and screening analysis. USE WHEN: a task needs source-attributed NCS production, resource, field, facility, discovery, gas-export unavailability, carbon-cost/emission-abatement, or Arps decline-forecast facts (from norskpetroleum.no / Norwegian Offshore Directorate FactPages / Gassco UMM) to orient a tie-in, host-capacity, export-availability, production, resource-accounting, emission-reduction, or production-forecast screening before a validated NeqSim reservoir/process study."
+last_verified: "2026-11-22"
 requires:
   python_packages: []
   java_packages: []
   env: []
-  network: []
+  network:
+    optional: ["factmaps.sodir.no"]
+    note: "Only SodirDataService / host_context call the network, and only when invoked. Gassco UMM parsing is offline (user-saved exports)."
 ---
 
 # Norwegian Continental Shelf Reference Data
@@ -19,6 +21,20 @@ production, resources, and the field inventory. The data is sourced from
 run by the Norwegian Ministry of Energy and the Norwegian Offshore Directorate)
 and the Norwegian Offshore Directorate (Sodir, formerly NPD) FactPages, which
 publish open, reusable-with-attribution data about NCS activity.
+
+The skill also has two live/near-live layers for tie-in work:
+
+- **Sodir DataService client** (`SodirDataService`, opt-in network): the REST
+  API that Sodir intends to replace the FactPages CSV downloads. It reads field,
+  facility, discovery, discovery-resource and monthly/yearly saleable
+  production tables, and `host_context()` turns them into a host-field picture:
+  daily rates, sales GOR and water-cut trends, a historic-peak ullage proxy, and
+  nearby undeveloped discoveries ranked by distance as tie-in candidates.
+- **Gassco UMM parser** (offline): parses Gassco Urgent Market Messages you
+  saved from umm.gassco.no (event table CSV or the Atom/REMIT feed), keeps the
+  latest revision of each event, and finds the worst concurrent unavailability
+  for an export asset in a time window. Gassco documents no public API and the
+  site sits behind its terms of use, so the skill never fetches it.
 
 The skill ships a curated **public seed** (headline national KPIs, a resource
 accounting split, sea areas, and a qualitative inventory of major fields) plus a
@@ -43,6 +59,13 @@ simulator — quantitative production forecasting must use the validated NeqSim
   screening of an emission-abatement measure (power-from-shore, waste-heat
   recovery, compressor upgrade, flaring reduction) before a validated NeqSim
   energy/combustion model and a qualified commercial review.
+- When screening a **tie-in to an existing NCS host**: pull the host's monthly
+  production from Sodir, read its GOR and water-cut trend, estimate indicative
+  ullage per stream from the historic peak, and list undeveloped discoveries
+  within a radius as candidates (`host_context`).
+- When a gas tie-in or export study needs **Gassco transport availability**:
+  planned/unplanned outages at fields, processing plants and exit terminals,
+  and the worst concurrent capacity loss in a window (`capacity_impact`).
 - When a task needs a screening production forecast: fit an Arps decline
   (exponential/hyperbolic/harmonic) to a produced-rate series and project a
   forward rate profile, remaining volume, and EUR to an economic-limit rate,
@@ -79,6 +102,35 @@ simulator — quantitative production forecasting must use the validated NeqSim
 - `sodir_download_plan()` / `refresh_instructions()`: offline refresh helper
   (returns official download URLs + ingestion routing; no network access).
 - `resource_remaining(total_billion_sm3_oe, produced_fraction, latest_annual_oe_mill_sm3=None)`.
+
+Live Sodir DataService (opt-in network, `factmaps.sodir.no`):
+
+- `SodirDataService(fetcher=None, page_size=2000, max_records=200000)`: inject
+  `fetcher(url) -> dict` for tests, caching or a proxy; default uses `urllib`.
+- `.query(table, where="1=1", out_fields="*", return_geometry=False)`: raw,
+  paginated ArcGIS query; `table` is a `TABLE_IDS` key (`field`, `facility`,
+  `discovery`, `discovery_reserves`, `profiles`, `pipeline`, `tuf`, ...) or id.
+- `.field_overview(name)`, `.field_production(name, period="month"|"year")`,
+  `.facilities(belongs_to=None, name=None)`, `.discoveries(where="1=1")`,
+  `.discovery_resources()`.
+- `host_context(field_name, radius_km=50, window_months=12, basis="net"|"gross",
+  host_latitude=None, host_longitude=None, discovery_statuses=None)`.
+
+Offline host analysis on rows you already hold:
+
+- `monthly_rates(records, basis="net")`: volumes per month to Sm3/d.
+- `ratio_trend(rates, window_months=12)`, `ullage_indicator(rates, window_months=12)`.
+- `nearby_discoveries(lat, lon, discoveries, radius_km=50, exclude_in_field=True,
+  statuses=None, hc_types=None)`; `haversine_km(...)`.
+
+Gassco UMM (offline):
+
+- `parse_umm_csv(path_or_text)`, `parse_umm_rows(dicts)`, `parse_umm_atom(xml)`:
+  headers matched case/spacing-insensitively to Gassco's 13 published columns
+  (`UMM_TABLE_COLUMNS`) or REMIT element names; naive times are read in
+  `naive_tz` (default UTC; pass Oslo time if the export is local).
+- `latest_revisions(events)`, `filter_events(events, asset=..., start=..., stop=...)`.
+- `capacity_impact(events, asset=..., start=..., stop=...)`.
 - `production_trend(series)`, `production_share(record)`.
 
 ## Outputs
@@ -109,6 +161,17 @@ simulator — quantitative production forecasting must use the validated NeqSim
   discounted NPV, breakeven CO2 price, a verdict, and stated assumptions.
 - `POWER_FROM_SHORE_FIELDS`, `CO2_SOURCE_SPLIT_2024`, `GAS_CO2_FACTOR_KG_PER_SM3`:
   bundled public context constants.
+- `HostContext`: field overview, facilities, host WGS84 location, `MonthlyRates`
+  series (oil/condensate/gas/water/liquid/o.e. Sm3/d, GOR Sm3/Sm3, water cut),
+  `RatioTrend` (recent vs previous window GOR and water cut, with warnings),
+  `UllageIndicator` (per stream: historic peak and month, recent mean,
+  indicative ullage, utilisation of peak, plus a caveat), and `TieInCandidate`s
+  (discovery, distance km, recoverable o.e. mill Sm3), with Sodir attribution.
+- `CapacityImpact`: matched events (latest revision), peak concurrent
+  unavailable MSm3/d and when, technical capacity, available capacity at peak,
+  lowest published available capacity, planned/unplanned counts, Gassco's
+  stated uncertainty band (planned +/-5, unplanned >1 day +/-2 MSm3/d), events
+  in energy units left unconverted, and caveats.
 - `fit_arps_decline(...)`: an `ArpsFit` with the model name, b-exponent, initial
   rate, nominal decline rate (1/year), R-squared, and peak time.
 - `forecast_production(...)`: a `ProductionForecast` with the forward `(time,
@@ -128,6 +191,30 @@ simple split of the published total by the produced fraction; the R/P horizon is
 a static ratio of remaining volume to the latest annual rate, not a forecast.
 Production trend and share are descriptive statistics over the (seeded or
 ingested) annual series.
+
+Host screening converts Sodir monthly volumes to average daily rates by days
+in the month (oil, NGL, condensate and water in mill Sm3, gas in bill Sm3). The
+default `net` basis uses saleable volumes, so GOR is a sales GOR (gas net of
+fuel, flare and injection); `gross` uses Sodir's gross columns where published
+and is closer to produced gas. Water cut is water / (water + oil + condensate)
+and is unavailable when Sodir does not publish produced water (common). The
+ullage proxy is the historic peak monthly-average daily rate minus the recent
+window mean, per stream. It is **not** nameplate capacity. Nearby discoveries
+use the vertex centroid of each discovery polygon (generalised to 0.01 deg) and a
+spherical-Earth great-circle distance, which is enough for ranking but not for
+routing. By default only discoveries without an assigned field (`fldName`
+empty) are kept. Sodir status strings include "Production likely but
+unclarified", "Production in clarification phase" and "Production is
+unlikely"; filter with `discovery_statuses`.
+
+Gassco UMM screening keeps the highest revision per event id (a REMIT message
+id `<thread>_<version>` is split when no revision column exists), drops
+dismissed events, and sweeps event start/stop times to find the largest sum of
+concurrently unavailable capacity for the matching assets. The sum can
+overstate impact, because Gassco's aggregated entry figure nets out dependencies.
+Events under Gassco's 5 MSm3/d publication threshold are not in the data.
+Energy-unit events (kWh/d, GWh/d) are not converted without a gross calorific
+value.
 
 This skill performs no reservoir, PVT, or hydraulic physics. It is a transparent
 public data layer and screening calculator that must be paired with validated
@@ -189,6 +276,26 @@ screen = abatement_screening(
 print(screen.co2_avoided_tonnes_per_year, screen.simple_payback_years,
       screen.npv_nok, screen.verdict)
 
+# Tie-in host context from the live Sodir DataService (network, opt-in)
+from norwegian_continental_shelf_data import host_context, SodirApiError
+try:
+    ctx = host_context("GRANE", radius_km=40)
+    print(ctx.trend.recent_mean_gor, ctx.trend.gor_change_fraction)
+    print(ctx.ullage.stream("oil").indicative_ullage, ctx.ullage.caveat)
+    for c in ctx.candidates[:5]:
+        print(c.name, c.distance_km, c.recoverable_oe_mill_sm3, c.discovery.status)
+except SodirApiError as exc:
+    print("Sodir not reachable:", exc)
+
+# Gassco UMM: worst concurrent unavailability at an export asset (offline file)
+from datetime import datetime, timezone
+from norwegian_continental_shelf_data import parse_umm_csv, capacity_impact
+# events = parse_umm_csv("umm_events.csv")    # saved from umm.gassco.no
+# imp = capacity_impact(events, asset="Kollsnes",
+#                       start=datetime(2026, 6, 1, tzinfo=timezone.utc),
+#                       stop=datetime(2026, 7, 1, tzinfo=timezone.utc))
+# print(imp.peak_unavailable_msm3_d, imp.uncertainty_msm3_d, imp.caveats)
+
 # Screening production forecast: fit an Arps decline and project forward
 from norwegian_continental_shelf_data import (
     fit_arps_decline, forecast_production,
@@ -215,7 +322,10 @@ The seed is a snapshot. To load the full, current dataset:
    production), `NcsDataset.ingest_sodir_field_reserves_csv(path)` (per-field
    recoverable/remaining reserves), or `NcsDataset.ingest_annual_production(rows)`
    / `ingest_field_reserves(rows)` (parsed rows).
-3. Always keep the source attribution and reference year with any reused figure.
+3. Or query the live Sodir DataService with `SodirDataService` (no download
+   step). Its tables match the FactPages views (see the Data Service overview
+   PDF in References).
+4. Always keep the source attribution and reference year with any reused figure.
 
 ## Validated NeqSim Path
 
@@ -241,6 +351,15 @@ quantitative NCS production analysis use:
 - [ ] Quantitative production/forecasting is escalated to validated NeqSim models.
 - [ ] Carbon-cost rates (CO2 tax, EU ETS, NOx Fund) are re-verified against the
       norskpetroleum.no "Emissions to air" page for the current year before use.
+- [ ] Live Sodir figures are quoted with retrieval date and the Sodir/NLOD attribution.
+- [ ] GOR basis (net sales vs gross) is stated; water cut is not inferred when
+      Sodir publishes no water.
+- [ ] Ullage proxy is labelled as historic-peak based and checked against the
+      host design basis / operator data before use in a tie-in decision.
+- [ ] Nearby-discovery distances are used for ranking only; routing uses a
+      proper pipeline-route screening.
+- [ ] Gassco UMM events come from a user-saved export, are the latest revision,
+      are read in the right time zone, and carry Gassco's disclaimer.
 - [ ] Abatement screening is treated as indicative only and escalated to a
       validated NeqSim energy/combustion model and a commercial review.
 
@@ -252,6 +371,12 @@ quantitative NCS production analysis use:
 | Wrong o.e. total | Mixing gas units | Gas in billion Sm3 equals million Sm3 o.e.; keep units consistent |
 | Over-reading a field record | Treating operator/status as current truth | Re-verify per-field data against FactPages |
 | Forecasting from R/P | Reading the static R/P ratio as a forecast | Use NeqSim `SimpleReservoir` / `runReservoir` |
+| GOR looks near zero on an oil field | Net (sales) gas is zero when gas is reinjected or imported | Use `basis="gross"` and state the basis |
+| Ullage taken as spare design capacity | Historic peak treated as nameplate | Confirm with the host design basis and a NeqSim process model |
+| Discovery list includes producing assets | `exclude_in_field=False` or stale status | Keep the default and re-check FactPages status |
+| UMM outage counted twice | Several revisions of one event kept | `capacity_impact` uses `latest_revisions`; do the same for custom views |
+| UMM times off by 1-2 h | Local-time export parsed as UTC | Pass `naive_tz` for Europe/Oslo offsets |
+| `SodirApiError` on a working query | Host blocked by a proxy/firewall | Inject a `fetcher` that uses your proxy or cached JSON |
 
 ## Limitations
 
@@ -267,6 +392,14 @@ quantitative NCS production analysis use:
   a certified emission inventory, a marginal-abatement-cost curve, or a validated
   energy model. It does not replace, and human review is required before, any
   investment or emission-reduction decision.
+- The Sodir client depends on an external service whose table ids and column
+  names can change (verified 2026-11-22). Sodir often publishes no produced
+  water, and monthly data lag by a few months.
+- Host analysis gives screening indicators only. It is not a capacity
+  assessment, and the GOR is not a PVT or well-test GOR.
+- Gassco UMM parsing does not fetch data, does not see events below the 5
+  MSm3/d threshold, and sums concurrent events without Gassco's dependency
+  netting. It is not a nomination or capacity-booking basis.
 - The Arps decline forecast is a transparent empirical curve fit to a produced
   -rate series; it is not a reservoir simulator or a material-balance model and
   does not capture drive mechanism, aquifer, or infill effects. Use validated
@@ -287,6 +420,14 @@ workflows rather than running calculations itself:
 - Community companions: `reservoir-depletion-screening`,
   `production-network-routing`, `asset-value-npv-screening`,
   `energy-emissions-screening`.
+- Host screening feeds the tie-in workflow: the host GOR/water-cut trend and
+  ullage proxy bound the rates given to a NeqSim separator train
+  (`neqsim.process.equipment.separator.ThreePhaseSeparator`) and export
+  compression (`neqsim.process.equipment.compressor.Compressor`) model. The
+  Gassco availability window frames export-gas scenarios for
+  `PipeBeggsAndBrills` / MCP `runPipeline`. Fluid compositions are not in
+  Sodir data, so the NeqSim fluid must come from a PVT report or an
+  assumption that is stated.
 
 ## References
 
@@ -298,5 +439,11 @@ workflows rather than running calculations itself:
 - Norwegian Petroleum — Emissions to air (CO2 tax, EU ETS, NOx Fund, power from shore): https://www.norskpetroleum.no/en/environment-and-technology/emissions-to-air/
 - Norwegian Offshore Directorate — Resource accounts: https://www.sodir.no/en/facts/resource-accounts/
 - Norwegian Offshore Directorate FactPages: https://factpages.sodir.no/
+- Norwegian Offshore Directorate open data (NLOD licence, REST API): https://www.sodir.no/en/facts/about-us/open-data/
+- Sodir DataService REST endpoint: https://factmaps.sodir.no/api/rest/services/DataService/Data/FeatureServer
+- Sodir FactPages / Data Service table overview: https://www.sodir.no/globalassets/1-sodir/om-oss/informasjonstjenester/karttjenester/factpages_dataservice.pdf
+- Gassco Urgent Market Messages: https://umm.gassco.no/
+- Gassco, Principles for publication on umm.gassco.no: https://umm.gassco.no/resources/Principles%20for%20publication%20on%20umm.pdf
+- ACER REMIT Manual of Procedures (UMM format, Annex VII): https://www.acer.europa.eu/remit
 - NeqSim repository: https://github.com/equinor/neqsim
 - NeqSim Skills Guide: https://github.com/equinor/neqsim/blob/master/docs/integration/skills_guide.md

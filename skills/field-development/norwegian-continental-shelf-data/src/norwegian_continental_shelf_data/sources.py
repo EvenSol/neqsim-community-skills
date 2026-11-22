@@ -102,6 +102,8 @@ def refresh_instructions() -> str:
         f"  2. FactPages: {SODIR_FACTPAGES}",
         "  3. Export the CSV, save it locally, and ingest with the matching",
         "     NcsDataset method (see sodir_download_plan()).",
+        "     Or query the live Sodir DataService REST API with SodirDataService",
+        "     (https://factmaps.sodir.no/api/rest/services/DataService/Data/FeatureServer).",
         "  4. Keep the source attribution and reference year with reused figures:",
         "     Source: Norwegian Petroleum (www.norskpetroleum.no), Norwegian",
         "     Ministry of Energy and Norwegian Offshore Directorate.",

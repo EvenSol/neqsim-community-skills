@@ -6,7 +6,7 @@
 # To publish a skill, submit the corresponding entry to the main NeqSim repo.
 
 catalog_version: "1.0"
-last_updated: "2026-07-11"
+last_updated: "2026-11-22"
 trust: community
 
 skills:
@@ -326,12 +326,12 @@ skills:
     min_neqsim_version: "3.7.0"
 
   - name: neqsim-norwegian-continental-shelf-data
-    version: "0.4.0"
-    description: "Public Norwegian Continental Shelf (NCS) reference-facts database, carbon-cost basis, decline-curve forecasting, and screening analysis. USE WHEN: a task needs offline, source-attributed NCS production, resource, field, carbon-cost/emission-abatement, or Arps decline-forecast facts (from norskpetroleum.no / Norwegian Offshore Directorate FactPages) to orient a production, resource-accounting, field-inventory, emission-reduction, or production-forecast screening before a validated NeqSim reservoir/process study."
+    version: "0.5.0"
+    description: "Public Norwegian Continental Shelf (NCS) reference-facts database, live Sodir DataService client, tie-in host screening (monthly rates, GOR/water-cut trends, historic-peak ullage proxy, nearby undeveloped discoveries), Gassco UMM export-availability parsing, carbon-cost basis, decline-curve forecasting, and screening analysis. USE WHEN: a task needs source-attributed NCS production, resource, field, facility, discovery, gas-export unavailability, carbon-cost/emission-abatement, or Arps decline-forecast facts (from norskpetroleum.no / Norwegian Offshore Directorate FactPages / Gassco UMM) to orient a tie-in, host-capacity, export-availability, production, resource-accounting, emission-reduction, or production-forecast screening before a validated NeqSim reservoir/process study."
     author: "neqsim-community"
     repo: "equinor/neqsim-community-skills"
     path: "skills/field-development/norwegian-continental-shelf-data/SKILL.md"
-    tags: [field-development, norwegian-continental-shelf, production, resources, open-data, database, screening, education]
+    tags: [field-development, norwegian-continental-shelf, production, resources, open-data, database, screening, education, sodir, gassco, tie-in, host-capacity, gas-export]
     min_neqsim_version: "3.7.0"
 
   - name: neqsim-field-layout-import
