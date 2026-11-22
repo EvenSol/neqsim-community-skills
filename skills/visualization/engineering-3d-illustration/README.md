@@ -3,7 +3,9 @@
 Turns NeqSim designs and calculated results into 3D figures with open tools:
 vessel cutaways with liquid levels, pipelines coloured by a calculated field,
 equipment layouts coloured by utilisation, and process areas with equipment,
-valves and routed piping. It also draws the fields of a solved OpenFOAM case.
+valves and routed piping. It draws a NeqSim process model or a DEXPI P&ID
+directly, marks new and modified items for a tie-in, and draws the fields of a
+solved OpenFOAM case.
 
 One scene is built from engineering numbers, then drawn by whichever tool fits:
 
@@ -40,9 +42,37 @@ with control, manual and check valves:
 
 ![Process area rendered with Blender](examples/img/process_area_blender.png)
 
+A NeqSim process model drawn straight from `ProcessSystem.buildGraph()`, with the
+tie-in scope marked - the new compressor and cooler in blue, stream temperatures
+as labels:
+
+![Tie-in scope drawn from a NeqSim process model](examples/img/process_model_tie_in_scope.png)
+
+The DEXPI reference P&ID read through NeqSim's DEXPI reader and drawn in 3D, with
+its tagged equipment, lines and inline valves:
+
+![A DEXPI P&ID drawn in 3D](examples/img/dexpi_pid_in_3d.png)
+
 Velocity in a pipe bend from a solved OpenFOAM case - cut plane and streamlines:
 
 ![OpenFOAM velocity in a bend](examples/img/openfoam_bend_velocity.png)
+
+## Works with the NeqSim main repository
+
+This skill draws what NeqSim already knows instead of asking for it again:
+
+| From NeqSim | Used for |
+|---|---|
+| `ProcessSystem.buildGraph()` | Equipment, lines, inline valves, stream values |
+| `DexpiXmlReader`, `DexpiTopologyResolver` | A DEXPI P&ID in 3D |
+| `CapacityConstrainedEquipment.getMaxUtilization()` | Utilisation on equipment |
+| `MechanicalDesign.toDesignDataJson()` | Vessel shell dimensions |
+| `neqsim layout-study` dataset | Real equipment positions |
+
+Where no position, size or diameter is available, a default is used and counted
+in the caption. An automatic arrangement is a schematic in flow order, not a plot
+plan - for placement against clearance and access rules use the plant-layout
+skills in the main repository and pass their positions in.
 
 ## Install
 
@@ -65,6 +95,7 @@ python examples/pipeline_temperature_profile.py
 python examples/module_utilisation_layout.py
 python examples/process_area_3d.py --blender
 python examples/neqsim_results_to_3d.py                 # needs neqsim and Java
+python examples/neqsim_process_and_dexpi_to_3d.py [pid.xml]   # needs neqsim and Java
 python examples/openfoam_case_to_figure.py <case_dir> U # needs a solved case
 ```
 

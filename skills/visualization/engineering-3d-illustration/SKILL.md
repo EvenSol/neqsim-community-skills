@@ -1,7 +1,7 @@
 ---
 name: neqsim-engineering-3d-illustration
 version: "0.1.0"
-description: "Illustrate NeqSim designs and calculated results in three dimensions with open tools. One backend-neutral scene describes a vessel cutaway with liquid levels, internals and nozzles, a pipeline profile coloured by a calculated field, an equipment layout coloured by utilisation, or a process area with equipment, valves and routed piping carrying a stream value; the scene is then drawn off-screen with PyVista for report figures, exported as exact solids (STEP, STL, glTF) with a generated CadQuery script, written as an editable OpenSCAD file, or rendered with Blender Cycles for presentation. Reads geometry and results from a NeqSim Separator and PipeBeggsAndBrills, draws the fields of a solved OpenFOAM case (surface, cut plane, clipped view, streamlines) for the CFD coupling skill, and writes a vessel's wetted volume as STL for a mesher. Every out-of-scale choice - vertical exaggeration, enlarged pipe diameter, assumed wall thickness - is recorded in the scene and printed in the caption, and labelled quantities are computed from the geometry that is drawn. USE WHEN: a study, report or presentation needs a 3D figure of equipment, piping, a pipeline or a layout with its calculated results; a NeqSim separator, pipeline or process area should be shown rather than tabulated; a STEP, STL or OpenSCAD model of screening geometry is needed; an OpenFOAM result needs a figure; or a rendered image is wanted for a front page."
+description: "Illustrate NeqSim designs and calculated results in three dimensions with open tools. One backend-neutral scene describes a vessel cutaway with liquid levels, internals and nozzles, a pipeline profile coloured by a calculated field, an equipment layout coloured by utilisation, or a process area with equipment, valves and routed piping carrying a stream value; the scene is then drawn off-screen with PyVista for report figures, exported as exact solids (STEP, STL, glTF) with a generated CadQuery script, written as an editable OpenSCAD file, or rendered with Blender Cycles for presentation. Draws a NeqSim ProcessSystem straight from its process graph and a DEXPI P&ID through NeqSim's DEXPI reader - placing equipment in flow order or at layout-study positions, routing the lines and marking new and modified items for a tie-in - reads geometry and results from a NeqSim Separator, PipeBeggsAndBrills and mechanical design data, draws the fields of a solved OpenFOAM case (surface, cut plane, clipped view, streamlines) for the CFD coupling skill, and writes a vessel's wetted volume as STL for a mesher. Every out-of-scale choice - vertical exaggeration, enlarged pipe diameter, assumed wall thickness - is recorded in the scene and printed in the caption, and labelled quantities are computed from the geometry that is drawn. USE WHEN: a study, report or presentation needs a 3D figure of equipment, piping, a pipeline or a layout with its calculated results; a NeqSim separator, pipeline or process model should be shown rather than tabulated; a DEXPI P&ID or a tie-in scope (existing, new, modified) should be shown in 3D; a STEP, STL or OpenSCAD model of screening geometry is needed; an OpenFOAM result needs a figure; or a rendered image is wanted for a front page."
 last_verified: "2026-11-22"
 requires:
   python_packages: []
@@ -40,7 +40,9 @@ run them elsewhere.
 - A NeqSim `Separator` or `PipeBeggsAndBrills` has been run and the result should
   be shown on the geometry.
 - A tie-in or debottlenecking study wants utilisation and stream conditions on
-  one 3D picture.
+  one 3D picture, or the tie-in scope shown as existing, new and modified items.
+- A NeqSim `ProcessSystem` or a DEXPI P&ID should be drawn without typing the
+  equipment and connections in again.
 - A STEP, STL or OpenSCAD model of screening-level geometry is needed downstream.
 - A solved OpenFOAM case needs figures, or a vessel volume is needed as STL for a
   mesher.
@@ -70,6 +72,12 @@ run them elsewhere.
 | `build_pipeline_scene` | `color_by`, `vertical_exaggeration`, `display_diameter_m` | Field to colour by; exaggeration and display diameter default to automatic, declared values |
 | `LayoutSpec` | `blocks`, `decks` | `EquipmentBlock(tag, kind, position, size_m, rotation_deg, utilisation)` |
 | `PlantSpec` | `equipment`, `pipes`, `decks`, `value_name`, `value_unit` | `Equipment` of kind `horizontal_vessel`, `vertical_vessel`, `column`, `heat_exchanger`, `pump`, `compressor` or `box`; `PipeRun(name, points, outside_diameter_m, value, valves)`; `InlineValve(tag, fraction, kind)` with kinds `manual`, `control`, `check` |
+| `Equipment`, `PipeRun` | `status` | `existing`, `new` or `modified`, for a tie-in or modification figure |
+| `plant_from_neqsim_process` | `process`, `value`, `positions`, `new_tags`, `modified_tags` | A NeqSim `ProcessSystem`; the stream value on the lines (`temperature`, `pressure`, `mass_flow`); optional positions; the tie-in scope by tag |
+| `plant_from_dexpi` | `path`, `positions`, `sizes`, `new_tags`, `modified_tags` | A DEXPI P&ID XML file; positions and sizes by tag where known |
+| `plant_from_topology` | `items`, `connections`, `positions` | `TopologyItem(tag, kind, size_m, utilisation, status)` and `TopologyConnection(name, source, target, diameter_m, value, valves, status)` from any other source |
+| `vessel_from_design_data` | `document`, `head_type` | NeqSim design-data JSON (schema 1.0); the head shape is stated by the caller |
+| `positions_from_layout_study` | `study`, `alternative` | A `neqsim layout-study` dataset and one of its alternatives |
 | `render_openfoam_case` | `case_dir`, `field`, `views`, `time` | A solved case; a field such as `U`, `p`, `T`, `alpha.water`; views from `surface`, `slice`, `clip`, `streamlines` |
 
 `utilisation` is whatever the study calculated, with 1.0 meaning at the limit.
@@ -81,6 +89,7 @@ run them elsewhere.
 | `Scene` | Primitives, labels, `notes`, `true_scale`, `facts` and `caption()` |
 | `VesselSpec.total_volume_m3`, `liquid_volume_m3(level)` | Closed-form volumes of the vessel and of the liquid below a level |
 | `PipelineSpec.chainage_m()`, `low_points()`, `suggested_vertical_exaggeration()` | True length along the pipe, labelled low points, a round exaggeration factor |
+| `ArrangedPlant` | The drawable `plant`, the `notes` on what was assumed, the tags with assumed positions, sizes and diameters, and `scene()` |
 | `render_scene` | One PNG per view (`iso`, `iso_back`, `front`, `side`, `top`), a caption text file, optional glTF |
 | `cadquery_script` / `export_cadquery` | A self-contained script; STEP, STL and GLB when CadQuery is installed |
 | `openscad_script` / `export_openscad` | A `.scad` file with one module per part; preview PNG and STL when OpenSCAD is installed |
@@ -131,6 +140,30 @@ the vertical. `Equipment.port(side, along)` returns a connection point on its
 envelope and `route(start, end, order)` an axis-parallel path between two points.
 Pipes are drawn at their true diameter with rounded bends, and a valve sits at a
 fraction of the routed length, with its operator upright.
+
+**From a model to a picture.** A process model and a P&ID say what is connected
+to what, not where it stands. `plant_from_neqsim_process` walks the graph from
+`ProcessSystem.buildGraph()`: vessels, columns, exchangers, pumps and compressors
+become equipment, a valve is put on the line it sits in, and streams, mixers,
+splitters and recycles are passed through. `plant_from_dexpi` does the same for a
+P&ID, using NeqSim's `DexpiXmlReader` for the tagged items and their DEXPI
+classes and `DexpiTopologyResolver` for the equipment, then following the piping
+through valves, reducers and tees from nozzle to nozzle. Nominal diameters such
+as `DN 80` become line diameters.
+
+**Placement is automatic only where nothing better exists.** Items are placed in
+flow order - one column per step, recycles ignored - and each line rises to a
+rack, crosses and drops to its target. Positions from a layout study replace
+this whenever they are given. Every automatic position, default size and assumed
+diameter is counted in the caption, and such a figure is marked not to scale: it
+is a schematic arrangement, not a plot plan.
+
+**Tie-in scope.** Marking tags as new or modified switches the colouring from
+results to status: new in blue, modified in orange, existing in grey, with
+utilisation and stream values kept as labels. A line is new when it serves a new
+item or carries a new valve; a line to equipment that is only modified stays
+existing. The same plant can be drawn both ways, so one figure shows what the
+solution adds and the other what it does to the process.
 
 **Backend choice.**
 
@@ -233,6 +266,28 @@ plant = PlantSpec(
 render_scene(build_plant_scene(plant, colormap_name="coolwarm"), "figures", colormap="coolwarm")
 ```
 
+### A NeqSim model or a DEXPI P&ID, with the tie-in scope
+
+```python
+from engineering_3d_illustration import (
+    plant_from_dexpi, plant_from_neqsim_process, positions_from_layout_study, render_scene,
+)
+
+# `process` is a neqsim ProcessSystem that has been run.
+arranged = plant_from_neqsim_process(
+    process, value="temperature", new_tags=("23-KA-001", "23-HA-001")
+)
+print(arranged.notes)  # what was placed, sized and routed by assumption
+render_scene(arranged.scene(color_by="status"), "figures/scope")
+render_scene(arranged.scene(color_by="results", colormap_name="coolwarm"),
+             "figures/results", colormap="coolwarm")
+
+# The same from a P&ID file, at the positions of a layout study when there is one:
+# positions = positions_from_layout_study(study, alternative)
+pid = plant_from_dexpi("pid.xml", new_tags=("23-KA-001",))
+render_scene(pid.scene(), "figures/pid", views=("iso", "top"))
+```
+
 ### OpenFOAM in both directions
 
 ```python
@@ -264,6 +319,8 @@ print(image.status, image.command)
 - [ ] `scene.facts` volumes agree with the study's inventory numbers.
 - [ ] The field shown on a pipeline or pipe run has its unit and range in the caption.
 - [ ] Utilisation values state what they are a utilisation of.
+- [ ] For a drawn model or P&ID, `ArrangedPlant.notes` has been read: assumed positions, sizes and diameters are acceptable for this figure, or have been supplied.
+- [ ] Tags marked new or modified match the study's scope list.
 - [ ] A `RenderOutcome` that is not `completed` is reported with its `command`, not hidden.
 - [ ] An OpenFOAM figure is drawn after the CFD quality gate has passed.
 - [ ] Synthetic or public data only in anything shared outside the project.
@@ -280,6 +337,9 @@ print(image.status, image.command)
 | CAD export has no colours for a field | CAD solids carry no field values | Use the PyVista figure for the result |
 | Blender image has no labels | Blender draws the solids only | Pair it with the PyVista figure and its caption |
 | OpenFOAM render reports `not_executed` | No `VTK/` folder and no solved time folder | Run the case, then `foamToVTK -latestTime` |
+| A drawn P&ID shows fewer valves than the drawing | Valves on drains, vents and off-page branches are not on an equipment-to-equipment line | Read the count in the caption; draw those lines by hand with `PipeRun` if they matter |
+| Everything from a P&ID is the same size | A P&ID holds no equipment sizes | Pass `sizes` by tag, or draw from the process model |
+| A model figure looks like a row of equipment | No positions were given, so flow order was used | Pass `positions`, for example from `positions_from_layout_study` |
 | Pipes cut through equipment | Routes are drawn as supplied | Route through a rack elevation with `route` in two steps |
 
 ## Limitations
@@ -288,6 +348,15 @@ print(image.status, image.command)
   schematic positions and are not cut into the shell.
 - Liquid is drawn level and still. With a weir, only the inlet side is filled.
 - A process area is drawn as supplied; there is no clash, access or stress check.
+- An automatic arrangement is a schematic in flow order with rack routing. It is
+  not a plot plan, and no clearance, access or escape-route rule is applied -
+  that is the job of the layout study in the NeqSim main repository.
+- From a DEXPI file, only lines between two equipment items are drawn, with the
+  valves on them. Instruments, drains, vents and off-page branches are counted
+  but not drawn. Orientation of a vessel is not in a P&ID.
+- There is no connection to an operator's plant viewer or digital twin. The STEP
+  and glTF exports are the hand-over; a company-specific connector belongs in an
+  enterprise repository.
 - A pipeline built from a NeqSim pipe lies on a straight heading - the process
   model has no plan route.
 - The Blender image has no labels or legend, and a CPU Cycles render takes from
@@ -318,15 +387,40 @@ numbers it shows come from NeqSim:
   profiles (`getPressureProfile()`, `getTemperatureProfile()`,
   `getLiquidHoldupProfile()`, `getElevationProfile()`) and can be passed to
   `PipelineSpec` as `FieldSeries`.
-- Stream temperatures and pressures for pipe runs, and equipment utilisation,
-  are taken from the study's `neqsim.process.processmodel.ProcessSystem` results
-  and supplied as plain numbers.
+- `neqsim.process.processmodel.ProcessSystem#buildGraph()` and the
+  `neqsim.process.processmodel.graph` classes (`ProcessGraph`, `ProcessNode`,
+  `ProcessEdge`) give `plant_from_neqsim_process` its equipment, connections and
+  streams; `getTemperature("C")`, `getPressure("bara")` and
+  `getFlowRate("kg/hr")` on the edge's stream give the line value.
+- `neqsim.process.equipment.capacity.CapacityConstrainedEquipment#getMaxUtilization()`
+  gives the utilisation shown on equipment.
+- `neqsim.process.processmodel.dexpi.DexpiXmlReader#readWithDiagnostics(File)`
+  and `DexpiTopologyResolver#resolve(Document)` are what `plant_from_dexpi` reads
+  a P&ID with; `DexpiXmlWriter#write(ProcessSystem, File)` writes one from a model.
+- `neqsim.process.mechanicaldesign.MechanicalDesign#toDesignDataJson()` produces
+  the design-data JSON read by `vessel_from_design_data`.
+- The `neqsim layout-study` dataset (`devtools/layout_study.py`,
+  `devtools/layout_model.py`) supplies positions through
+  `positions_from_layout_study`.
 - NeqSim is reached from Python with `from neqsim import jneqsim`.
 - CFD figures are drawn from cases written by `neqsim-cfd-coupling`; solid
   temperature fields are rendered by `neqsim-fem-coupling`.
 
-Candidate NeqSim gap: the process model holds no nozzle positions, plot-plan
-coordinates or pipe routes, so layouts and routes are supplied by the user.
+Skills in the NeqSim main repository that this one works beside, not instead of:
+
+- `neqsim-pid-process-operations` and `neqsim-dexpi-conformance-validation` -
+  produce and validate the DEXPI P&ID that is drawn here.
+- `neqsim-plant-layout-geometry`, `neqsim-plant-layout-study` and
+  `neqsim-plant-layout-delivery` - place equipment against clearance, access and
+  mass constraints and deliver plot drawings and CAD of the physical envelopes.
+  Use their positions here; do not use the automatic arrangement as a layout.
+- `neqsim-capacity-and-utilization-analysis` - calculates the utilisation shown.
+- `neqsim-engineering-design-package` - produces the design data and datasheets.
+- `neqsim-pfd-layout-review` - governs 2D flow diagrams, which this skill does
+  not draw.
+
+Candidate NeqSim gap: the process model holds no nozzle positions or pipe
+routes, so routes are schematic unless supplied.
 
 ## References
 

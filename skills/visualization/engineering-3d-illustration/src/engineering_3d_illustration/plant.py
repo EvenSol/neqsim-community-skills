@@ -42,6 +42,14 @@ EQUIPMENT_KINDS = (
     "box",
 )
 VALVE_KINDS = ("manual", "control", "check")
+STATUSES = ("existing", "new", "modified")
+# Tie-in colouring: what is there today stays neutral, what the solution adds stands out.
+STATUS_COLORS = {
+    "existing": (0.66, 0.68, 0.71),
+    "new": (0.10, 0.45, 0.85),
+    "modified": (0.93, 0.55, 0.10),
+}
+STATUS_LEGEND = "Colour by status: new in blue, modified in orange, existing in grey"
 PORT_SIDES = ("top", "bottom", "inlet", "outlet", "front", "back")
 _SIZE_COUNT = {
     "horizontal_vessel": 2,  # diameter, tan-tan length
@@ -71,6 +79,8 @@ class Equipment:
     column, ``(length,)`` for a pump or compressor and ``(length, width,
     height)`` for a box. ``rotation_deg`` turns the item about the vertical;
     at zero its long axis runs along ``x`` with the inlet end at low ``x``.
+    ``status`` marks the item as ``existing``, ``new`` or ``modified`` for a
+    tie-in or modification figure.
     """
 
     tag: str
@@ -79,10 +89,13 @@ class Equipment:
     size_m: tuple[float, ...]
     rotation_deg: float = 0.0
     utilisation: float | None = None
+    status: str = "existing"
 
     def __post_init__(self) -> None:
         if self.kind not in EQUIPMENT_KINDS:
             raise ValueError(f"equipment kind must be one of {', '.join(EQUIPMENT_KINDS)}")
+        if self.status not in STATUSES:
+            raise ValueError(f"status must be one of {', '.join(STATUSES)}")
         if len(self.size_m) != _SIZE_COUNT[self.kind]:
             raise ValueError(f"{self.kind} needs {_SIZE_COUNT[self.kind]} size value(s)")
         for value in self.size_m:
@@ -178,8 +191,11 @@ class PipeRun:
     outside_diameter_m: float
     value: float | None = None
     valves: tuple[InlineValve, ...] = ()
+    status: str = "existing"
 
     def __post_init__(self) -> None:
+        if self.status not in STATUSES:
+            raise ValueError(f"status must be one of {', '.join(STATUSES)}")
         points = tuple(
             (_finite("x", p[0]), _finite("y", p[1]), _finite("z", p[2])) for p in self.points
         )
@@ -440,9 +456,10 @@ def _equipment_primitives(item: Equipment, color: Any) -> list[Primitive]:
 
 
 def _valve_primitives(
-    valve: InlineValve, centre: Vec, direction: Vec, pipe_radius: float
+    valve: InlineValve, centre: Vec, direction: Vec, pipe_radius: float, body_color: Any = None
 ) -> tuple[list[Primitive], Vec]:
     """Body, flanges and operator of a valve; returns the parts and the label anchor."""
+    body_color = body_color or PALETTE["internal"]
     body_half = 2.2 * pipe_radius
     body_radius = 1.9 * pipe_radius
     start = _add(centre, direction, -body_half)
@@ -451,7 +468,7 @@ def _valve_primitives(
             name=f"{valve.tag} body",
             kind="revolved",
             role="internal",
-            color=PALETTE["internal"],
+            color=body_color,
             params={
                 # Two cones meeting at the seat - the valve symbol turned into a solid.
                 "profile": [
@@ -508,7 +525,7 @@ def _valve_primitives(
                     name=f"{valve.tag} actuator",
                     kind="revolved",
                     role="internal",
-                    color=PALETTE["internal"],
+                    color=body_color,
                     params={
                         "profile": vessel_profile(
                             2.4 * pipe_radius,
@@ -548,14 +565,29 @@ def build_plant_scene(
     colormap_name: str = "viridis",
     bend_radius_diameters: float = 1.5,
     label_pipes: bool = True,
+    color_by: str = "auto",
+    extra_notes: Sequence[str] = (),
+    true_scale: bool = True,
     title: str | None = None,
 ) -> Scene:
-    """Scene for a process area, drawn to scale.
+    """Scene for a process area, drawn to scale unless ``true_scale`` is cleared.
 
-    Pipe runs that carry a value share one colour scale named by
-    ``spec.value_name``; runs without a value are drawn neutral. Equipment with
-    a utilisation is coloured on the fixed green-amber-red legend.
+    ``extra_notes`` are added to the caption - an automatic arrangement uses
+    them to say which positions, sizes and diameters were assumed.
+
+    ``color_by="results"`` colours pipe runs by their value on one shared scale
+    (named by ``spec.value_name``) and equipment by utilisation on the fixed
+    green-amber-red legend. ``color_by="status"`` shows a tie-in or
+    modification instead: new items in blue, modified in orange, existing in
+    grey, with values and utilisation kept as labels. ``"auto"`` picks
+    ``status`` as soon as anything is marked new or modified.
     """
+    if color_by not in ("auto", "results", "status"):
+        raise ValueError("color_by must be 'auto', 'results' or 'status'")
+    changed = [e.tag for e in spec.equipment if e.status != "existing"] + [
+        p.name for p in spec.pipes if p.status != "existing"
+    ]
+    by_status = color_by == "status" or (color_by == "auto" and bool(changed))
     primitives: list[Primitive] = []
     labels: list[Label] = []
     notes = [
@@ -585,9 +617,14 @@ def build_plant_scene(
         color = PALETTE["equipment"]
         text = item.tag
         if item.utilisation is not None:
-            color = utilisation_color(item.utilisation)
             text = f"{item.tag}  {100.0 * item.utilisation:.0f} %"
-            utilised = True
+            if not by_status:
+                color = utilisation_color(item.utilisation)
+                utilised = True
+        if by_status:
+            color = STATUS_COLORS[item.status]
+            if item.status != "existing":
+                text += f"  ({item.status})"
         primitives.extend(_equipment_primitives(item, color))
         _length_, _width, height, _axis = item.envelope()
         labels.append(
@@ -601,7 +638,9 @@ def build_plant_scene(
         path = _rounded(pipe.points, bend_radius_diameters * pipe.outside_diameter_m)
         scalars = None
         color = PALETTE["pipeline"]
-        if pipe.value is not None and value_range is not None:
+        if by_status:
+            color = STATUS_COLORS[pipe.status]
+        elif pipe.value is not None and value_range is not None:
             scalars = tuple(pipe.value for _ in path)
             color = colormap(pipe.value, value_range[0], value_range[1], colormap_name)
         primitives.append(
@@ -629,23 +668,39 @@ def build_plant_scene(
             )
         for valve in pipe.valves:
             centre, direction = pipe.point_at(valve.fraction)
-            parts, anchor = _valve_primitives(valve, centre, direction, radius)
+            parts, anchor = _valve_primitives(
+                valve, centre, direction, radius, STATUS_COLORS[pipe.status] if by_status else None
+            )
             primitives.extend(parts)
             labels.append(Label(valve.tag, anchor, "valve"))
 
-    if value_range is not None:
+    if by_status:
+        notes.append(STATUS_LEGEND)
+        new = sum(1 for e in spec.equipment if e.status == "new")
+        modified = sum(1 for e in spec.equipment if e.status == "modified")
+        lines = sum(1 for p in spec.pipes if p.status != "existing")
+        notes.append(
+            f"{new} new and {modified} modified equipment items, {lines} new or modified lines"
+        )
+        if value_range is not None:
+            notes.append(f"Line labels show {spec.value_name} [{spec.value_unit or '-'}]")
+    elif value_range is not None:
         unit = f" [{spec.value_unit}]" if spec.value_unit else ""
         notes.append(
             f"Pipe colour: {spec.value_name}{unit}, {value_range[0]:.4g} to {value_range[1]:.4g}"
         )
     if utilised:
         notes.append(UTILISATION_LEGEND)
-    notes.append("Equipment and valves shown as envelope shapes; pipe routes as supplied")
+    notes.extend(extra_notes)
+    notes.append(
+        "Equipment and valves shown as envelope shapes"
+        + ("" if extra_notes else "; pipe routes as supplied")
+    )
     return Scene(
         name=_slug(spec.name),
         title=title or f"{spec.name} - process area",
         primitives=tuple(primitives),
         labels=tuple(labels),
         notes=tuple(notes),
-        true_scale=True,
+        true_scale=true_scale,
     )

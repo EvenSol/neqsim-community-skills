@@ -32,6 +32,15 @@ from .model import (
     vessel_from_neqsim_separator,
     vessel_profile,
 )
+from .neqsim_process import (
+    equipment_kind,
+    nominal_diameter_m,
+    plant_from_dexpi,
+    plant_from_neqsim_process,
+    positions_from_layout_study,
+    valve_kind,
+    vessel_from_design_data,
+)
 from .openfoam import (
     FOAM_VIEWS,
     FoamOutput,
@@ -50,9 +59,28 @@ from .plant import (
     build_plant_scene,
     route,
 )
+from .topology import (
+    ArrangedPlant,
+    TopologyConnection,
+    TopologyItem,
+    flow_levels,
+    plant_from_topology,
+)
 from .pyvista_backend import VIEWS, detect_pyvista, primitive_polydata, render_scene
 
 __all__ = [
+    "ArrangedPlant",
+    "TopologyConnection",
+    "TopologyItem",
+    "equipment_kind",
+    "flow_levels",
+    "nominal_diameter_m",
+    "plant_from_dexpi",
+    "plant_from_neqsim_process",
+    "plant_from_topology",
+    "positions_from_layout_study",
+    "valve_kind",
+    "vessel_from_design_data",
     "EQUIPMENT_KINDS",
     "FOAM_VIEWS",
     "Equipment",
