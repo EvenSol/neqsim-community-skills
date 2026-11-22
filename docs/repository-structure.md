@@ -41,6 +41,7 @@ This lets one public repository host several independent skills.
 - `skills/process`: process equipment, process modeling, and operational screening workflows.
 - `skills/pvt`: fluid characterization, composition quality, and PVT workflow helpers.
 - `skills/flow-assurance`: hydrate, wax, corrosion, multiphase flow, and transport screening workflows.
+- `skills/visualization`: figures and 3D illustrations of designs and calculated results. These skills render data and run no engineering calculation of their own.
 
 Add a new top-level domain only when an existing domain is clearly unsuitable.
 

@@ -6,7 +6,7 @@
 # To publish a skill, submit the corresponding entry to the main NeqSim repo.
 
 catalog_version: "1.0"
-last_updated: "2026-07-11"
+last_updated: "2026-11-22"
 trust: community
 
 skills:
@@ -609,4 +609,12 @@ skills:
     repo: "equinor/neqsim-community-skills"
     path: "skills/process/fem-coupling/SKILL.md"
     tags: [process, fem, finite-element, scikit-fem, fenicsx, gmsh, pyvista, visualization, 3d, heat-transfer, conduction, cooldown, thermal-stress, insulation, diffusion, mesh-quality, coupling]
+    min_neqsim_version: "3.7.0"
+  - name: neqsim-engineering-3d-illustration
+    version: "0.1.0"
+    description: "3D figures of NeqSim designs and results with open tools. One scene - a vessel cutaway with levels and internals, a pipeline coloured by a calculated field, a layout coloured by utilisation, or a process area with equipment, valves and routed piping - is drawn with PyVista (report figures), CadQuery (STEP, STL, glTF), OpenSCAD (editable model) or Blender (render). Draws a NeqSim ProcessSystem, a DEXPI P&ID or a neqsim layout-study alternative directly, marks new and modified items for a tie-in, draws the fields of a solved OpenFOAM case, and states every out-of-scale or assumed value in the caption. USE WHEN: a study, report or presentation needs a 3D figure of equipment, piping, a pipeline or a layout with its results; a NeqSim separator, pipeline, process model, DEXPI P&ID or layout study should be shown rather than tabulated; a tie-in scope (existing, new, modified) should be shown in 3D; a STEP, STL or OpenSCAD model is needed; or an OpenFOAM result needs a figure."
+    author: "neqsim-community"
+    repo: "equinor/neqsim-community-skills"
+    path: "skills/visualization/engineering-3d-illustration/SKILL.md"
+    tags: [visualization, 3d, illustration, pyvista, cadquery, openscad, blender, openfoam, dexpi, p-and-id, tie-in, step, stl, separator, pipeline, piping, valves, layout, reporting]
     min_neqsim_version: "3.7.0"

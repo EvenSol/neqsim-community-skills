@@ -35,17 +35,19 @@ For this multi-skill repository, each skill is cataloged by a path such as `skil
 
 ## Skill Catalog
 
-The complete source of truth is [`community-skills.yaml`](community-skills.yaml). The catalog currently contains 57 community skills across these public domains:
+The complete source of truth is [`community-skills.yaml`](community-skills.yaml). The catalog currently contains 68 community skills across these public domains:
 
 | Domain | Folder | Skills |
 | --- | --- | ---: |
+| Engineering data | [skills/engineering-data](skills/engineering-data) | 1 |
 | Environment | [skills/environment](skills/environment) | 2 |
-| Field development | [skills/field-development](skills/field-development) | 7 |
+| Field development | [skills/field-development](skills/field-development) | 8 |
 | Flow assurance | [skills/flow-assurance](skills/flow-assurance) | 7 |
-| Process | [skills/process](skills/process) | 25 |
-| PVT | [skills/pvt](skills/pvt) | 2 |
+| Process | [skills/process](skills/process) | 28 |
+| PVT | [skills/pvt](skills/pvt) | 6 |
 | Safety | [skills/safety](skills/safety) | 8 |
-| Subsea | [skills/subsea](skills/subsea) | 6 |
+| Subsea | [skills/subsea](skills/subsea) | 7 |
+| Visualization | [skills/visualization](skills/visualization) | 1 |
 
 Representative skills include:
 
@@ -58,6 +60,7 @@ Representative skills include:
 | [skills/safety/vacuum-collapse-screening](skills/safety/vacuum-collapse-screening) | `neqsim-vacuum-collapse-screening` | Public cooldown and external-pressure screening for blocked-in vessels |
 | [skills/subsea/subsea-layout-geometry](skills/subsea/subsea-layout-geometry) | `neqsim-subsea-layout-geometry` | Public subsea layout geometry and step-out screening |
 | [skills/environment/energy-emissions-screening](skills/environment/energy-emissions-screening) | `neqsim-energy-emissions-screening` | Field-life energy and CO2-equivalent emissions screening |
+| [skills/visualization/engineering-3d-illustration](skills/visualization/engineering-3d-illustration) | `neqsim-engineering-3d-illustration` | 3D figures of vessels, pipelines, layouts and process areas with their calculated results, using PyVista, CadQuery, OpenSCAD and Blender |
 
 These skills are intentionally simple and public. They are suitable for learning, testing agent workflows, and demonstrating repository structure. They are not design tools.
 
