@@ -553,6 +553,9 @@ targets DOLFINx 0.8 and later, and rendering targets PyVista 0.43 and later.
   and produces the wall shear and the local velocity field; this skill consumes the
   film coefficient that follows and resolves the solid. The two share the same
   design-basis discipline and the same gate-before-quoting rule.
+- `neqsim-engineering-3d-illustration` - draws the equipment, piping and pipeline the
+  solid model sits in, with the process results on it. Use `render_field` here for
+  the temperature field inside the wall and that skill for the surrounding picture.
 - `neqsim-surf-cooldown-screening` - consumes the no-touch time and the effective
   U-value from the transient model.
 - `neqsim-hydrate-margin-check`, `neqsim-wax-margin-check` - supply the target

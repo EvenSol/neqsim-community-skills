@@ -468,6 +468,11 @@ tested against every intermediate version.
   resolves the temperature and stress field inside the wall. Hand it the film
   coefficient and the near-wall heat-flux distribution; take back an effective
   U-value, a U-multiplier and a metal temperature.- `neqsim-flow-accelerated-corrosion` — consumes the mass-transfer enhancement factor
+- `neqsim-engineering-3d-illustration` — draws the solved case. Its
+  `render_openfoam_case` reads the `VTK/` folder that `foamToVTK -latestTime`
+  writes and produces surface, cut-plane, clipped and streamline figures with the
+  field range in the caption; its `vessel_fluid_volume_stl` writes a vessel's
+  wetted volume as STL for a mesher. Render after `assess_quality`, not instead of it
 - `neqsim-two-phase-flow-regime-screening`,
   `neqsim-multiphase-flow-slug-screening` — supply the `flow_regime` that drives
   the multiphase model choice
